@@ -1,0 +1,41 @@
+/* ===== PROJECT page — simple grille 4 colonnes ===== */
+/* Pour ajouter des images : ajoute des .pj-item dans project.html.
+   La grille s'étend toute seule (autant de lignes que nécessaire). */
+
+   .pj-grid {
+    column-count: 4;
+    column-gap: 10px;
+    padding: 10px;
+    padding-top: calc(5vh + 10px); /* laisse la place au header fixe */
+    background-color: white;
+    min-height: 100vh;
+}
+
+.pj-item {
+    overflow: hidden;
+    break-inside: avoid;
+    margin-bottom: 10px;
+}
+
+.pj-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.pj-item img:hover {
+    transform: scale(1.03);
+}
+
+@media (max-width: 900px) {
+    .pj-grid {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 500px) {
+    .pj-grid {
+        column-count: 1;
+    }
+}

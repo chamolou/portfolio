@@ -1,0 +1,257 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* color variables */
+    --color-black: #000000;
+    --color-white: #ffffff;
+    --color-border: var(--color-black);
+}
+
+/* Inverted theme: swap black/white */
+html[data-theme="inverted"] {
+    --color-black: #ffffff;
+    --color-white: #000000;
+    --color-border: var(--color-black);
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-black);
+}
+
+body {
+    background-color: var(--color-white);
+    transition: background-color 0.4s ease;
+}
+
+section {
+    height: 100vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    column-gap: 20px;
+    /* espace horizontal et vertical entre les cellules */
+    padding: 0 20px;
+    /* marge latérale de 20px autour des colonnes */
+    grid-template-rows: repeat(39, 1fr);
+}
+
+
+/* left */
+
+.left {
+    grid-column: 1/2;
+    grid-row: 2/40;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(38, 1fr);
+}
+
+.first_menu {
+    border-top: 1.5px solid var(--color-border);
+    border-bottom: 1.5px solid var(--color-border);
+    grid-column: 1/10;
+    grid-row: 1/2;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.4s ease;
+    cursor: pointer;
+}
+
+.menu-first-texte {
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.8vw;
+    color: var(--color-black);
+}
+
+.second_menu {
+
+    border-bottom: 1.5px solid var(--color-border);
+    grid-column: 1/10;
+    grid-row: 2/3;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.4s ease;
+    cursor: pointer;
+}
+
+.menu-second-texte {
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.8vw;
+    color: var(--color-black);
+}
+
+.third_menu {
+    border-bottom: 1.5px solid var(--color-border);
+    grid-column: 1/10;
+    grid-row: 3/4;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.4s ease;
+    cursor: pointer;
+}
+
+.menu-third-texte {
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.8vw;
+    color: var(--color-black);
+}
+
+[class$="_menu"]:hover {
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+[class$="_menu"]:hover a {
+    color: var(--color-white);
+}
+
+[class$="_menu"] a {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+[class$="_menu"]:hover .plus-svg {
+    filter: invert(1);
+}
+
+
+
+.plus-svg {
+    /* prevent the svg from stretching its container and align it to the right */
+    flex: 0 0 auto;
+    max-width: 25px;
+    /* fixed maximum width */
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    margin-left: auto;
+    transition: filter 0.25s ease;
+    /* push to the right when inside a flex parent */
+
+}
+
+/* Invert the SVG automatically whenever the global theme is inverted */
+html[data-theme="inverted"] .plus-svg {
+    filter: invert(1);
+}
+
+html[data-theme="inverted"] [class$="_menu"]:hover .plus-svg {
+    filter: invert(0);
+}
+
+
+
+/* right */
+
+.right {
+    grid-column: 2/10;
+    grid-row: 2/40;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 540px;
+    overflow-y: auto;
+    row-gap: 5px;
+    column-gap: 5px;
+}
+
+.gallery-item {
+
+    overflow: hidden;
+    cursor: pointer;
+    /* place ton image directement dans cette div, ex: <img src="..."> */
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* place the left color label at the bottom of the left column */
+.left-color-texte-element {
+    grid-column: 1/3; /* span both left sub-columns */
+    grid-row: 37/38; /* near the bottom of the left grid */
+    align-self: end; /* stick to bottom of the cell */
+    justify-self: start;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8vw;
+    cursor: pointer;
+    padding-left: 8px;
+    font-weight: 400;
+    transition: opacity 0.25s ease, color 0.25s ease;
+    color: var(--color-black);
+}
+
+.left-color-texte-element:hover {
+    opacity: 0.5;
+}
+
+/* ── lightbox ── */
+
+.lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lightbox-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-overlay img {
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transform: scale(0.96);
+    transition: transform 0.3s ease;
+}
+
+.lightbox-overlay.is-open img {
+    transform: scale(1);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.9vw;
+    color: var(--color-white, #ffffff);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    transition: opacity 0.25s ease;
+}
+
+.lightbox-close:hover {
+    opacity: 0.6;
+}
+
+/* Longhand border-color so GSAP theme animation can interpolate via --color-black */
+[class$="_menu"] {
+    border-top-color: var(--color-black);
+    border-bottom-color: var(--color-black);
+}

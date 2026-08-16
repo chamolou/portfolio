@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - lights - rect area light</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="../css/a.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js" integrity="sha512-1dalHDkG9EtcOmCnoCjiwQ/HEB5SDNqw8d4G2MKoNwjiwMNeBAkudsBCmSlMnXdsH8Bm0mOd3tl/6nL5y0bMaQ==" crossorigin="anonymous"></script>
+		
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q==" crossorigin="anonymous"></script>
+	
+
+	</head>
+	<body>
+
+
+		<header>
+			<div id="logo">
+				<h6 class="logo">CANSAT <span>library : three.js </span></h6>
+				<h5 class="logo">loader <span> mtl </span></h5>
+				<h5 class="logo">material  <span> in </span></h5>
+				<h5 class="logo">object 3D  <span> obj from vectary</span></h5>
+				<h5 class="logo">animation  <span> gsap library</span></h5>
+				
+				<h5 class="logo" id="values">animation  <span> gsap library</span></h5>
+				<h5 class="logo" id="values1">animation  <span> gsap library</span></h5>
+				<h5 class="logo" id="values2">animation  <span> gsap library</span></h5>
+			</div>
+		</header>
+		<main>
+
+
+		</main>
+	
+
+		<script type="module">
+
+
+            import * as THREE from './build/three.module.js';
+            import { OBJLoader } from './jsm/loaders/OBJLoader.js';
+            import { MTLLoader } from './jsm/loaders/MTLLoader.js';
+			import Stats from './jsm/libs/stats.module.js';
+	
+		
+			import { OrbitControls } from './jsm/controls/OrbitControls.js';
+			import { RectAreaLightHelper } from './jsm/helpers/RectAreaLightHelper.js';
+			import { RectAreaLightUniformsLib } from './jsm/lights/RectAreaLightUniformsLib.js';
+
+			import { EffectComposer } from './jsm/postprocessing/EffectComposer.js';
+			import { RenderPass } from './jsm/postprocessing/RenderPass.js';
+	
+			import { FilmPass } from './jsm/postprocessing/FilmPass.js';
+			import { GlitchPass } from './jsm/postprocessing/GlitchPass.js';
+	
+
+			const origin = new THREE.Vector3();
+
+			let rectLight, rectLightHelper;
+	
+			let camera, scene, renderer,composer,
+			light1, light2, light3, light4,
+			object, stats;
+
+			const clock = new THREE.Clock();
+	 
+			init();
+			animate();
+		
+	
+			function init() {
+
+			
+				camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 1, 1000 );
+                camera.position.set(100,100, 190 );
+				scene = new THREE.Scene();
+           
+
+
+// gsap.to( camera.position, {
+// 	duration: 2,
+// 	x: 100,
+// 	y: 10,
+// 	z: -100, // maybe adding even more offset depending on your model
+// 	onUpdate: function() {
+// 		camera.lookAt(origin );
+//     },
+//     onComplete:function(){
+//         gsap.to( camera.position, {
+// 	duration: 2,
+// 	x: 0,
+// 	y: 10,
+// 	z: -100, // maybe adding even more offset depending on your model
+// 	onUpdate: function() {
+// 		camera.lookAt(origin );
+//     },
+//     onComplete:function(){
+//         gsap.to( camera.position, {
+// 	duration:6,
+// 	x: 50,
+// 	y: 50,
+// 	z: -60, // maybe adding even more offset depending on your model
+// 	onUpdate: function() {
+// 		camera.lookAt(origin );
+//     },
+//     onComplete: function(){
+// gsap.to( camera.position, {duration: 2,
+// 	x: -10,
+// 	y: 20,
+// 	z: -50, // maybe adding even more offset depending on your model
+// 	onUpdate: function() {
+// 		camera.lookAt(origin );
+//     }  })
+//     }
+// } );
+
+//     }
+// } );
+
+//     }
+// } );
+
+                      
+
+
+	
+
+
+   // Model/material loading!
+
+                const ma2 = new THREE.MeshStandardMaterial( { color: 0xafffff, roughness: 0, metalness: 1 } );
+
+    
+
+   var mtlLoader = new MTLLoader();
+	mtlLoader.load("../box/a.mtl", function(materials){
+		
+		materials.preload();
+		var objLoader = new OBJLoader();
+		objLoader.setMaterials(materials);
+		
+		objLoader.load("../box/a.obj", function(mesh){
+           console.log(mesh);
+          
+
+			mesh.traverse(function(node){
+///discover name of the array
+               // console.log(mesh.children[1].name)
+
+                mesh.children[1].material = ma2;
+				mesh.children[0].material = ma2;
+				mesh.children[2].material = ma2;
+				mesh.children[3].material = ma2;
+				mesh.children[4].material = ma2;
+				mesh.children[5].material = ma2;
+
+				if( node instanceof THREE.Mesh ){
+					node.castShadow = true;
+                    node.receiveShadow = true;
+                 
+
+                 
+				}
+            });
+            
+            mesh.scale.set( 0.2, 0.2, 0.2 )
+			scene.add(mesh);
+            mesh.position.set(0, 0, 0);
+			mesh.position.y = 0;
+            mesh.rotation.y = Math.PI;
+        
+           // gsap.to( mesh.children[0].rotation, {duration:10,y: -50});
+          //      gsap.to( mesh.children[0].position, {duration:4,y: 100});
+          //gsap.to(mesh.rotation, {duration: 20, y: Math.PI * 2, repeat: -1, ease: "none"});
+
+          ////anima with function anilmate
+        //        function animate2() {
+
+        //    requestAnimationFrame( animat2 );
+        //    mesh.children[0].rotation.y += 0.001;
+        //     }
+        //     animate()
+
+
+
+           
+		});
+		
+	});
+
+				///light
+
+				const sphere = new THREE.SphereBufferGeometry(0.4, 50, 50 );
+
+
+				light1 = new THREE.PointLight( 0x6fe5e6,0.1, 500 );
+				light1.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x6fe5e6 } ) ) );
+				scene.add( light1 );
+
+				light2 = new THREE.PointLight( 0x6fe5e6, 0.1, 50 );
+				light2.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x6fe5e6 } ) ) );
+				scene.add( light2 );
+
+				light3 = new THREE.PointLight( 0x6fe5e6, 0.1, 50 );
+				light3.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x6fe5e6 } ) ) );
+				scene.add( light3 );
+
+				light4 = new THREE.PointLight( 0x6fe5e6, 0.1, 50 );
+				light4.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x6fe5e6 } ) ) );
+				scene.add( light4 );
+
+			
+
+				const ambient = new THREE.AmbientLight( 0xffffff, 0.0);
+				scene.add( ambient );
+
+				const rect = RectAreaLightUniformsLib.init();
+
+				rectLight = new THREE.RectAreaLight( 0x6fe5e6, 2, 70, 70 );
+				rectLight.position.set( 5, 15, 100 );
+				scene.add( rectLight );
+				
+			
+                gsap.to(rectLight.position, {duration:5,x:500});
+
+				rectLightHelper = new RectAreaLightHelper( rectLight );
+				rectLight.add( rectLightHelper );
+
+
+			
+
+				
+		
+
+			
+
+				const geoFloor = new THREE.BoxBufferGeometry( 2000, 0.1, 2000 );
+				const matStdFloor = new THREE.MeshStandardMaterial( { color: 0x416667, roughness: 0, metalness: 0.5 } );
+				
+				const mshStdFloor = new THREE.Mesh( geoFloor, matStdFloor );
+				scene.add( mshStdFloor );
+
+
+
+				const matStdObjects = new THREE.MeshStandardMaterial( { color: 0xffffff, roughness: 0, metalness:1 } );
+
+				const geoBox = new THREE.BoxBufferGeometry( Math.PI, Math.sqrt( 2 ), Math.E );
+                const mshStdBox = new THREE.Mesh( geoBox, matStdObjects );
+
+                const mshStdBox2 = new THREE.Mesh( geoBox, matStdObjects );
+
+                mshStdBox2.position.set( 2, 1,1 );
+				mshStdBox2.rotation.set( 0, Math.PI / 2.0, 0 );
+				mshStdBox2.castShadow = true;
+				mshStdBox2.receiveShadow = true;
+				mshStdBox.position.set( 0, 0, 0 );
+				mshStdBox.rotation.set( 0, Math.PI / 2.0, 0 );
+				mshStdBox.castShadow = true;
+				mshStdBox.receiveShadow = true;
+				scene.add( mshStdBox );
+                scene.add( mshStdBox2 );
+			
+
+
+
+
+
+
+
+	
+    	
+	 		//renderer
+			    renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.shadowMap.enabled = true;
+				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+				renderer.outputEncoding = THREE.sRGBEncoding;
+			///composer
+				composer = new EffectComposer( renderer );
+				document.body.appendChild( renderer.domElement );
+
+			///filtre
+
+
+			const renderPass = new RenderPass( scene, camera );
+			composer.addPass( renderPass );
+
+			const filmPass = new FilmPass( 0.35, 0.025, 648, false );
+			composer.addPass(filmPass);
+
+
+				///control
+
+				const controls = new OrbitControls( camera, renderer.domElement );
+				controls.target.copy( mshStdBox.position );
+				controls.update();
+
+				///satts
+
+				stats = new Stats();
+				document.body.appendChild( stats.dom );
+
+			
+                
+		window.addEventListener( 'resize', onResize, false );
+
+			}
+
+
+
+
+
+
+
+
+
+
+
+
+
+			function onResize() {
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				camera.aspect = ( window.innerWidth / window.innerHeight );
+				camera.updateProjectionMatrix();
+
+			}
+         
+       
+			function animate() {
+		
+                //camera.lookAt( scene.position );
+	
+ 
+            
+		
+                            //     ///animation cmera 
+                            //                 const time = - performance.now() * 0.00003;
+
+                            // camera.position.x = 400 * Math.cos( time );
+                            // camera.position.z = 400 * Math.sin( time );
+                            // //regarder vers la scene
+                            // camera.lookAt( scene.position );
+				const time = Date.now() * 0.0005;
+				const delta = clock.getDelta();
+
+				if ( object ) object.rotation.y -= 0.01 * delta;
+
+				light1.position.x = Math.sin( time * 0.7 ) * 20;
+				light1.position.y =+ Math.cos( time * 0.5 ) * 20;
+				light1.position.z = Math.cos( time * 0.3 ) *10;
+
+				light2.position.x = Math.cos( time * 0.3 ) * 20;
+				light2.position.y = Math.sin( time * 0.5 ) * 20;
+				light2.position.z = Math.sin( time * 0.7 ) * 0;
+
+				light3.position.x = Math.sin( time * 0.7 ) * 20;
+				light3.position.y = Math.cos( time * 0.3 ) * 20;
+				light3.position.z = Math.sin( time * 0.5 ) * 10;
+
+				light4.position.x = Math.sin( time * 1 ) * 2;
+				light4.position.y = Math.cos( time * 1 ) * 20;
+				light4.position.z = Math.sin( time * 1 ) * 0;
+				light1.lookAt( origin );
+		
+			
+				const t = ( Date.now() / 3000 );
+
+					// move light in circle around center
+					// change light height with sine curv
+					const r = 10.0;
+					const lx = 30 * Math.cos( t );
+					const lz = 150 * Math.sin( t );
+					const ly =  20+ 50.0 * Math.sin( t / 10.0 );
+					values.innerHTML = "axe X "+lx;
+					values1.innerHTML = "axe y "+ly;
+					values2.innerHTML = "axe z "+lz;
+              	    rectLight.position.set(lx, ly, lz );
+                    
+					rectLight.lookAt( origin );
+					rectLightHelper.update();
+
+				
+
+				stats.begin();
+		
+		
+				composer.render();
+				stats.end();
+			
+				requestAnimationFrame( animate );
+			}
+	
+
+
+
+
+
+
+
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://db.onlinewebfonts.com/c/c5c9157a20810aac79a10bf84a37bdb4?family=Neue+Montreal+Medium" rel="stylesheet"> 
+    <link href="https://db.onlinewebfonts.com/c/86491e13bc132c38bdba0c2f57051023?family=GTSectra-Regular" rel="stylesheet"> 
+    <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://db.onlinewebfonts.com/a/CODgB0IR9bqNC2Vz" rel="stylesheet" type="text/css"/>
+    <title>Carré 3D avec Three.js</title>
+
+    <style>
+
+/* font-family: "Neue Montreal";
+font-family: "Montreal-Medium"; */
+
+:root {
+  --main-typo-color: rgba(255, 255, 255, 0.818);
+ 
+}
+*{
+  margin: 0;
+}
+
+      body { 
+        margin: 0;
+         font-family: "GTSectra-Regular";
+         background: rgb(0, 0, 0); 
+         color: var(--main-typo-color);
+    
+       }
+      section {
+        height: 100vh;
+        position: relative;
+       
+
+      }
+      .gsap-marker-start{
+        z-index: 99999999999;
+        position: relative;
+      }
+      .background {
+    height: 100%;
+    width: 100%;
+ 
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+      canvas{
+        position: fixed;
+ top:0;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+     section{
+      position: relative;
+     }
+     h2{
+        font-size:20px;
+   
+    
+        line-height:20px;
+        text-transform: uppercase;
+
+       font-family: 'Roboto', sans-serif;
+     
+ 
+    
+     }
+
+     h3 {
+      font-size: 10px;
+        width: 94px;
+    
+        line-height: 11px;
+       
+ 
+       font-family: 'Roboto', sans-serif;
+       font-weight: 400;
+   
+      
+}
+
+a {    font-size: 10px;
+    
+  pointer-events: all;
+        line-height: 12px;
+        color: var(--main-typo-color);
+
+       font-family: 'Roboto', sans-serif;
+       font-weight: 400;
+       display: block;
+       text-decoration: none;
+       text-transform: uppercase;
+   
+   }
+h4 {
+      font-size: 12px;
+  
+    
+        line-height: 12px;
+       
+
+       font-family: 'Roboto', sans-serif;
+       font-weight: 700;
+       text-transform: uppercase;
+   
+      
+}
+
+#carre{
+  width: 150px;
+  height: 150px;
+  background-color: rgba(226, 43, 147, 0.064);
+  position:relative;
+  top:-50vh
+
+
+}
+.grid{
+  display: grid;
+
+  grid-template-columns:30px repeat(9, 1fr) 30px;
+  grid-template-rows: 4vh 10vh 15vh 15vh 15vh;
+}
+.c2-r2 {
+  grid-column: 2;
+  grid-row: 2;pointer-events: all;
+
+}
+.c2-r3 {
+grid-column: 2;
+grid-row: 3;pointer-events: all;
+
+}
+.c3-r2 {
+grid-column: 3;
+grid-row: 2;
+position: relative;pointer-events: all;
+}
+.c3-r3 {
+grid-column: 3;
+grid-row: 3;
+position: relative;
+}
+.c4-r2 {
+grid-column: 4;
+grid-row: 2;
+position: relative;
+}
+.marge{
+  margin-bottom: 10px;
+}
+
+/* //filter effet aucruseru */
+.flou{
+  width: 105vw;
+  height: 105vh;
+  background-color: rgba(0, 0, 0, 0.15);  
+  backdrop-filter: blur(95px);
+  transform: translate(-2vw,-2vh);
+  position: fixed;
+  z-index: 4;
+}
+.ScrollSmoother-wrapper{
+  z-index: 5;
+
+}
+.pin-spacer {
+  pointer-events: none;
+}
+.start {
+  opacity: 0;
+}
+.rideau{
+  width: 105vw;
+  height: 105vh;
+  background-color: rgba(0, 0, 0, 0.99);  
+
+  transform: translate(-2vw,-2vh);
+  position: fixed;
+  z-index: 5;
+}
+iframe {
+  height: 100vh;
+  width: 100vw;
+}
+    </style>
+  </head>
+  <body>
+
+    <iframe src="6 MIRROR2.html" id='monIframe' frameborder="0"></iframe>
+    
+         
+
+
+
+ 
+
+
+ 
+<div id="smoothContent">
+
+
+
+
+  <div class="grid">
+  
+     
+          
+
+    <div class="c2-r2 start"  >
+            
+    <h4 class="marge">AW 2023 INRACI</h4>
+               
+    <h2><span id="how"> LEARN</span>  <br><span id="todo">WHY</span><br><span id="small">small</span> <br>things</h1> </h2>
+       
+      
+    </div>
+
+
+    <div class="c2-r3 start"  >
+      <h3  class="base12">
+        Cet espace centralise de manière exhaustive et informative toutes les données essentielles pour les cours d'atelier web inraci
+    
+      </h3>
+
+    
+    </div>
+        
+    <div class="c3-r2 start"  id="testtest" >
+      <h4 class="marge" >
+        web basic
+       </h4>
+       <a class="bouton" href="">DISPLAY.FLEX</a>
+       <a class="bouton" href="">DISPLAY.GRID</a>
+       <a class="bouton" href="">animation DIVERSES</a>
+       <a class="bouton" href="">SVG.BASE</a>
+       <a class="bouton" href="">GSAP.BASE</a>
+     
+    </div>   
+
+    <div class="c3-r3 start"  id="testtest" >
+      <h4 class="marge" >
+        BLENDER
+       </h4>
+       <a href="">formes</a>
+       <a href="">materiaux</a>
+       <a href="">animation</a>
+    
+     
+    </div>   
+      
+    <div class="c4-r2 start"  id="testtest" >
+      <h4 class="marge" >
+      glss
+       </h4>
+       <a href="">three.js:base</a>
+       <a href="">three.js:animation</a>
+       <a href="">animation</a>
+    
+     
+    </div>     
+         
+
+      </div>
+
+  
+   
+
+
+
+
+
+    <section class="section1">
+         
+       
+      <!-- //<div id="carre"></div> -->
+            
+       
+          
+    </section>
+    <section class="section2" >
+    
+    </section>
+    <section>
+
+    </section>
+
+
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+  var iframe = document.getElementById("monIframe");
+
+</script>
+  
+  </body>
+</html>

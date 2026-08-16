@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Effet de Déformation</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        #changeTextureButton {
+            position: fixed;
+            top:10px;
+            left:10px;
+            background-color: brown;
+            width: 100px;
+            height: 30px;
+            z-index: 9999999999999999999;
+        }
+    </style>
+</head>
+<body>
+    <div id="changeTextureButton"></div>
+    <div id="container"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/stats.js"></script>
+
+
+    <script>
+        const scene = new THREE.Scene();
+    
+        const aspect = window.innerWidth / window.innerHeight;
+const size = Math.min(window.innerWidth, window.innerHeight) / 2; // Ajustez la taille selon vos besoins
+
+const camera = new THREE.OrthographicCamera(
+  -size * aspect,
+  size * aspect,
+  size,
+  -size,
+  0.1,
+  1000
+);camera.position.z = 2; 
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('container').appendChild(renderer.domElement);
+
+     
+   const geometry = new THREE.PlaneGeometry(window.innerWidth*1.5 ,window.innerHeight*1.5);
+
+
+   ///texture image pour le shader 
+   const textures = [
+            new THREE.TextureLoader().load('cubemap/image2/46545.png'),
+            new THREE.TextureLoader().load('cubemap/image2/23.png'), // Ajoutez ici le chemin de votre deuxième image
+        // Ajoutez ici le chemin de votre troisième image
+        ];
+        
+     let currentTextureIndex = 0;
+    const textureCount = textures.length;
+
+///textrure pour displacement
+
+const displacementMapTexture = new THREE.TextureLoader().load('displacement/clouds.png');
+
+
+
+
+        const vertexShader = `
+      
+     
+    varying vec2 vUv;
+    void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+`;
+
+const fragmentShader = `
+
+
+uniform sampler2D uTexture1;
+uniform sampler2D uTexture2;
+uniform sampler2D uDisplacementMap;
+uniform float uTime;
+uniform float uTransition;
+uniform vec2 uScale;
+uniform float uYo;
+uniform float uTextureOffsetX;
+uniform float uTextureOffsetY;
+varying vec2 vUv;
+
+void main() {
+    vec2 uv = vUv;
+
+   
+
+
+    if (uTime > 0.0) {
+        uv.x += uTime * (0.2 * sin(uv.y * 10.0));
+        uv.y += uTime * (0.2 * sin(uv.x * 10.0));
+    }
+ 
+    // Ajustez les coordonnées de texture pour la carte de déplacement
+    vec2 displacementUv = uv;
+    displacementUv.x += uTextureOffsetX;
+    displacementUv.y += uTextureOffsetY;
+  
+    // Échantillonnez la texture de déplacement
+    vec4 displacementColor = texture2D(uDisplacementMap, displacementUv);
+
+    // Utilisez les composantes RVB de la texture de déplacement pour déplacer les coordonnées de texture
+    uv.x += displacementColor.r * uYo; // Ajustez selon vos besoins
+    uv.y += displacementColor.g * uYo; // Ajustez selon vos besoins
+    // Ajustez la taille
+    
+    // Ajustez les coordonnées de texture spécifiquement pour les textures d'images
+    vec2 imageUv = uv;
+   
+    float windowAspectRatio = ${window.innerWidth}.0 / ${window.innerHeight}.0;
+float imageAspectRatio = 0.999; // Ajustez ici le rapport d'aspect de vos images
+
+
+if (windowAspectRatio > 1.0 && windowAspectRatio < 1.3) {
+    imageUv.y /= windowAspectRatio / imageAspectRatio;
+    imageUv.y -= 0.1; // Center the coordinates around the central point (0, 0)
+    imageUv.x -= 0.1; // Center the coordinates around the central point (0, 0)
+    imageUv *= uScale*0.71;
+} 
+else if (windowAspectRatio >= 1.3 && windowAspectRatio < 2.0) {
+    imageUv.y /= windowAspectRatio / imageAspectRatio;
+    imageUv.y -= 0.1; // Center the coordinates around the central point (0, 0)
+    imageUv.x -= 0.15; // Center the coordinates around the central point (0, 0)
+    imageUv *= uScale*0.95;
+
+} 
+else if (windowAspectRatio >= 2.0) {
+    imageUv.y /= windowAspectRatio / imageAspectRatio;
+    imageUv.y += 0.01; // Center the coordinates around the central point (0, 0)
+    imageUv.x -= 0.16; // Center the coordinates around the central point (0, 0)
+    imageUv *= uScale*0.89;
+} else {
+    // Adjust for other cases
+    imageUv.x *= windowAspectRatio / imageAspectRatio;
+    imageUv.y -= 0.15; // Center the coordinates around the central point (0, 0)
+    imageUv.x += 0.25; // Center the coordinates around the central point (0, 0)
+    imageUv *= uScale*0.59;
+}
+
+    // Échantillonnez les textures d'images
+    vec4 texColor1 = texture2D(uTexture1, imageUv);
+    vec4 texColor2 = texture2D(uTexture2, imageUv);
+
+    // Utilisez un fondu enchaîné entre les deux textures d'images
+    gl_FragColor = mix(texColor1, texColor2, uTransition);
+  
+}
+`;
+
+
+const material = new THREE.ShaderMaterial({
+    uniforms: {
+        uTexture1: { value: textures[0] },
+        uTexture2: { value: textures[1] },
+        uTime: { value: 0.0 },
+        uDisplacementMap: { value: displacementMapTexture },
+        uTransition: { value: 0.0 },
+ uScale: { value: new THREE.Vector2(1.4, 2.08) },
+        uYo: { value: 0.0 },
+        uTextureOffsetX: { value: -0.03 },
+        uTextureOffsetY: { value: 0.0 },
+        uDisplacementX: { value: 0.0 }, // Ajoutez ces uniformes
+        uDisplacementY: { value: 0.0 }, // Ajoutez ces uniformes
+    },
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
+    transparent: true,
+});
+        const plane = new THREE.Mesh(geometry, material);
+        scene.add(plane);
+
+
+
+
+
+      //  dsiaplemcemnt position
+        gsap.to(material.uniforms.uTextureOffsetX, {
+    value:0.9, // Ajustez la valeur de décalage en x
+    duration: 2,
+    ease: "power4.inOut",
+    delay: 0,
+    repeat:-1,
+    yoyo:true
+});
+
+gsap.to(material.uniforms.uTextureOffsetU, {
+    value:0.7, // Ajustez la valeur de décalage en y
+    duration: 2,
+    ease: "power4.inOut",
+    delay: 0,
+    repeat:-1,
+    yoyo:true
+});
+
+//taille du filtre dispalemcent
+      
+        gsap.to(material.uniforms. uYo, {
+            value: 0.5,
+            duration:1,
+            ease: "none",
+     
+            
+        });
+
+        gsap.to(material.uniforms. uYo, {
+            value: 0.5,
+            duration:1,
+            ease: "none"
+            
+        });
+
+//      /transition image
+
+     gsap.to(material.uniforms. uTransition, {
+            value: 1,
+            duration:1,
+            ease: "power4.inOut",
+            delay:0.5
+            
+        });
+        
+ 
+
+
+        gsap.to(material.uniforms.uTime, {
+     value:0.5, // Valeur finale
+    duration: 0.9, // Durée de l'animation
+     ease: "power4.in", // Fonction d'animation (facultatif)
+   
+ });
+ gsap.to(material.uniforms.uTime, {
+     value:0.0, // Valeur finale
+    duration: 0.9, // Durée de l'animation
+     ease: "power4.out", // Fonction d'animation (facultatif)
+     delay:0.9
+ });
+
+
+        //  gsap.to(material.uniforms.uTime, {
+        //      value: 0,
+        //     duration:1,
+        //      ease: "power4.inOut",
+        //     delay:2
+
+            
+        //  });
+
+
+  
+        const changeTextureButton = document.getElementById('changeTextureButton');
+
+        changeTextureButton.addEventListener('click', () => {
+            currentTextureIndex = (currentTextureIndex + 1) % textureCount;
+            material.uniforms.uTexture2.value = textures[currentTextureIndex];
+        });
+
+
+
+        ///////////redimensionnemtn
+
+// Redimensionnement du rendu lorsque la fenêtre change de taille
+function onWindowResize() {
+    const newWidth = window.innerWidth;
+    const newHeight = window.innerHeight;
+
+    // Mettez à jour la taille du rendu et la caméra
+    camera.aspect = newWidth / newHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(newWidth, newHeight);
+}
+
+// Écouteur d'événement pour le redimensionnement de la fenêtre
+window.addEventListener('resize', onWindowResize);
+
+// Appelez onWindowResize() une fois au début pour initialiser la taille du rendu
+onWindowResize();
+
+
+
+
+
+
+
+        const stats = new Stats();
+        document.body.appendChild( stats.dom ).setAttribute("id", "democlass"); ;
+			
+            democlass.style.top='750px'
+            democlass.style.left='80px'
+    democlass.style.opacity=1;
+
+
+
+    let increasing = true; 
+
+        function animate() {
+        
+
+     const time2 =  performance.now() * 0.0001;
+
+
+     material.uniforms.uYo.value = 0.1 * Math.cos(time2*2) ;
+     
+stats.begin()
+      
+     
+            renderer.render(scene, camera);
+            stats.end();
+                requestAnimationFrame(animate);
+        }
+
+        animate();
+
+           
+
+
+    </script>
+</body>
+</html>

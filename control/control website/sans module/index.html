@@ -1,0 +1,2124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet">
+  <!-- <link href="https://db.onlinewebfonts.com/c/c5c9157a20810aac79a10bf84a37bdb4?family=Neue+Montreal+Medium" rel="stylesheet"> 
+<link href="https://db.onlinewebfonts.com/c/86491e13bc132c38bdba0c2f57051023?family=GTSectra-Regular" rel="stylesheet">  -->
+  <title>Carré 3D avec Three.js</title>
+
+
+</head>
+
+<body>
+
+
+
+  <div id="smoothContent">
+
+    <div class="player"></div>
+    <audio id="audio" autoplay loop>
+      <source id="audioSource" src="musique11.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+
+
+  <header>
+    <div class="hd1">
+      <svg width="120" height="23" viewBox="0 0 120 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M46.2152 6.55114H50.6271L50.6781 15.2259L41.4151 0.480347H35.8953V21.8477H40.8896V7.61391L50.0879 21.8477H55.6724V4.33341V0.480347H46.2133L46.2152 6.55114Z"
+          fill="white" />
+        <path d="M56.2214 4.33341V21.8477H60.849L61.0255 6.55114H65.661V0.480347H56.2038L56.2214 4.33341Z"
+          fill="white" />
+        <path
+          d="M81.7066 12.5946C81.1589 12.1449 80.4249 11.8612 79.5046 11.7435C80.0345 11.5879 80.5377 11.3525 80.9968 11.0455C81.7055 10.5715 82.2867 9.93045 82.689 9.17876C83.114 8.37272 83.3279 7.4721 83.3106 6.56102C83.3544 5.37003 83.031 4.19436 82.3842 3.19333C81.7374 2.1923 80.7985 1.4143 79.6948 0.964759C78.5366 0.441866 77.1712 0.18042 75.5986 0.18042H66.1865V21.5537H70.7866V13.7299H75.3554C76.4443 13.7299 77.2156 13.926 77.6692 14.3181C78.1228 14.7103 78.3797 15.3169 78.4398 16.1378L78.832 21.5556H83.5321L82.987 15.4162C82.8811 14.1482 82.4543 13.2076 81.7066 12.5946ZM77.6692 9.13365C77.0535 9.64609 76.192 9.90231 75.0848 9.90231H70.7866V4.03349H74.9299C76.1208 4.03349 77.028 4.27925 77.6516 4.77077C78.2751 5.26229 78.5882 5.98976 78.5908 6.95319C78.5921 7.89571 78.2849 8.62253 77.6692 9.13365Z"
+          fill="white" />
+        <path
+          d="M100.142 1.96879C98.5895 1.05372 96.7143 0.596191 94.5168 0.596191C92.3403 0.596191 90.4703 1.05372 88.9068 1.96879C87.3483 2.8758 86.0956 4.22684 85.3087 5.84931C84.472 7.52518 84.0537 9.50629 84.0537 11.7926C84.0537 14.079 84.472 16.0555 85.3087 17.7222C86.0972 19.336 87.3502 20.6772 88.9068 21.5733C90.4755 22.4753 92.3455 22.927 94.5168 22.9283C96.6881 22.9296 98.5581 22.478 100.127 21.5733C101.684 20.6771 102.939 19.3361 103.729 17.7222C104.564 16.0568 104.983 14.0803 104.984 11.7926C104.985 9.50498 104.567 7.52387 103.729 5.84931C102.943 4.2299 101.695 2.87958 100.142 1.96879ZM99.5542 15.7359C99.1637 16.7409 98.4806 17.6057 97.5934 18.2183C96.6693 18.8083 95.5892 19.1068 94.4933 19.0752C93.4144 19.1164 92.3499 18.8164 91.4512 18.218C90.5525 17.6196 89.8653 16.7531 89.4872 15.7418C89.0336 14.6581 88.8068 13.3437 88.8068 11.7985C88.8068 10.2534 89.0336 8.93437 89.4872 7.84153C89.8767 6.83078 90.5553 5.95715 91.4383 5.32968C92.3408 4.73256 93.4056 4.42851 94.4874 4.45906C95.5856 4.42696 96.6673 4.73144 97.5875 5.33164C98.4758 5.95589 99.1583 6.83024 99.5483 7.84349C100.001 8.93764 100.227 10.2566 100.229 11.8005C100.23 13.3443 100.005 14.6561 99.5523 15.7359H99.5542Z"
+          fill="white" />
+        <path d="M110.109 17.6947V0.182373H105.513V21.5478H120V17.6947H110.109Z" fill="white" />
+        <path
+          d="M30.5892 1.38436C29.0572 0.461453 27.263 0 25.2067 0C22.4053 0 20.2229 0.686947 18.6594 2.06085C18.3024 2.37729 17.9773 2.728 17.6888 3.10794C17.3992 2.72893 17.0742 2.37832 16.7182 2.06085C15.1495 0.688254 12.9671 0.00130723 10.1709 0C8.11334 0 6.31851 0.461453 4.78643 1.38436C3.25513 2.31109 2.02827 3.66541 1.2569 5.28056C0.418969 6.95513 0 8.92643 0 11.1945C0 13.5227 0.428116 15.5188 1.28435 17.1829C2.0757 18.7776 3.31621 20.1061 4.8531 21.0046C6.44266 21.9046 8.24456 22.3617 10.0709 22.3282C11.9455 22.3282 13.5534 21.9974 14.8946 21.336C15.9715 20.8092 16.9215 20.0553 17.679 19.1261C18.4361 20.0557 19.3862 20.8097 20.4634 21.336C21.8046 21.9974 23.4125 22.3282 25.2871 22.3282C27.1134 22.3615 28.9153 21.9044 30.5049 21.0046C32.0418 20.1061 33.2823 18.7776 34.0737 17.1829C34.9299 15.5175 35.358 13.5214 35.358 11.1945C35.358 8.92774 34.9449 6.95644 34.1188 5.28056C33.3472 3.66554 32.1204 2.31127 30.5892 1.38436ZM29.9696 15.0907C29.6038 16.0889 28.9559 16.9595 28.1048 17.5967C27.2661 18.1891 26.2587 18.4951 25.2322 18.4692C23.7812 18.4692 22.6576 18.0627 21.8615 17.2496C21.0634 16.4378 20.5575 15.2691 20.3556 13.8259H15.0005C14.8044 15.2691 14.3044 16.4378 13.5083 17.2496C12.7122 18.0614 11.5886 18.4692 10.1356 18.4692C9.1065 18.4965 8.09612 18.1904 7.25514 17.5967C6.40499 16.9566 5.75917 16.0832 5.39625 15.0828C4.93499 13.8369 4.7141 12.5148 4.74526 11.1866C4.71786 9.86452 4.93319 8.54859 5.38057 7.30416C5.73875 6.29526 6.3792 5.41047 7.22573 4.75506C8.0792 4.13675 9.11359 3.81885 10.167 3.8511C11.4965 3.8511 12.5651 4.22759 13.373 4.98055C14.1789 5.73156 14.7358 6.91199 14.9789 8.25517H20.4124C20.6556 6.91199 21.1968 5.73156 21.9968 4.98055C22.7968 4.22955 23.8714 3.8511 25.2028 3.8511C26.2562 3.81885 27.2906 4.13675 28.1441 4.75506C28.99 5.41102 29.6303 6.29562 29.9892 7.30416C30.4366 8.54859 30.6519 9.86452 30.6245 11.1866C30.6532 12.5179 30.4296 13.8426 29.9657 15.0907H29.9696Z"
+          fill="white" />
+      </svg>
+
+
+    </div>
+    <div class="hd3">
+      <p>
+        Exploring the Boundaries of <br> the Unreal.
+      </p>
+      <p class="foot bigg" id="foote">
+        Restart <svg width="20" height="8" viewBox="0 0 20 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M19.3536 4.35355C19.5488 4.15829 19.5488 3.84171 19.3536 3.64645L16.1716 0.464466C15.9763 0.269204 15.6597 0.269204 15.4645 0.464466C15.2692 0.659728 15.2692 0.976311 15.4645 1.17157L18.2929 4L15.4645 6.82843C15.2692 7.02369 15.2692 7.34027 15.4645 7.53553C15.6597 7.7308 15.9763 7.7308 16.1716 7.53553L19.3536 4.35355ZM0 4.5H19V3.5H0V4.5Z"
+            fill="white" />
+        </svg>
+
+      </p>
+    </div>
+
+    <div class="hd2">
+      <div class="cd big">
+        <a href="https://www.remedygames.com/studio" class="hp"  target="_blank">studio</a>
+      </div>
+      <div class="cd big">
+        <a href="https://www.remedygames.com/contact" class="hp"  target="_blank">contact</a>
+      </div>
+      <div class="cd big">
+        <a href="https://www.remedygames.com/news" class="hp" target="_blank"> new</a>
+      </div>
+
+
+
+
+
+
+    </div>
+  </header>
+
+
+
+  </div>
+
+  <div class="menu">
+    <div class="rond"></div>
+
+    <div class="mn1">
+      <?xml version="1.0" encoding="UTF-8"?>
+      <svg id="logo1" width="24" height="34" viewBox="0 0 24 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.2503 0H0.575806V33.3611H11.2503V0Z" fill="white" />
+        <path d="M23.0145 20.749H11.2504V33.3627H23.0145V20.749Z" fill="white" />
+        <path d="M12.9569 0.0126953H11.8564V19.5133H12.9569V0.0126953Z" fill="white" />
+        <path d="M20.9003 18.7065H13.3684V19.5022H20.9003V18.7065Z" fill="white" />
+      </svg>
+
+      <?xml version="1.0" encoding="UTF-8"?>
+      <svg class="mn" id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720">
+        <defs>
+          <style>
+            .cls-1 {
+              fill: #fff;
+              stroke: #fff;
+              stroke-miterlimit: 10;
+            }
+          </style>
+        </defs>
+        <rect class="cls-1" x="256.9" y="256.9" width="206.2" height="206.2"
+          transform="translate(360 869.12) rotate(-135)" />
+        <circle class="cls-1" cx="172.18" cy="360" r="21.56" />
+        <circle class="cls-1" cx="360" cy="548.14" r="21.56" />
+        <circle class="cls-1" cx="547.82" cy="360" r="21.56" />
+        <circle class="cls-1" cx="360" cy="171.86" r="21.56" />
+      </svg>
+      <?xml version="1.0" encoding="UTF-8"?>
+
+
+
+      <?xml version="1.0" encoding="UTF-8"?>
+      <svg class="mn" logo id="Calque_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720">
+        <defs>
+          <style>
+            .cls-1 {
+              fill: #fff;
+            }
+
+            .cls-2 {
+              fill: none;
+              stroke: #1d1d1b;
+              stroke-miterlimit: 10;
+              stroke-width: 7px;
+            }
+          </style>
+        </defs>
+        <rect class="cls-1" x="145.71" y="139.31" width="306.95" height="306.95" />
+        <path class="cls-2" d="M248.54,139.31v110.94h91.64s2.29,88.19,0,88.19h-91.64v107.82" />
+      </svg>
+      <svg width="34" id="logo4" height="22" viewBox="0 0 34 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32.5332 1.40625H4.90674V15.0977H32.5332V1.40625Z" fill="white" />
+        <path d="M28.423 7.1543H0.796509V20.8458H28.423V7.1543Z" fill="white" stroke="black" stroke-miterlimit="10" />
+        <path d="M0.796509 7.07586L5.02705 1.1084V7.07586H0.796509Z" fill="white" />
+        <path d="M28.5077 14.8789V20.9424L32.7382 14.8789H28.5077Z" fill="white" />
+        <path d="M28.423 7.15446L32.7381 1.1084" stroke="black" stroke-miterlimit="10" />
+        <path d="M32.7382 1.1084H5.11169V14.7999H32.7382V1.1084Z" stroke="black" stroke-miterlimit="10" />
+        <path d="M0.796509 20.8465L5.11168 14.7998" stroke="black" stroke-miterlimit="10" />
+      </svg>
+
+
+
+    </div>
+
+  </div>
+
+  <section class="section1">
+    <div class="sec">
+      <h1 class="sec1h">
+        mytologies
+      </h1>
+      <h1 class="sec2h">
+        of impossible
+      </h1>
+      <!-- <p class="sec3h">
+        Vivez l'aventure en 3D.
+      </p>
+
+      <p class="sec4h">
+        Explorez un monde 3D où chaque aventure
+        <br>prend vie
+      </p> -->
+
+
+   
+
+    </div>
+
+    <div class="wave">
+      <div class="bar" style="animation-delay: 0s;"></div>
+      <div class="bar" style="animation-delay: 0.1s;"></div>
+      <div class="bar" style="animation-delay: 0.2s;"></div>
+      <div class="bar" style="animation-delay: 0.3s;"></div>
+      <div class="bar" style="animation-delay: 0.4s;"></div>
+      <div class="bar" style="animation-delay: 0.5s;"></div>
+      <div class="bar" style="animation-delay: 0.6s;"></div>
+      <div class="bar" style="animation-delay: 0.7s;"></div>
+  </div>
+
+    <div class="portal">
+
+      <div class="top"></div>
+
+      <div class="ent big">
+        <p>
+          enter
+        </p>
+
+      </div>
+
+      <p class="p1">
+        Control
+      </p>
+
+      <p class="p2">
+        Control takes players into a strange and mysterious world <br>
+        where reality is fluid and the paranormal is ever-present.
+      </p>
+
+      <p class="p3">
+        A labyrinthine world
+      </p>
+
+      <p class="p4">
+        A supernatural journey
+      </p>
+
+      <p class="p5">
+        The Federal Bureau of Control, a brutalist skyscraper in constant flux,<br>
+        is filled with secrets and mysteries waiting<br> to be uncovered.
+      </p>
+
+
+
+
+
+      <p class="p6">
+        Enter a world where gravity is optional, objects obey your command, <br>
+        and the unseen shapes your reality.
+      </p>
+
+      <p class="p7">
+        Power unleashed
+      </p>
+
+      <p class="p8">
+        A mind-bending experience
+      </p>
+
+      <p class="p9">
+        Bend physics to your will, wield supernatural abilities, and <br>
+        uncover the secrets of the Federal Bureau of Control.
+      </p>
+
+      <div class="bot"></div>
+
+    </div>
+
+
+
+    <div class="playlist">
+
+
+
+      <div class="m1">
+        <p class="pm1">
+          DnD Calm Fantasy Adventure
+        </p>
+
+        <p class="pm2">
+          Stardust Space Wanderers
+        </p>
+
+        <P class="pm3">
+          Nebula Mysterious Ambient Journey
+        </P>
+
+        <P class="pm4">
+          Dark Tension Mysterious Thriller
+        </P>
+
+        <P class="pm5">
+          The Dungeon of the Dark Pyramid
+        </P>
+
+      </div>
+
+      <div class="time">
+      </div>
+
+      <div class="ppl play2  bigg">
+        <svg class="btn" width="527" height="612" viewBox="0 0 527 612" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M414.607 215.177C462.6 245.171 486.593 260.167 494.823 279.371C502.01 296.137 502.01 315.121 494.823 331.891C486.593 351.091 462.6 366.087 414.607 396.084L189.2 536.964C135.935 570.254 109.302 586.901 87.3243 585.131C68.167 583.591 50.606 573.861 39.1467 558.431C26 540.731 26 509.324 26 446.511V164.75C26 101.937 26 70.531 39.1467 52.83C50.606 37.4007 68.167 27.6677 87.3243 26.1273C109.302 24.3607 135.935 41.006 189.2 74.2967L414.607 215.177Z"
+            stroke="white" stroke-width="52" stroke-linejoin="round" />
+        </svg>
+
+      </div>
+
+      <div class="ppa pause2  bigg">
+        <svg class="btn" width="333" height="580" viewBox="0 0 333 580" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M34 34V546M299 34V546" stroke="white" stroke-width="66.6667" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+
+
+      </div>
+
+      <div class="next  bigg">
+        <svg class="btn" width="747" height="427" viewBox="0 0 747 427" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0V426.5L373.2 213.225L0 0ZM26.65 45.925L319.45 213.225L26.65 380.55V45.925Z" fill="white" />
+          <path d="M373.175 0V426.5L746.375 213.225L373.175 0ZM399.825 45.925L692.625 213.225L399.825 380.55V45.925Z"
+            fill="white" />
+        </svg>
+
+      </div>
+
+      <div class="before bigg">
+        <svg class="btn" width="747" height="427" viewBox="0 0 747 427" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M746.375 426.5L746.375 -3.43323e-05L373.175 213.275L746.375 426.5ZM719.725 380.575L426.925 213.275L719.725 45.95L719.725 380.575Z"
+            fill="white" />
+          <path
+            d="M373.2 426.5L373.2 -3.43323e-05L0.00018926 213.275L373.2 426.5ZM346.55 380.575L53.7502 213.275L346.55 45.95L346.55 380.575Z"
+            fill="white" />
+        </svg>
+
+      </div>
+
+
+      <div class="m9 big">
+        <p>next</p>
+      </div>
+
+    </div>
+
+
+
+    <!-- <div class="scene4">
+
+      <div class="port">
+        <img class="img" src="img1.png" alt="">
+      </div>
+
+      <div class="port2">
+        <img class="img" src="img2.png" alt="">
+      </div>
+
+      <div class="port3">
+        <img class="img" src="image6.png" alt="">
+      </div>
+
+
+    </div> -->
+    
+  </section>
+
+ 
+
+
+
+
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r132/three.js"
+    integrity="sha512-GMNFd5lpd+N+jks9bfkO6LrZuvR9ToNCb4U5yUzol4VIoXhB9dsU/VgoYmJu48xY2+hhkolZMsA4iT7i7mP/aA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="gsap.js"></script>
+  <script src="ScrollTrigger.min.js"></script>
+  <script src="ScrollSmoother.min.js"></script>
+
+  <!-- Chargement des shaders -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/shaders/CopyShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/shaders/ConvolutionShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/shaders/FXAAShader.js"></script>
+
+
+  <!-- Chargement de CopyShader.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/shaders/CopyShader.js"></script>
+
+  <!-- Chargement de Pass.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/postprocessing/Pass.js"></script>
+
+  <!-- Chargement de ShaderPass.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/postprocessing/ShaderPass.js"></script>
+
+
+  <!-- Chargement de BloomPass.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+  <!-- Chargement de EffectComposer.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/postprocessing/EffectComposer.js"></script>
+
+  <!-- Chargement de RenderPass.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/postprocessing/RenderPass.js"></script>
+  <!-- Load FilmPass -->
+  <!-- Load FilmPass and FilmShader -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/shaders/FilmShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/postprocessing/FilmPass.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/dat.gui@0.7.7/build/dat.gui.min.js"></script>
+
+
+  <script>
+
+
+
+
+    // Initialiser la scène
+    const scene = new THREE.Scene();
+
+    // Initialiser la caméra (perspective)
+    const camera = new THREE.PerspectiveCamera(76, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 16;
+    camera.position.y = 4;
+    camera.position.x = 1;
+    gsap.to(camera.position, { duration: 5, y: 1.5, x: 0.6, delay: 3 })
+
+
+    // Initialiser le moteur de rendu
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    document.body.appendChild(renderer.domElement);
+
+    //amnient 
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0)
+    scene.add(ambientLight)
+
+
+    //  scene.fog = new THREE.FogExp2(0xffffff, 0.04); 
+
+
+    //////////////////////////////////////////
+
+    ////loader et texture laoder
+    const loader = new THREE.GLTFLoader();
+    const textureLoader = new THREE.TextureLoader();
+
+    let mixer;
+    const imgtexture = textureLoader.load('yaw_texture65.png')
+    imgtexture.flipY = false
+    imgtexture.encoding = THREE.sRGBEncoding;
+    imgtexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+    // Env map pour des reflets plus riches sur yawCube
+    const yawCubeEnvMap = new THREE.CubeTextureLoader()
+      .setPath('cubemap/image1/')
+      .load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']);
+    yawCubeEnvMap.encoding = THREE.sRGBEncoding;
+
+    // Créer un matériau blanc
+    const material = new THREE.MeshStandardMaterial({
+
+
+      map: imgtexture,
+    });
+
+    const yawCubeMaterial = new THREE.MeshStandardMaterial({
+      map: imgtexture,
+      envMap: yawCubeEnvMap,
+      envMapIntensity: 1.1,
+      roughness: 0.28,
+      metalness: 0.55,
+      emissive: new THREE.Color(0.25, 0, 0),
+    });
+
+
+    // window.onload = function () {
+    //   var musique = document.getElementById('musique');
+    //   musique.play();
+    // }
+
+
+
+
+
+    // Charger la vidéo comme texture
+    const video = document.createElement('video');
+    video.src = 'VIDEO2.mp4';
+    video.crossOrigin = 'anonymous';
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.play();
+
+    const videoTexture = new THREE.VideoTexture(video);
+    videoTexture.minFilter = THREE.LinearFilter;
+    videoTexture.magFilter = THREE.LinearFilter;
+    videoTexture.format = THREE.RGBAFormat;
+    videoTexture.generateMipmaps = false;
+    videoTexture.flipY = false;
+    videoTexture.wrapS = THREE.ClampToEdgeWrapping;
+    videoTexture.wrapT = THREE.ClampToEdgeWrapping;
+    videoTexture.repeat.set(1, 1);
+    videoTexture.offset.set(0, 0);
+    videoTexture.center.set(0.5, 0.5);
+    videoTexture.rotation = 0;
+
+    // L'ecran est un cube : les 6 faces sont en bandes dans l'atlas.
+    // On remappe uniquement la face avant (+Z) sur [0,1] pour cadrer toute la vidéo.
+    function fitVideoToEcranUVs(mesh, texture) {
+      const geom = mesh.geometry;
+      const pos = geom.attributes.position;
+      const uv = geom.attributes.uv;
+      if (!pos || !uv) return;
+
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i);
+        const y = pos.getY(i);
+        const z = pos.getZ(i);
+        if (Math.abs(z - 1) < 1e-3) {
+          // Face écran : X → U, Y → V (V inversé car flipY=false)
+          uv.setXY(i, (x + 1) / 2, (1 - y) / 2);
+        } else {
+          // Autres faces : coin de texture (évite un crop parasite)
+          uv.setXY(i, 0, 0);
+        }
+      }
+      uv.needsUpdate = true;
+      texture.needsUpdate = true;
+    }
+
+    loader.load('yaw_okyere_darko_sips5blend55.glb', (gltf) => {
+      const model = gltf.scene;
+      // Changer la taille du modèle
+      const scale = 0.5; // Modifiez cette valeur en fonction de la taille souhaitée
+
+      model.scale.set(scale, scale, scale);
+      model.position.y = -0.2
+
+      // Déclarez une variable pour stocker l'animation mixer
+
+      model.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          if (child.name === 'ecran') {
+            child.material = new THREE.MeshStandardMaterial({ map: videoTexture });
+            fitVideoToEcranUVs(child, videoTexture);
+          } else {
+            child.material = material;
+          }
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+
+
+
+
+
+
+
+
+
+
+      //////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation
+      //////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation
+      //////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation//////////////////////animation
+
+
+      mixer = new THREE.AnimationMixer(model);
+      let totalDuration;
+
+      // Ajouter un délai de 5 secondes avant de démarrer l'animation
+      setTimeout(() => {
+        gltf.animations.forEach((clip) => {
+          const action = mixer.clipAction(clip);
+
+          action.play(); // Lance l'animation
+
+          // Ralentir l'animation (par exemple, à 0.1 de vitesse)
+          action.timeScale = 0.4;
+
+          // Définir l'animation pour ne pas se répéter
+          action.setLoop(THREE.LoopOnce, 0);
+
+          // Quand l'animation se termine, s'assurer qu'il ne revient pas à sa position de départ
+          action.clampWhenFinished = true; // Cela permet de maintenir la position finale
+          action.onFinished = () => {
+            // L'animation est terminée, s'assurer que l'objet reste à la fin
+            model.position.copy(action.getRoot().position); // Met à jour la position finale du modèle
+          };
+
+          totalDuration = clip.duration; // Durée de l'animation
+        });
+      }, 10000); // Le délai de 5 secondes (5000 ms)
+
+
+
+      ///boutons
+
+
+
+
+
+      const yawTheSecond = model.children.find((child) => child.name === 'yawCube')
+      console.log(yawTheSecond)
+
+      // const yawTheSecond2 =  model.children.find((child) => child.name === 'yawCube2')
+      // console.log(  yawTheSecond2)
+
+
+
+      // Meshes du cube portal (matériau dédié + clignotement rouge)
+      const yawCubeMeshes = [];
+      if (yawTheSecond) {
+        yawTheSecond.traverse((child) => {
+          if (child.isMesh) {
+            child.material = yawCubeMaterial.clone();
+            yawCubeMeshes.push(child);
+          }
+        });
+      }
+
+      const blinkProxy = { t: 0.25 };
+      const yawCubeBlink = gsap.to(blinkProxy, {
+        t: 1,
+        duration: 0.55,
+        yoyo: true,
+        repeat: -1,
+        ease: 'sine.inOut',
+        onUpdate: () => {
+          const c = blinkProxy.t;
+          yawCubeMeshes.forEach((m) => {
+            m.material.emissive.setRGB(c, 0, 0);
+          });
+        }
+      });
+
+      // Créer une liste d'objets 3D cliquables
+      const objects = yawCubeMeshes.length ? yawCubeMeshes : [yawTheSecond];
+      //objects.push(yawTheSecond2);
+
+      // objects.push(Silhouette);
+
+
+
+      let yawCubeClicked = false; // Variable pour suivre l'état du clic
+
+      const hoverRaycaster = new THREE.Raycaster();
+      const hoverMouse = new THREE.Vector2();
+
+      window.addEventListener('mousemove', (event) => {
+        if (yawCubeClicked || !objects.length) {
+          document.body.style.cursor = '';
+          return;
+        }
+        hoverMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        hoverMouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        hoverRaycaster.setFromCamera(hoverMouse, camera);
+        const hits = hoverRaycaster.intersectObjects(objects, true);
+        document.body.style.cursor = hits.length > 0 ? 'pointer' : '';
+      });
+
+      window.addEventListener('click', onClick, false);
+
+      function onClick(event) {
+        if (yawCubeClicked) return; // Empêche un nouvel appui
+
+        const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+        const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        const vector = new THREE.Vector3(mouseX, mouseY, 0.5);
+        vector.unproject(camera);
+
+        const raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+        const intersects = raycaster.intersectObjects(objects, true);
+
+        if (intersects.length > 0) {
+          const clickedObject = intersects[0].object;
+          const isYawCube = yawCubeMeshes.includes(clickedObject) || clickedObject === yawTheSecond;
+
+          if (isYawCube) {
+            yawCubeClicked = true; // Empêche les futurs clics
+            yawCubeBlink.kill();
+            yawCubeMeshes.forEach((m) => {
+              m.material.emissive.setRGB(0, 0, 0);
+            });
+            document.body.style.cursor = '';
+
+            gsap.to(camera.position, { duration: 5, z: -6, y: 11, x: 0.7 });
+
+            const sec = document.querySelector(".sec");
+            gsap.to(sec, {
+              duration: 3,
+              opacity: 0,
+              onComplete: function () {
+                sec.style.display = "none";
+              }
+            });
+
+            const portal = document.querySelector(".portal");
+
+            gsap.to(portal, { duration: 4, opacity: 1, delay: 3 })
+            const rond = document.querySelector(".rond");
+            gsap.to(rond, { duration: 4, top: "46%" });
+
+
+          }
+
+
+          document.querySelectorAll('.ent').forEach(element => {
+            element.addEventListener('click', () => {
+              // Déplacer l'élément rond à top 53%
+              const rond = document.querySelector(".rond");
+              gsap.to(rond, { duration: 4, top: "53%" });
+
+              // Déplacer la caméra en z: -40
+              gsap.to(camera.position, { duration: 7, z: -43 });
+
+              // Animer la rotation de la caméra pour la faire regarder vers le haut
+              gsap.to(camera.rotation, { delay: 4, duration: 4, x: 0.3 }); // Rotation vers le haut (90°)
+
+              // Cacher la div .portal en 2 secondes
+              const portal = document.querySelector(".portal");
+              gsap.to(portal, {
+                duration: 2,
+                opacity: 0,
+                onComplete: function () {
+                  portal.style.display = "none";
+
+                  // Faire apparaître la div .playlist après la disparition de .portal
+                  const playlist = document.querySelector(".playlist");
+                  gsap.to(playlist, {
+                    delay: 2,
+                    duration: 4,
+                    opacity: 1,
+                    display: "grid" // Si tu veux changer son display de 'none' à 'block'
+                  });
+                }
+              });
+
+              // Animer l'angle de fourthSpotLight vers 0
+              gsap.to(fourthSpotLight, { duration: 4, angle: 0 });
+              gsap.to(secondSpotLight, { duration: 4, angle: 0 });
+            });
+          });
+
+          document.querySelector(".m9").addEventListener("click", () => {
+            // Déplacer l'élément rond à top 59%
+            const rond = document.querySelector(".rond");
+            gsap.to(rond, { duration: 4, top: "59%" });
+
+            // Déplacer la caméra en z: -105 et y: 14.5
+            gsap.to(camera.position, { duration: 5, z: -105, y: 14.5 });
+
+            // Animer la rotation de la caméra à 360 degrés autour de l'axe Z
+            gsap.to(camera.rotation, { duration: 5, z: "+=6.2832" }); // 6.2832 radians = 360°
+
+            // Optionnel : tu peux aussi animer la rotation légère de la caméra sur l'axe X si tu le souhaites
+            gsap.to(camera.rotation, { duration: 2, x: 0 }); // Rotation légère vers le haut (90°)
+
+            gsap.to(camera.position, { delay: 4.5, duration: 2, z: -107, x: 10 });
+            gsap.to(camera.rotation, { delay: 4, duration: 2, y: 0.1, x: -0.2 });
+
+            // Cacher la div .playlist en 3 secondes
+            gsap.to(".playlist", {
+              duration: 3,
+              opacity: 0,
+              onComplete: function () {
+                // Après l'animation de disparition, on met la div en display: none
+                document.querySelector(".playlist").style.display = "none";
+
+                // Sélectionner la div .gal
+                const scene = document.querySelector(".scene4");
+
+                // Rendre la div .gal visible avec un délai de 2 secondes
+                gsap.to(scene, {
+                  duration: 4,
+                  opacity: 1,
+                  display: 'grid', // Assure que l'élément devient un grid
+                });
+              }
+            });
+          });
+
+
+
+
+
+
+          // else if(clickedObject === yawTheSecond2) {
+
+
+          // }
+
+
+
+
+
+          //   else if (clickedObject=== Silhouette) {
+          //           // Ouvrir un site pour le deuxième cube
+          // alert("ee")
+          //       }
+        }
+      }
+
+
+      // // Sélectionner l'élément avec la classe .big
+      // const bigElement = document.querySelector(".big");
+
+      // // Ajouter un écouteur d'événements pour le survol de la souris
+      // bigElement.addEventListener("mouseenter", () => {
+      //   // Changer le curseur à une forme spécifique (par exemple, pointer)
+      //   document.body.style.cursor = "pointer"; // ou tout autre type de curseur
+      // });
+
+      // // Ajouter un écouteur d'événements pour quand la souris quitte l'élément
+      // bigElement.addEventListener("mouseleave", () => {
+      //   // Remettre le curseur par défaut
+      //   document.body.style.cursor = "default";
+      // });
+      const bigElements = document.querySelectorAll('.big');
+
+
+      bigElements.forEach(bigElement => {
+
+        bigElement.addEventListener('mouseenter', () => {
+
+
+          bigElement.style.transition = 'transform 0.3s ease';
+
+
+          bigElement.style.cursor = 'pointer';
+        });
+
+
+        bigElement.addEventListener('mouseleave', () => {
+
+
+
+
+          bigElement.style.cursor = '';
+        });
+      });
+
+
+      const big2Elements = document.querySelectorAll('.bigg');
+
+
+      big2Elements.forEach(big2Element => {
+
+        big2Element.addEventListener('mouseenter', () => {
+
+          big2Element.style.transform = 'scale(1.2)';
+          big2Element.style.transition = 'transform 0.3s ease';
+
+
+          big2Element.style.cursor = 'pointer';
+        });
+
+
+        big2Element.addEventListener('mouseleave', () => {
+
+          big2Element.style.transform = 'scale(1)';
+
+
+          big2Element.style.cursor = '';
+        });
+      });
+
+
+
+
+
+
+
+      // // effet de souris 
+
+      // const mouse = { x: 0, y: 0 };
+
+      // document.addEventListener('mousemove', function (e) {
+      //   mouse.x = e.clientX || e.pageX;
+      //   mouse.y = e.clientY || e.pageY;
+
+      //   // Utilisez la position de la souris pour effectuer des modifications légères
+      //   const rotationIntensity = 0.11; // Augmentez cette valeur pour un effet plus fort
+
+      //   gsap.to(camera.rotation,
+      //     {
+      //       duration: 2,
+      //       x: (mouse.y / window.innerHeight - 0.5) * rotationIntensity,
+      //       y: (mouse.x / window.innerWidth - 0.5) * rotationIntensity,
+
+      //     })
+      //   // Mettez à jour la scène
+      //   renderer.render(scene, camera);
+      // });
+
+
+
+
+
+
+      scene.add(model);
+
+
+
+
+
+
+
+      // Vous pouvez ajouter des transformations, des matériaux, etc. au modèle ici
+    }, undefined, (error) => {
+      console.error('Erreur de chargement du modèle:', error);
+    });
+
+
+
+
+
+    // Créer le panneau GUI
+    const gui = new dat.GUI();
+
+    // Modifier dynamiquement le z-index via JavaScript
+    const guiContainer = document.querySelector('.dg.ac'); // Sélectionner le conteneur de dat.GUI
+    if (guiContainer) {
+      guiContainer.style.position = 'absolute'; // Assurez-vous qu'il est positionné
+      guiContainer.style.zIndex = '1000'; // Définir un z-index élevé
+      guiContainer.style.visibility = 'hidden'; // Cacher le panneau
+    } else {
+      console.error('dat.GUI container not found');
+
+    }
+
+    const tenthSpotLightParams = {
+      intensity: 1.4,
+      distance: 0,
+      angle: 0.11,
+      exponent: 1,
+      decay: 0,
+      positionX: 1,
+      positionY: 13,
+      positionZ: -59,
+      targetX: 0.2,
+      targetY: 0,
+      targetZ: 260,
+      showHelper: true,
+    };
+
+    // Création du dixième SpotLight
+    const tenthSpotLight = new THREE.SpotLight(
+      0xFF0000,
+      tenthSpotLightParams.intensity,
+      tenthSpotLightParams.distance,
+      tenthSpotLightParams.angle,
+      tenthSpotLightParams.exponent,
+      tenthSpotLightParams.decay
+    );
+    tenthSpotLight.position.set(
+      tenthSpotLightParams.positionX,
+      tenthSpotLightParams.positionY,
+      tenthSpotLightParams.positionZ
+    );
+    tenthSpotLight.target.position.set(
+      tenthSpotLightParams.targetX,
+      tenthSpotLightParams.targetY,
+      tenthSpotLightParams.targetZ
+    );
+    scene.add(tenthSpotLight);
+    scene.add(tenthSpotLight.target);
+
+    tenthSpotLight.castShadow = true;
+
+    // Helper pour la lumière
+    const tenthSpotLightHelper = new THREE.SpotLightHelper(tenthSpotLight);
+    scene.add(tenthSpotLightHelper);
+    tenthSpotLightHelper.visible = false;
+
+    // Création de l'interface dat.GUI folder
+    const spotLightFolder10 = gui.addFolder('Dixième SpotLight');
+
+    // Ajout des contrôles GUI pour la dixième lumière
+    spotLightFolder10.add(tenthSpotLightParams, 'intensity', 0, 10).onChange(value => tenthSpotLight.intensity = value);
+    spotLightFolder10.add(tenthSpotLightParams, 'distance', 0, 2000).onChange(value => tenthSpotLight.distance = value);
+    spotLightFolder10.add(tenthSpotLightParams, 'angle', 0, Math.PI / 2).onChange(value => tenthSpotLight.angle = value);
+    spotLightFolder10.add(tenthSpotLightParams, 'exponent', 0, 1).onChange(value => tenthSpotLight.penumbra = value);
+    spotLightFolder10.add(tenthSpotLightParams, 'decay', 0, 4).onChange(value => tenthSpotLight.decay = value);
+
+    // Position et cible
+    spotLightFolder10.add(tenthSpotLightParams, 'positionX', -150, 150).onChange(value => tenthSpotLight.position.x = value);
+    spotLightFolder10.add(tenthSpotLightParams, 'positionY', -100, 100).onChange(value => tenthSpotLight.position.y = value);
+    spotLightFolder10.add(tenthSpotLightParams, 'positionZ', -100, 100).onChange(value => tenthSpotLight.position.z = value);
+
+    // Cible
+    spotLightFolder10.add(tenthSpotLightParams, 'targetX', -130, 130).onChange(value => { tenthSpotLight.target.position.x = value; tenthSpotLightHelper.update(); });
+    spotLightFolder10.add(tenthSpotLightParams, 'targetY', -130, 130).onChange(value => { tenthSpotLight.target.position.y = value; tenthSpotLightHelper.update(); });
+    spotLightFolder10.add(tenthSpotLightParams, 'targetZ', -160, 260).onChange(value => { tenthSpotLight.target.position.z = value; tenthSpotLightHelper.update(); });
+
+    spotLightFolder10.add(tenthSpotLightParams, 'showHelper').onChange(value => tenthSpotLightHelper.visible = value);
+
+    spotLightFolder10.close();
+
+    const fourteenthSpotLightParams = {
+      intensity: 0.8,
+      distance: 0,
+      angle: 0.86,
+      exponent: 1,
+      decay: 0,
+      positionX: -0.2,
+      positionY: 20,
+      positionZ: -103,
+      targetX: -0.2,
+      targetY: -15,
+      targetZ: -260,
+      showHelper: true,
+    };
+
+    // Création de la quatorzième SpotLight avec une couleur rouge
+    const fourteenthSpotLight = new THREE.SpotLight(
+      0xFF0000, // Rouge
+      fourteenthSpotLightParams.intensity,
+      fourteenthSpotLightParams.distance,
+      fourteenthSpotLightParams.angle,
+      fourteenthSpotLightParams.exponent,
+      fourteenthSpotLightParams.decay
+    );
+    fourteenthSpotLight.position.set(
+      fourteenthSpotLightParams.positionX,
+      fourteenthSpotLightParams.positionY,
+      fourteenthSpotLightParams.positionZ
+    );
+    fourteenthSpotLight.target.position.set(
+      fourteenthSpotLightParams.targetX,
+      fourteenthSpotLightParams.targetY,
+      fourteenthSpotLightParams.targetZ
+    );
+    scene.add(fourteenthSpotLight);
+    scene.add(fourteenthSpotLight.target);
+
+    fourteenthSpotLight.castShadow = true;
+
+    // Helper pour la lumière
+    const fourteenthSpotLightHelper = new THREE.SpotLightHelper(fourteenthSpotLight);
+    scene.add(fourteenthSpotLightHelper);
+    fourteenthSpotLightHelper.visible = false;
+
+
+
+    // Création de l'interface dat.GUI folder
+    const spotLightFolder14 = gui.addFolder('Quatorzième SpotLight');
+
+    // Ajout des contrôles GUI pour la quatorzième lumière
+    spotLightFolder14.add(fourteenthSpotLightParams, 'intensity', 0, 10).onChange(value => fourteenthSpotLight.intensity = value);
+    spotLightFolder14.add(fourteenthSpotLightParams, 'distance', 0, 2000).onChange(value => fourteenthSpotLight.distance = value);
+    spotLightFolder14.add(fourteenthSpotLightParams, 'angle', 0, Math.PI / 2).onChange(value => fourteenthSpotLight.angle = value);
+    spotLightFolder14.add(fourteenthSpotLightParams, 'exponent', 0, 1).onChange(value => fourteenthSpotLight.penumbra = value);
+    spotLightFolder14.add(fourteenthSpotLightParams, 'decay', 0, 4).onChange(value => fourteenthSpotLight.decay = value);
+
+    // Position et cible
+    spotLightFolder14.add(fourteenthSpotLightParams, 'positionX', -150, 150).onChange(value => fourteenthSpotLight.position.x = value);
+    spotLightFolder14.add(fourteenthSpotLightParams, 'positionY', -100, 100).onChange(value => fourteenthSpotLight.position.y = value);
+    spotLightFolder14.add(fourteenthSpotLightParams, 'positionZ', -200, 100).onChange(value => fourteenthSpotLight.position.z = value);
+
+    // Cible
+    spotLightFolder14.add(fourteenthSpotLightParams, 'targetX', -130, 130).onChange(value => { fourteenthSpotLight.target.position.x = value; fourteenthSpotLightHelper.update(); });
+    spotLightFolder14.add(fourteenthSpotLightParams, 'targetY', -230, 130).onChange(value => { fourteenthSpotLight.target.position.y = value; fourteenthSpotLightHelper.update(); });
+    spotLightFolder14.add(fourteenthSpotLightParams, 'targetZ', -260, 260).onChange(value => { fourteenthSpotLight.target.position.z = value; fourteenthSpotLightHelper.update(); });
+
+    spotLightFolder14.add(fourteenthSpotLightParams, 'showHelper').onChange(value => fourteenthSpotLightHelper.visible = value);
+
+    spotLightFolder14.close();
+
+
+    const thirteenthSpotLightParams = {
+      intensity: 0.62,
+      distance: 0,
+      angle: 0.0,
+      exponent: 1,
+      decay: 0,
+      positionX: 33.2,
+      positionY: 20,
+      positionZ: 15,
+      targetX: -30,
+      targetY: 1,
+      targetZ: -11,
+      showHelper: true,
+    };
+
+
+
+    // Création de la treizième SpotLight
+    const thirteenthSpotLight = new THREE.SpotLight(0xFFFFFF, thirteenthSpotLightParams.intensity, thirteenthSpotLightParams.distance, thirteenthSpotLightParams.angle, thirteenthSpotLightParams.exponent, thirteenthSpotLightParams.decay);
+    thirteenthSpotLight.position.set(thirteenthSpotLightParams.positionX, thirteenthSpotLightParams.positionY, thirteenthSpotLightParams.positionZ);
+    thirteenthSpotLight.target.position.set(thirteenthSpotLightParams.targetX, thirteenthSpotLightParams.targetY, thirteenthSpotLightParams.targetZ);
+    scene.add(thirteenthSpotLight);
+    scene.add(thirteenthSpotLight.target);
+
+
+
+    gsap.to(thirteenthSpotLight, {
+      duration: 10,
+      angle: 0.4,
+      delay: 8,
+      intensity: 0.42,
+
+
+    });
+
+
+    thirteenthSpotLight.castShadow = true;
+
+    // Helper pour la lumière
+    const thirteenthSpotLightHelper = new THREE.SpotLightHelper(thirteenthSpotLight);
+    scene.add(thirteenthSpotLightHelper);
+    thirteenthSpotLightHelper.visible = false;
+
+    // Création de l'interface dat.GUI folder
+    const spotLightFolder13 = gui.addFolder('Treizième SpotLight');
+
+    // Contrôles pour les paramètres de la lumière
+    spotLightFolder13.add(thirteenthSpotLightParams, 'intensity', 0, 10).onChange((value) => {
+      thirteenthSpotLight.intensity = value;
+    });
+    spotLightFolder13.add(thirteenthSpotLightParams, 'distance', 0, 2000).onChange((value) => {
+      thirteenthSpotLight.distance = value;
+    });
+    spotLightFolder13.add(thirteenthSpotLightParams, 'angle', 0, Math.PI / 2).onChange((value) => {
+      thirteenthSpotLight.angle = value;
+    });
+    spotLightFolder13.add(thirteenthSpotLightParams, 'exponent', 0, 1).onChange((value) => {
+      thirteenthSpotLight.penumbra = value;
+    });
+    spotLightFolder13.add(thirteenthSpotLightParams, 'decay', 0, 4).onChange((value) => {
+      thirteenthSpotLight.decay = value;
+    });
+
+    // Contrôles pour la position
+    spotLightFolder13.add(thirteenthSpotLightParams, 'positionX', -100, 100).onChange((value) => {
+      thirteenthSpotLight.position.x = value;
+    });
+    spotLightFolder13.add(thirteenthSpotLightParams, 'positionY', -50, 50).onChange((value) => {
+      thirteenthSpotLight.position.y = value;
+    });
+    spotLightFolder13.add(thirteenthSpotLightParams, 'positionZ', -50, 15).onChange((value) => {
+      thirteenthSpotLight.position.z = value;
+    });
+
+    // Contrôles pour la position de la cible
+    spotLightFolder13.add(thirteenthSpotLightParams, 'targetX', -30, 30).onChange((value) => {
+      thirteenthSpotLight.target.position.x = value;
+      thirteenthSpotLightHelper.update();
+    });
+    spotLightFolder13.add(thirteenthSpotLightParams, 'targetY', -30, 30).onChange((value) => {
+      thirteenthSpotLight.target.position.y = value;
+      thirteenthSpotLightHelper.update();
+    });
+    spotLightFolder13.add(thirteenthSpotLightParams, 'targetZ', -30, 30).onChange((value) => {
+      thirteenthSpotLight.target.position.z = value;
+      thirteenthSpotLightHelper.update();
+    });
+
+    // Contrôle pour afficher/masquer le helper
+    spotLightFolder13.add(thirteenthSpotLightParams, 'showHelper').onChange((value) => {
+      thirteenthSpotLightHelper.visible = value;
+    });
+
+    spotLightFolder13.close();
+
+
+
+
+    const twelfthSpotLightParams = {
+      intensity: 0.8,
+      distance: 0,
+      angle: 0.47,
+      exponent: 1,
+      decay: 0,
+      positionX: 0.2,
+      positionY: 30,
+      positionZ: -96,
+      targetX: 0.2,
+      targetY: -31,
+      targetZ: -144,
+      showHelper: true,
+    };
+
+    // Création de la douzième SpotLight avec une couleur bleue
+    const twelfthSpotLight = new THREE.SpotLight(
+      0x0000FF, // Bleu
+      twelfthSpotLightParams.intensity,
+      twelfthSpotLightParams.distance,
+      twelfthSpotLightParams.angle,
+      twelfthSpotLightParams.exponent,
+      twelfthSpotLightParams.decay
+    );
+    twelfthSpotLight.position.set(
+      twelfthSpotLightParams.positionX,
+      twelfthSpotLightParams.positionY,
+      twelfthSpotLightParams.positionZ
+    );
+    twelfthSpotLight.target.position.set(
+      twelfthSpotLightParams.targetX,
+      twelfthSpotLightParams.targetY,
+      twelfthSpotLightParams.targetZ
+    );
+    scene.add(twelfthSpotLight);
+    scene.add(twelfthSpotLight.target);
+
+    twelfthSpotLight.castShadow = true;
+
+    // Helper pour la lumière
+    const twelfthSpotLightHelper = new THREE.SpotLightHelper(twelfthSpotLight);
+    scene.add(twelfthSpotLightHelper);
+    twelfthSpotLightHelper.visible = false;
+
+    // Création de l'interface dat.GUI folder
+    const spotLightFolder12 = gui.addFolder('Douzième SpotLight');
+
+    // Ajout des contrôles GUI pour la douzième lumière
+    spotLightFolder12.add(twelfthSpotLightParams, 'intensity', 0, 10).onChange(value => twelfthSpotLight.intensity = value);
+    spotLightFolder12.add(twelfthSpotLightParams, 'distance', 0, 2000).onChange(value => twelfthSpotLight.distance = value);
+    spotLightFolder12.add(twelfthSpotLightParams, 'angle', 0, Math.PI / 2).onChange(value => twelfthSpotLight.angle = value);
+    spotLightFolder12.add(twelfthSpotLightParams, 'exponent', 0, 1).onChange(value => twelfthSpotLight.penumbra = value);
+    spotLightFolder12.add(twelfthSpotLightParams, 'decay', 0, 4).onChange(value => twelfthSpotLight.decay = value);
+
+    // Position et cible
+    spotLightFolder12.add(twelfthSpotLightParams, 'positionX', -150, 150).onChange(value => twelfthSpotLight.position.x = value);
+    spotLightFolder12.add(twelfthSpotLightParams, 'positionY', -100, 100).onChange(value => twelfthSpotLight.position.y = value);
+    spotLightFolder12.add(twelfthSpotLightParams, 'positionZ', -200, 100).onChange(value => twelfthSpotLight.position.z = value);
+
+    // Cible
+    spotLightFolder12.add(twelfthSpotLightParams, 'targetX', -130, 130).onChange(value => { twelfthSpotLight.target.position.x = value; twelfthSpotLightHelper.update(); });
+    spotLightFolder12.add(twelfthSpotLightParams, 'targetY', -230, 130).onChange(value => { twelfthSpotLight.target.position.y = value; twelfthSpotLightHelper.update(); });
+    spotLightFolder12.add(twelfthSpotLightParams, 'targetZ', -160, 260).onChange(value => { twelfthSpotLight.target.position.z = value; twelfthSpotLightHelper.update(); });
+
+    spotLightFolder12.add(twelfthSpotLightParams, 'showHelper').onChange(value => twelfthSpotLightHelper.visible = value);
+
+    spotLightFolder12.close();
+
+
+    const eleventhSpotLightParams = {
+      intensity: 0.8,
+      distance: 0,
+      angle: 0.47,
+      exponent: 1,
+      decay: 0,
+      positionX: 1,
+      positionY: 30,
+      positionZ: -56,
+      targetX: 0.2,
+      targetY: -31,
+      targetZ: -61,
+      showHelper: true,
+    };
+
+    // Création de la onzième SpotLight
+    const eleventhSpotLight = new THREE.SpotLight(
+      0x0000FF,
+      eleventhSpotLightParams.intensity,
+      eleventhSpotLightParams.distance,
+      eleventhSpotLightParams.angle,
+      eleventhSpotLightParams.exponent,
+      eleventhSpotLightParams.decay
+    );
+    eleventhSpotLight.position.set(
+      eleventhSpotLightParams.positionX,
+      eleventhSpotLightParams.positionY,
+      eleventhSpotLightParams.positionZ
+    );
+    eleventhSpotLight.target.position.set(
+      eleventhSpotLightParams.targetX,
+      eleventhSpotLightParams.targetY,
+      eleventhSpotLightParams.targetZ
+    );
+    scene.add(eleventhSpotLight);
+    scene.add(eleventhSpotLight.target);
+
+    eleventhSpotLight.castShadow = true;
+
+    // Helper pour la lumière
+    const eleventhSpotLightHelper = new THREE.SpotLightHelper(eleventhSpotLight);
+    scene.add(eleventhSpotLightHelper);
+    eleventhSpotLightHelper.visible = false;
+
+    // Création de l'interface dat.GUI folder
+    const spotLightFolder11 = gui.addFolder('Onzième SpotLight');
+
+    // Ajout des contrôles GUI pour la onzième lumière
+    spotLightFolder11.add(eleventhSpotLightParams, 'intensity', 0, 10).onChange(value => eleventhSpotLight.intensity = value);
+    spotLightFolder11.add(eleventhSpotLightParams, 'distance', 0, 2000).onChange(value => eleventhSpotLight.distance = value);
+    spotLightFolder11.add(eleventhSpotLightParams, 'angle', 0, Math.PI / 2).onChange(value => eleventhSpotLight.angle = value);
+    spotLightFolder11.add(eleventhSpotLightParams, 'exponent', 0, 1).onChange(value => eleventhSpotLight.penumbra = value);
+    spotLightFolder11.add(eleventhSpotLightParams, 'decay', 0, 4).onChange(value => eleventhSpotLight.decay = value);
+
+    // Position et cible
+    spotLightFolder11.add(eleventhSpotLightParams, 'positionX', -150, 150).onChange(value => eleventhSpotLight.position.x = value);
+    spotLightFolder11.add(eleventhSpotLightParams, 'positionY', -100, 100).onChange(value => eleventhSpotLight.position.y = value);
+    spotLightFolder11.add(eleventhSpotLightParams, 'positionZ', -100, 100).onChange(value => eleventhSpotLight.position.z = value);
+
+    // Cible
+    spotLightFolder11.add(eleventhSpotLightParams, 'targetX', -130, 130).onChange(value => { eleventhSpotLight.target.position.x = value; eleventhSpotLightHelper.update(); });
+    spotLightFolder11.add(eleventhSpotLightParams, 'targetY', -130, 130).onChange(value => { eleventhSpotLight.target.position.y = value; eleventhSpotLightHelper.update(); });
+    spotLightFolder11.add(eleventhSpotLightParams, 'targetZ', -160, 260).onChange(value => { eleventhSpotLight.target.position.z = value; eleventhSpotLightHelper.update(); });
+
+    spotLightFolder11.add(eleventhSpotLightParams, 'showHelper').onChange(value => eleventhSpotLightHelper.visible = value);
+
+    spotLightFolder11.close();
+
+
+
+
+
+
+    const ninthSpotLightParams = {
+      intensity: 0.5,
+      distance: 0,
+      angle: 1.3,
+      exponent: 1,
+      decay: 0.9,
+      positionX: -8.8,
+      positionY: 12.2,
+      positionZ: -6.6,
+      targetX: 0,
+      targetY: 95,
+      targetZ: -6,
+      showHelper: true,
+    };
+
+    // Création du neuvième SpotLight
+    const ninthSpotLight = new THREE.SpotLight(
+      0xFF0000,
+      ninthSpotLightParams.intensity,
+      ninthSpotLightParams.distance,
+      ninthSpotLightParams.angle,
+      ninthSpotLightParams.exponent,
+      ninthSpotLightParams.decay
+    );
+    ninthSpotLight.position.set(
+      ninthSpotLightParams.positionX,
+      ninthSpotLightParams.positionY,
+      ninthSpotLightParams.positionZ
+    );
+    ninthSpotLight.target.position.set(
+      ninthSpotLightParams.targetX,
+      ninthSpotLightParams.targetY,
+      ninthSpotLightParams.targetZ
+    );
+    scene.add(ninthSpotLight);
+    scene.add(ninthSpotLight.target);
+
+    ninthSpotLight.castShadow = true;
+
+    // Helper pour la lumière
+    const ninthSpotLightHelper = new THREE.SpotLightHelper(ninthSpotLight);
+    scene.add(ninthSpotLightHelper);
+    ninthSpotLightHelper.visible = false;
+
+    // Création de l'interface dat.GUI folder
+    const spotLightFolder9 = gui.addFolder('Neuvième SpotLight');
+
+    // Ajout des contrôles GUI pour la neuvième lumière
+    spotLightFolder9.add(ninthSpotLightParams, 'intensity', 0, 10).onChange(value => ninthSpotLight.intensity = value);
+    spotLightFolder9.add(ninthSpotLightParams, 'distance', 0, 2000).onChange(value => ninthSpotLight.distance = value);
+    spotLightFolder9.add(ninthSpotLightParams, 'angle', 0, Math.PI / 2).onChange(value => ninthSpotLight.angle = value);
+    spotLightFolder9.add(ninthSpotLightParams, 'exponent', 0, 1).onChange(value => ninthSpotLight.penumbra = value);
+    spotLightFolder9.add(ninthSpotLightParams, 'decay', 0, 4).onChange(value => ninthSpotLight.decay = value);
+
+    // Position et cible
+    spotLightFolder9.add(ninthSpotLightParams, 'positionX', -100, 100).onChange(value => ninthSpotLight.position.x = value);
+    spotLightFolder9.add(ninthSpotLightParams, 'positionY', -50, 50).onChange(value => ninthSpotLight.position.y = value);
+    spotLightFolder9.add(ninthSpotLightParams, 'positionZ', -50, 50).onChange(value => ninthSpotLight.position.z = value);
+
+    // Cible
+    spotLightFolder9.add(ninthSpotLightParams, 'targetX', -130, 130).onChange(value => { ninthSpotLight.target.position.x = value; ninthSpotLightHelper.update(); });
+    spotLightFolder9.add(ninthSpotLightParams, 'targetY', -130, 130).onChange(value => { ninthSpotLight.target.position.y = value; ninthSpotLightHelper.update(); });
+    spotLightFolder9.add(ninthSpotLightParams, 'targetZ', -130, 130).onChange(value => { ninthSpotLight.target.position.z = value; ninthSpotLightHelper.update(); });
+
+    spotLightFolder9.add(ninthSpotLightParams, 'showHelper').onChange(value => ninthSpotLightHelper.visible = value);
+
+    spotLightFolder9.close();
+
+
+
+    const eighthSpotLightParams = {
+      intensity: 0.9,
+      distance: 0,
+      angle: 0.67,
+      exponent: 1,
+      decay: 0.9,
+      positionX: 6.7,
+      positionY: 6.7,
+      positionZ: -5.4,
+      targetX: 0,
+      targetY: 130,
+      targetZ: -5,
+      showHelper: true,
+    };
+
+    // Création du huitième SpotLight
+    const eighthSpotLight = new THREE.SpotLight(
+      0xFF0000,
+      eighthSpotLightParams.intensity,
+      eighthSpotLightParams.distance,
+      eighthSpotLightParams.angle,
+      eighthSpotLightParams.exponent,
+      eighthSpotLightParams.decay
+    );
+    eighthSpotLight.position.set(
+      eighthSpotLightParams.positionX,
+      eighthSpotLightParams.positionY,
+      eighthSpotLightParams.positionZ
+    );
+    eighthSpotLight.target.position.set(
+      eighthSpotLightParams.targetX,
+      eighthSpotLightParams.targetY,
+      eighthSpotLightParams.targetZ
+    );
+    scene.add(eighthSpotLight);
+    scene.add(eighthSpotLight.target);
+
+    eighthSpotLight.castShadow = true;
+
+    // Helper pour la lumière
+    const eighthSpotLightHelper = new THREE.SpotLightHelper(eighthSpotLight);
+    scene.add(eighthSpotLightHelper);
+    eighthSpotLightHelper.visible = false;
+
+    // Création de l'interface dat.GUI folder
+    const spotLightFolder8 = gui.addFolder('Huitième SpotLight');
+
+    // Ajout des contrôles GUI pour la huitième lumière
+    spotLightFolder8.add(eighthSpotLightParams, 'intensity', 0, 10).onChange(value => eighthSpotLight.intensity = value);
+    spotLightFolder8.add(eighthSpotLightParams, 'distance', 0, 2000).onChange(value => eighthSpotLight.distance = value);
+    spotLightFolder8.add(eighthSpotLightParams, 'angle', 0, Math.PI / 2).onChange(value => eighthSpotLight.angle = value);
+    spotLightFolder8.add(eighthSpotLightParams, 'exponent', 0, 1).onChange(value => eighthSpotLight.penumbra = value);
+    spotLightFolder8.add(eighthSpotLightParams, 'decay', 0, 4).onChange(value => eighthSpotLight.decay = value);
+
+    // Position et cible
+    spotLightFolder8.add(eighthSpotLightParams, 'positionX', -100, 100).onChange(value => eighthSpotLight.position.x = value);
+    spotLightFolder8.add(eighthSpotLightParams, 'positionY', -50, 50).onChange(value => eighthSpotLight.position.y = value);
+    spotLightFolder8.add(eighthSpotLightParams, 'positionZ', -50, 50).onChange(value => eighthSpotLight.position.z = value);
+
+    // Cible
+    spotLightFolder8.add(eighthSpotLightParams, 'targetX', -130, 130).onChange(value => { eighthSpotLight.target.position.x = value; eighthSpotLightHelper.update(); });
+    spotLightFolder8.add(eighthSpotLightParams, 'targetY', -130, 130).onChange(value => { eighthSpotLight.target.position.y = value; eighthSpotLightHelper.update(); });
+    spotLightFolder8.add(eighthSpotLightParams, 'targetZ', -130, 130).onChange(value => { eighthSpotLight.target.position.z = value; eighthSpotLightHelper.update(); });
+
+    spotLightFolder8.add(eighthSpotLightParams, 'showHelper').onChange(value => eighthSpotLightHelper.visible = value);
+
+    spotLightFolder8.close();
+
+
+
+    const seventhSpotLightParams = {
+      intensity: 1.7,
+      distance: 538,
+      angle: 0.55,
+      exponent: 1,
+      decay: 0.9,
+      positionX: -5,
+      positionY: 7,
+      positionZ: -6,
+      targetX: 0,
+      targetY: 86,
+      targetZ: -17,
+      showHelper: true,
+    };
+
+    // Création du septième SpotLight
+    const seventhSpotLight = new THREE.SpotLight(
+      0xFF0000,
+      seventhSpotLightParams.intensity,
+      seventhSpotLightParams.distance,
+      seventhSpotLightParams.angle,
+      seventhSpotLightParams.exponent,
+      seventhSpotLightParams.decay
+    );
+    seventhSpotLight.position.set(
+      seventhSpotLightParams.positionX,
+      seventhSpotLightParams.positionY,
+      seventhSpotLightParams.positionZ
+    );
+    seventhSpotLight.target.position.set(
+      seventhSpotLightParams.targetX,
+      seventhSpotLightParams.targetY,
+      seventhSpotLightParams.targetZ
+    );
+    scene.add(seventhSpotLight);
+    scene.add(seventhSpotLight.target);
+
+    seventhSpotLight.castShadow = true;
+
+    // Helper pour la lumière
+    const seventhSpotLightHelper = new THREE.SpotLightHelper(seventhSpotLight);
+    scene.add(seventhSpotLightHelper);
+    seventhSpotLightHelper.visible = false;
+
+    // Création de l'interface dat.GUI folder
+    const spotLightFolder7 = gui.addFolder('Septième SpotLight');
+
+    // Ajout des contrôles GUI pour la septième lumière
+    spotLightFolder7.add(seventhSpotLightParams, 'intensity', 0, 10).onChange(value => seventhSpotLight.intensity = value);
+    spotLightFolder7.add(seventhSpotLightParams, 'distance', 0, 2000).onChange(value => seventhSpotLight.distance = value);
+    spotLightFolder7.add(seventhSpotLightParams, 'angle', 0, Math.PI / 2).onChange(value => seventhSpotLight.angle = value);
+    spotLightFolder7.add(seventhSpotLightParams, 'exponent', 0, 1).onChange(value => seventhSpotLight.penumbra = value);
+    spotLightFolder7.add(seventhSpotLightParams, 'decay', 0, 4).onChange(value => seventhSpotLight.decay = value);
+
+    // Position et cible
+    spotLightFolder7.add(seventhSpotLightParams, 'positionX', -100, 100).onChange(value => seventhSpotLight.position.x = value);
+    spotLightFolder7.add(seventhSpotLightParams, 'positionY', -50, 50).onChange(value => seventhSpotLight.position.y = value);
+    spotLightFolder7.add(seventhSpotLightParams, 'positionZ', -50, 50).onChange(value => seventhSpotLight.position.z = value);
+
+    // Cible
+    spotLightFolder7.add(seventhSpotLightParams, 'targetX', -130, 130).onChange(value => { seventhSpotLight.target.position.x = value; seventhSpotLightHelper.update(); });
+    spotLightFolder7.add(seventhSpotLightParams, 'targetY', -130, 130).onChange(value => { seventhSpotLight.target.position.y = value; seventhSpotLightHelper.update(); });
+    spotLightFolder7.add(seventhSpotLightParams, 'targetZ', -130, 130).onChange(value => { seventhSpotLight.target.position.z = value; seventhSpotLightHelper.update(); });
+
+    spotLightFolder7.add(seventhSpotLightParams, 'showHelper').onChange(value => seventhSpotLightHelper.visible = value);
+
+    spotLightFolder7.close();
+
+
+
+
+    //// --- Paramètres de la troisieme SpotLight --- 
+    const thirdSpotLightParams = {
+      intensity: 1,
+      distance: 450,
+      angle: 0.3,
+      exponent: 1,
+      decay: 0.7,
+      positionX: 0,
+      positionY: 10,
+      positionZ: 15,
+      targetX: 1,
+      targetY: -2,
+      targetZ: 0,
+      showHelper: true, // Contrôle pour activer/désactiver le helper
+    };
+
+
+
+    //// --- Paramètres de la deuxième SpotLight --- 
+    const secondSpotLightParams = {
+      intensity: 0.4,
+      distance: 450,
+      angle: 0,
+      exponent: 1,
+      decay: 0.7,
+      positionX: -6,
+      positionY: 11,
+      positionZ: 22,
+      targetX: 12.61,
+      targetY: -2,
+      targetZ: -9.2,
+      showHelper: true, // Contrôle pour activer/désactiver le helper
+    };
+
+
+
+
+
+
+    //// --- Paramètres de la quatrième SpotLight --- 
+    const fourthSpotLightParams = {
+      intensity: 0.39,
+      distance: 500,
+      angle: 0,
+      exponent: 1,
+      decay: 0.8,
+      positionX: 10,
+      positionY: 20,
+      positionZ: 10,
+      targetX: -21,
+      targetY: -25,
+      targetZ: 0,
+      showHelper: true, // Contrôle pour activer/désactiver le helper
+    };
+
+
+
+
+
+
+
+    const fifthSpotLightParams = {
+      intensity: 0.7,
+      distance: 0,
+      angle: 0.09,
+      exponent: 1,
+      decay: 0.9,
+      positionX: -1,
+      positionY: -12.1,
+      positionZ: 8.9,
+      targetX: 0.2,
+      targetY: 130,
+      targetZ: -80,
+      showHelper: true,
+    };
+
+    // Création de la cinquième SpotLight
+    const fifthSpotLight = new THREE.SpotLight(
+      0xFF0000,
+      fifthSpotLightParams.intensity,
+      fifthSpotLightParams.distance,
+      fifthSpotLightParams.angle,
+      fifthSpotLightParams.exponent,
+      fifthSpotLightParams.decay
+    );
+    fifthSpotLight.position.set(
+      fifthSpotLightParams.positionX,
+      fifthSpotLightParams.positionY,
+      fifthSpotLightParams.positionZ
+    );
+    fifthSpotLight.target.position.set(
+      fifthSpotLightParams.targetX,
+      fifthSpotLightParams.targetY,
+      fifthSpotLightParams.targetZ
+    );
+    scene.add(fifthSpotLight);
+    scene.add(fifthSpotLight.target);
+
+    fifthSpotLight.castShadow = true;
+
+    // Helper pour la lumière
+    const fifthSpotLightHelper = new THREE.SpotLightHelper(fifthSpotLight);
+    scene.add(fifthSpotLightHelper);
+    fifthSpotLightHelper.visible = false;
+
+    // Création de l'interface dat.GUI folder
+    const spotLightFolder5 = gui.addFolder('Cinquième SpotLight');
+
+    // Ajout des contrôles GUI pour la cinquième lumière
+    spotLightFolder5.add(fifthSpotLightParams, 'intensity', 0, 10).onChange(value => fifthSpotLight.intensity = value);
+    spotLightFolder5.add(fifthSpotLightParams, 'distance', 0, 2000).onChange(value => fifthSpotLight.distance = value);
+    spotLightFolder5.add(fifthSpotLightParams, 'angle', 0, Math.PI / 2).onChange(value => fifthSpotLight.angle = value);
+    spotLightFolder5.add(fifthSpotLightParams, 'exponent', 0, 1).onChange(value => fifthSpotLight.penumbra = value);
+    spotLightFolder5.add(fifthSpotLightParams, 'decay', 0, 4).onChange(value => fifthSpotLight.decay = value);
+
+    // Position et cible
+    spotLightFolder5.add(fifthSpotLightParams, 'positionX', -100, 100).onChange(value => fifthSpotLight.position.x = value);
+    spotLightFolder5.add(fifthSpotLightParams, 'positionY', -50, 50).onChange(value => fifthSpotLight.position.y = value);
+    spotLightFolder5.add(fifthSpotLightParams, 'positionZ', -50, 50).onChange(value => fifthSpotLight.position.z = value);
+
+    // Cible
+    spotLightFolder5.add(fifthSpotLightParams, 'targetX', -130, 130).onChange(value => { fifthSpotLight.target.position.x = value; fifthSpotLightHelper.update(); });
+    spotLightFolder5.add(fifthSpotLightParams, 'targetY', -130, 130).onChange(value => { fifthSpotLight.target.position.y = value; fifthSpotLightHelper.update(); });
+    spotLightFolder5.add(fifthSpotLightParams, 'targetZ', -130, 130).onChange(value => { fifthSpotLight.target.position.z = value; fifthSpotLightHelper.update(); });
+
+    spotLightFolder5.add(fifthSpotLightParams, 'showHelper').onChange(value => fifthSpotLightHelper.visible = value);
+
+    spotLightFolder5.close();
+
+
+
+
+
+
+    const sixthSpotLightParams = {
+      intensity: 0.93,
+      distance: 0,
+      angle: 1.57,
+      exponent: 1,
+      decay: 0.9,
+      positionX: 4,
+      positionY: 6,
+      positionZ: -7.7,
+      targetX: 0,
+      targetY: 129,
+      targetZ: -3,
+      showHelper: true,
+    };
+
+    // Création du sixième SpotLight
+    const sixthSpotLight = new THREE.SpotLight(
+      0xFF0000,
+      sixthSpotLightParams.intensity,
+      sixthSpotLightParams.distance,
+      sixthSpotLightParams.angle,
+      sixthSpotLightParams.exponent,
+      sixthSpotLightParams.decay
+    );
+    sixthSpotLight.position.set(
+      sixthSpotLightParams.positionX,
+      sixthSpotLightParams.positionY,
+      sixthSpotLightParams.positionZ
+    );
+    sixthSpotLight.target.position.set(
+      sixthSpotLightParams.targetX,
+      sixthSpotLightParams.targetY,
+      sixthSpotLightParams.targetZ
+    );
+    scene.add(sixthSpotLight);
+    scene.add(sixthSpotLight.target);
+
+    sixthSpotLight.castShadow = true;
+
+    // Helper pour la lumière
+    const sixthSpotLightHelper = new THREE.SpotLightHelper(sixthSpotLight);
+    scene.add(sixthSpotLightHelper);
+    sixthSpotLightHelper.visible = false;
+
+    // Création de l'interface dat.GUI folder
+    const spotLightFolder6 = gui.addFolder('Sixième SpotLight');
+
+    // Ajout des contrôles GUI pour la sixième lumière
+    spotLightFolder6.add(sixthSpotLightParams, 'intensity', 0, 10).onChange(value => sixthSpotLight.intensity = value);
+    spotLightFolder6.add(sixthSpotLightParams, 'distance', 0, 2000).onChange(value => sixthSpotLight.distance = value);
+    spotLightFolder6.add(sixthSpotLightParams, 'angle', 0, Math.PI / 2).onChange(value => sixthSpotLight.angle = value);
+    spotLightFolder6.add(sixthSpotLightParams, 'exponent', 0, 1).onChange(value => sixthSpotLight.penumbra = value);
+    spotLightFolder6.add(sixthSpotLightParams, 'decay', 0, 4).onChange(value => sixthSpotLight.decay = value);
+
+    // Position et cible
+    spotLightFolder6.add(sixthSpotLightParams, 'positionX', -100, 100).onChange(value => sixthSpotLight.position.x = value);
+    spotLightFolder6.add(sixthSpotLightParams, 'positionY', -50, 50).onChange(value => sixthSpotLight.position.y = value);
+    spotLightFolder6.add(sixthSpotLightParams, 'positionZ', -50, 50).onChange(value => sixthSpotLight.position.z = value);
+
+    // Cible
+    spotLightFolder6.add(sixthSpotLightParams, 'targetX', -130, 130).onChange(value => { sixthSpotLight.target.position.x = value; sixthSpotLightHelper.update(); });
+    spotLightFolder6.add(sixthSpotLightParams, 'targetY', -130, 130).onChange(value => { sixthSpotLight.target.position.y = value; sixthSpotLightHelper.update(); });
+    spotLightFolder6.add(sixthSpotLightParams, 'targetZ', -130, 130).onChange(value => { sixthSpotLight.target.position.z = value; sixthSpotLightHelper.update(); });
+
+    spotLightFolder6.add(sixthSpotLightParams, 'showHelper').onChange(value => sixthSpotLightHelper.visible = value);
+
+    spotLightFolder6.close();
+
+
+
+
+
+
+
+
+
+
+
+    // Création de la quatrième SpotLight
+    const fourthSpotLight = new THREE.SpotLight(
+      0xFFFFFF,
+      fourthSpotLightParams.intensity,
+      fourthSpotLightParams.distance,
+      fourthSpotLightParams.angle,
+      fourthSpotLightParams.exponent,
+      fourthSpotLightParams.decay
+    );
+    fourthSpotLight.position.set(
+      fourthSpotLightParams.positionX,
+      fourthSpotLightParams.positionY,
+      fourthSpotLightParams.positionZ
+    );
+    fourthSpotLight.target.position.set(
+      fourthSpotLightParams.targetX,
+      fourthSpotLightParams.targetY,
+      fourthSpotLightParams.targetZ
+    );
+    scene.add(fourthSpotLight);
+    scene.add(fourthSpotLight.target);
+
+    fourthSpotLight.castShadow = true;
+
+    gsap.to(fourthSpotLight, {
+      duration: 10,
+      angle: 2,
+      delay: 8,
+      intensity: 0.42,
+
+
+    });
+
+
+    // Helper pour la lumière
+    const fourthSpotLightHelper = new THREE.SpotLightHelper(fourthSpotLight);
+    scene.add(fourthSpotLightHelper);
+    fourthSpotLightHelper.visible = false;
+
+    // Création de l'interface dat.GUI folder
+    const spotLightFolder4 = gui.addFolder('Quatrième SpotLight');
+
+    // Contrôles pour les paramètres de la lumière
+    spotLightFolder4.add(fourthSpotLightParams, 'intensity', 0, 10).onChange((value) => {
+      fourthSpotLight.intensity = value;
+    });
+    spotLightFolder4.add(fourthSpotLightParams, 'distance', 0, 2000).onChange((value) => {
+      fourthSpotLight.distance = value;
+    });
+    spotLightFolder4.add(fourthSpotLightParams, 'angle', 0, Math.PI / 2).onChange((value) => {
+      fourthSpotLight.angle = value;
+    });
+    spotLightFolder4.add(fourthSpotLightParams, 'exponent', 0, 1).onChange((value) => {
+      fourthSpotLight.penumbra = value;
+    });
+    spotLightFolder4.add(fourthSpotLightParams, 'decay', 0, 4).onChange((value) => {
+      fourthSpotLight.decay = value;
+    });
+
+    // Contrôles pour la position
+    spotLightFolder4.add(fourthSpotLightParams, 'positionX', -100, 100).onChange((value) => {
+      fourthSpotLight.position.x = value;
+    });
+    spotLightFolder4.add(fourthSpotLightParams, 'positionY', -50, 50).onChange((value) => {
+      fourthSpotLight.position.y = value;
+    });
+    spotLightFolder4.add(fourthSpotLightParams, 'positionZ', -50, 50).onChange((value) => {
+      fourthSpotLight.position.z = value;
+    });
+
+    // Contrôles pour la position de la cible
+    spotLightFolder4.add(fourthSpotLightParams, 'targetX', -30, 30).onChange((value) => {
+      fourthSpotLight.target.position.x = value;
+      fourthSpotLightHelper.update();
+    });
+    spotLightFolder4.add(fourthSpotLightParams, 'targetY', -30, 30).onChange((value) => {
+      fourthSpotLight.target.position.y = value;
+      fourthSpotLightHelper.update();
+    });
+    spotLightFolder4.add(fourthSpotLightParams, 'targetZ', -30, 30).onChange((value) => {
+      fourthSpotLight.target.position.z = value;
+      fourthSpotLightHelper.update();
+    });
+
+    // Contrôle pour afficher/masquer le helper
+    spotLightFolder4.add(fourthSpotLightParams, 'showHelper').onChange((value) => {
+      fourthSpotLightHelper.visible = value;
+    });
+
+    spotLightFolder4.close();
+
+
+
+
+
+
+    // Création de la deuxième SpotLight
+    const secondSpotLight = new THREE.SpotLight(0xFFFFFF, secondSpotLightParams.intensity, secondSpotLightParams.distance, secondSpotLightParams.angle, secondSpotLightParams.exponent, secondSpotLightParams.decay);
+    secondSpotLight.position.set(secondSpotLightParams.positionX, secondSpotLightParams.positionY, secondSpotLightParams.positionZ);
+    secondSpotLight.target.position.set(secondSpotLightParams.targetX, secondSpotLightParams.targetY, secondSpotLightParams.targetZ);
+    scene.add(secondSpotLight);
+    scene.add(secondSpotLight.target);
+
+
+    gsap.to(secondSpotLight, {
+      duration: 10,
+      angle: 1.3,
+      delay: 8,
+
+
+
+    });
+
+
+    // Création de la troisieme SpotLight
+    const thirdSpotLight = new THREE.SpotLight(0xFFFFFF, thirdSpotLightParams.intensity, thirdSpotLightParams.distance, thirdSpotLightParams.angle, thirdSpotLightParams.exponent, thirdSpotLightParams.decay);
+    thirdSpotLight.position.set(thirdSpotLightParams.positionX, thirdSpotLightParams.positionY, thirdSpotLightParams.positionZ);
+    thirdSpotLight.target.position.set(thirdSpotLightParams.targetX, thirdSpotLightParams.targetY, thirdSpotLightParams.targetZ);
+    scene.add(thirdSpotLight);
+    scene.add(thirdSpotLight.target);
+
+
+    secondSpotLight.castShadow = true;
+    // Helper pour la lumière
+    const secondSpotLightHelper = new THREE.SpotLightHelper(secondSpotLight);
+    scene.add(secondSpotLightHelper);
+    secondSpotLightHelper.visible = false
+
+
+    // Création de l'interface dat.GUI folder
+    const spotLightFolder2 = gui.addFolder('Deuxième SpotLight');
+
+    // Contrôles pour les paramètres de la lumière
+    spotLightFolder2.add(secondSpotLightParams, 'intensity', 0, 10).onChange((value) => {
+      secondSpotLight.intensity = value;
+    });
+    spotLightFolder2.add(secondSpotLightParams, 'distance', 0, 2000).onChange((value) => {
+      secondSpotLight.distance = value;
+    });
+    spotLightFolder2.add(secondSpotLightParams, 'angle', 0, Math.PI / 2).onChange((value) => {
+      secondSpotLight.angle = value;
+    });
+    spotLightFolder2.add(secondSpotLightParams, 'exponent', 0, 1).onChange((value) => {
+      secondSpotLight.penumbra = value; // Penumbra correspond à l'exponentiation
+    });
+    spotLightFolder2.add(secondSpotLightParams, 'decay', 0, 4).onChange((value) => {
+      secondSpotLight.decay = value;
+    });
+
+    // Contrôles pour la position
+    spotLightFolder2.add(secondSpotLightParams, 'positionX', -100, 100).onChange((value) => {
+      secondSpotLight.position.x = value;
+    });
+    spotLightFolder2.add(secondSpotLightParams, 'positionY', -50, 50).onChange((value) => {
+      secondSpotLight.position.y = value;
+    });
+    spotLightFolder2.add(secondSpotLightParams, 'positionZ', -50, 105).onChange((value) => {
+      secondSpotLight.position.z = value;
+    });
+
+    // Contrôles pour la position de la cible
+    spotLightFolder2.add(secondSpotLightParams, 'targetX', -30, 30).onChange((value) => {
+      secondSpotLight.target.position.x = value;
+      secondSpotLightHelper.update(); // Met à jour le helper
+    });
+    spotLightFolder2.add(secondSpotLightParams, 'targetY', -30, 30).onChange((value) => {
+      secondSpotLight.target.position.y = value;
+      secondSpotLightHelper.update(); // Met à jour le helper
+    });
+    spotLightFolder2.add(secondSpotLightParams, 'targetZ', -30, 30).onChange((value) => {
+      secondSpotLight.target.position.z = value;
+      secondSpotLightHelper.update(); // Met à jour le helper
+    });
+
+    // Contrôle pour afficher/masquer le helper
+    spotLightFolder2.add(secondSpotLightParams, 'showHelper').onChange((value) => {
+      secondSpotLightHelper.visible = value;
+    });
+
+    spotLightFolder2.close(); // Ouvre le dossier par défaut
+
+
+
+    // Création de l'interface dat.GUI pour le troisième spot light
+    const spotLightFolder3 = gui.addFolder('Troisième SpotLight');
+
+    // Contrôles pour les paramètres de la lumière
+    spotLightFolder3.add(thirdSpotLightParams, 'intensity', 0, 10).onChange((value) => {
+      thirdSpotLight.intensity = value;
+    });
+    spotLightFolder3.add(thirdSpotLightParams, 'distance', 0, 2000).onChange((value) => {
+      thirdSpotLight.distance = value;
+    });
+    spotLightFolder3.add(thirdSpotLightParams, 'angle', 0, Math.PI / 2).onChange((value) => {
+      thirdSpotLight.angle = value;
+    });
+    spotLightFolder3.add(thirdSpotLightParams, 'exponent', 0, 1).onChange((value) => {
+      thirdSpotLight.penumbra = value; // Penumbra correspond à l'exponentiation
+    });
+    spotLightFolder3.add(thirdSpotLightParams, 'decay', 0, 4).onChange((value) => {
+      thirdSpotLight.decay = value;
+    });
+
+    // Contrôles pour la position
+    spotLightFolder3.add(thirdSpotLightParams, 'positionX', -100, 100).onChange((value) => {
+      thirdSpotLight.position.x = value;
+    });
+    spotLightFolder3.add(thirdSpotLightParams, 'positionY', -50, 50).onChange((value) => {
+      thirdSpotLight.position.y = value;
+    });
+    spotLightFolder3.add(thirdSpotLightParams, 'positionZ', -50, 15).onChange((value) => {
+      thirdSpotLight.position.z = value;
+    });
+
+    // Contrôles pour la position de la cible
+    spotLightFolder3.add(thirdSpotLightParams, 'targetX', -30, 30).onChange((value) => {
+      thirdSpotLight.target.position.x = value;
+      thirdSpotLightHelper.update(); // Met à jour le helper
+    });
+    spotLightFolder3.add(thirdSpotLightParams, 'targetY', -30, 30).onChange((value) => {
+      thirdSpotLight.target.position.y = value;
+      thirdSpotLightHelper.update(); // Met à jour le helper
+    });
+    spotLightFolder3.add(thirdSpotLightParams, 'targetZ', -30, 30).onChange((value) => {
+      thirdSpotLight.target.position.z = value;
+      thirdSpotLightHelper.update(); // Met à jour le helper
+    });
+
+    // Contrôle pour afficher/masquer le helper
+    spotLightFolder3.add(thirdSpotLightParams, 'showHelper').onChange((value) => {
+      thirdSpotLightHelper.visible = value;
+    });
+
+    spotLightFolder3.close(); // Ouvre le dossier par défaut
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /////////////////////////GUI FOR CAMERA 
+
+
+    const cameraFolder = gui.addFolder('Camera');
+
+    // Position controls using `onChange`
+    const positionFolder = cameraFolder.addFolder('Position');
+    positionFolder.add(camera.position, 'x', -100, 50).name('X').onChange((value) => {
+      camera.position.x = value;
+    });
+
+    positionFolder.add(camera.position, 'y', -100, 50).name('Y').onChange((value) => {
+      camera.position.y = value;
+    });
+    positionFolder.add(camera.position, 'z', -150, 50).name('Z').onChange((value) => {
+      camera.position.z = value;
+    });
+    positionFolder.close();
+
+    // Rotation controls using `onChange`
+    const rotationFolder = cameraFolder.addFolder('Rotation');
+    rotationFolder.add(camera.rotation, 'x', -Math.PI, Math.PI).name('X').onChange((value) => {
+      camera.rotation.x = value;
+    });
+    rotationFolder.add(camera.rotation, 'y', -Math.PI, Math.PI).name('Y').onChange((value) => {
+      camera.rotation.y = value;
+    });
+    rotationFolder.add(camera.rotation, 'z', -Math.PI, Math.PI).name('Z').onChange((value) => {
+      camera.rotation.z = value;
+    });
+    rotationFolder.close();
+
+    cameraFolder.close();
+
+
+
+
+
+
+
+
+    const clock = new THREE.Clock();
+    // Animation
+    // Fonction de rendu
+    function animate() {
+      requestAnimationFrame(animate);
+
+
+      if (mixer) {
+        const delta = clock.getDelta(); // Utilisez une instance de Clock pour suivre le temps
+        mixer.update(delta);
+
+      }
+      renderer.render(scene, camera);
+    }
+
+    // Démarrer l'animation
+    animate();
+
+
+    // Tableau des musiques
+    const musiques = [
+      "musique11.mp3",
+      "musique2.mp3",
+      "musique3.mp3",
+      "musique4.mp3",
+      "musique5.mp3"
+    ];
+
+    let currentIndex = 0; // Index de la musique actuellement en lecture
+
+    // Récupération des éléments du DOM
+    const audio = document.getElementById('audio');
+    const audioSource = document.getElementById('audioSource');
+    const pmElements = document.querySelectorAll('p.pm1, p.pm2, p.pm3, p.pm4, p.pm5'); // Sélectionner tous les éléments pm
+
+    // Fonction pour changer la musique
+    function changeTrack() {
+      audioSource.src = musiques[currentIndex];
+      audio.load(); // Recharge la source audio pour prendre en compte la nouvelle
+      audio.play(); // Lance la lecture de la nouvelle musique
+
+      // Réinitialisation de la mise à l'échelle pour tous les éléments
+      pmElements.forEach((el) => {
+        el.style.transform = 'scale(1)';
+      });
+
+      // Applique scale(1.2) à l'élément correspondant à l'index actuel
+      if (currentIndex >= 0 && currentIndex < pmElements.length) {
+        pmElements[currentIndex].style.transform = 'scale(1.2)';
+      }
+    }
+
+    // Gérer le bouton suivant (next)
+    document.querySelector('.next').addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % musiques.length; // Passe à la musique suivante (boucle)
+      changeTrack();
+    });
+
+    // Gérer le bouton précédent (before)
+    document.querySelector('.before').addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + musiques.length) % musiques.length; // Passe à la musique précédente (boucle)
+      changeTrack();
+    });
+
+    // Initialisation avec la première musique
+    changeTrack();
+
+    // Gérer le bouton play
+    document.querySelector('.play2').addEventListener('click', () => {
+      audio.play(); // Démarre la lecture
+    });
+
+    // Gérer le bouton pause
+    document.querySelector('.pause2').addEventListener('click', () => {
+      audio.pause(); // Met la lecture en pause
+    });
+
+
+    document.getElementById('foote').addEventListener('click', function () {
+      location.reload();  // Cela recharge la page
+    });
+
+
+    const wave = document.querySelector('.wave');
+            const heights = [20, 50, 30, 60, 40, 55, 25, 45]; // Motif répété
+
+            for (let i = 0; i < heights.length; i++) {
+                let bar = document.createElement('div');
+                bar.classList.add('bar');
+                bar.style.animationDelay = `${i * 0.2}s`; // Décalage progressif pour un effet d'onde
+                bar.style.height = `${heights[i]}px`; // Hauteur initiale issue du motif
+                wave.appendChild(bar);
+            }
+
+  </script>
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://db.onlinewebfonts.com/c/c5c9157a20810aac79a10bf84a37bdb4?family=Neue+Montreal+Medium" rel="stylesheet"> 
+    <link href="https://db.onlinewebfonts.com/c/86491e13bc132c38bdba0c2f57051023?family=GTSectra-Regular" rel="stylesheet"> 
+    <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Carré 3D avec Three.js</title>
+
+    <style>
+      body { margin: 0; font-family: "GTSectra-Regular";background: rgb(0, 0, 0);  }
+      section {
+        height: 100vh;
+        position: relative;
+       
+
+      }
+      .gsap-marker-start{
+        z-index: 99999999999;
+        position: relative;
+      }
+      .background {
+    height: 100%;
+    width: 100%;
+ 
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+      canvas{
+        position: fixed;
+ top:0;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+     .header{
+        width: 96vw;
+        margin-left: 2vw;
+        height: 6vh;
+    
+        position: fixed;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 10px;
+        letter-spacing: 1px;
+        font-family: "Neue Montreal Medium"; 
+
+     }
+     .header div{
+        width:33.33%;
+        text-transform: uppercase;
+     }
+     .header div:nth-child(3){
+      text-align: right;
+
+     }
+     .header div:nth-child(2){
+      text-align: center;
+      
+     }
+     section{
+      position: relative;
+     }
+     h1{
+        font-size: 0.3vw;
+        width: 30%;
+    
+        line-height: 0.4vw;
+        text-transform: uppercase;
+        color: white;
+       font-family: 'Roboto', sans-serif;
+     
+ 
+        position: absolute;
+        top:3vh;
+        left:2%
+     }
+     h2 {
+      font-size: 0.3vw;
+        width: 5%;
+    
+        line-height: 0.4vw;
+        text-transform: uppercase;
+        color: white;
+       font-family: 'Roboto', sans-serif;
+   
+        position: absolute;
+        top:10%;
+        left:2%
+}
+#carre{
+  width: 150px;
+  height: 150px;
+  background-color: rgba(226, 43, 147, 0.064);
+  position:relative;
+  top:-50vh
+
+
+}
+    </style>
+  </head>
+  <body>
+
+    <div class="header">
+        <div>THREE.JS</div>
+        <div></div>
+        <div>scrolltrigger</div>
+
+    </div>
+
+
+<div id="smoothContent">
+
+    <section class="section1">
+  
+        <h1 data-speed="1" data-lag="0.8"><span id="inn">    We<br></span>
+
+      
+            try<br>
+            Good<br>
+            things</h1>
+            <h2 class='txt' data-speed="0.8" data-lag="0.4">Dogstudio is a multidisciplinary creative studio at the intersection of art, design and technology. </h2>
+    </section>
+    <section class="section2" >
+      <div id="carre"></div>
+    </section>
+    <section></section>
+
+
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="gsap.js"></script>
+    <script src="ScrollTrigger.min.js"></script>
+     <script src="ScrollSmoother.min.js"></script>
+
+     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+     <script src="https://unpkg.com/stats.js"></script>
+
+
+
+     <script type="module">
+
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+var smoother =  ScrollSmoother.create({
+  content: "#smoothContent",
+  smooth: 2,
+  effects: true
+
+  });
+
+
+  import * as THREE from '../build/three.module.js';
+        import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
+          
+       import { Reflector } from './jsm/objects/Reflector.js';
+      import Stats from './jsm/libs/stats.module.js'
+      import { GUI } from './jsm/libs/dat.gui.module.js';
+      import { OrbitControls } from './jsm/controls/OrbitControls.js';
+      import { RectAreaLightHelper } from './jsm/helpers/RectAreaLightHelper.js';
+			import { RectAreaLightUniformsLib } from './jsm/lights/RectAreaLightUniformsLib.js';
+			import { EffectComposer } from './jsm/postprocessing/EffectComposer.js';
+			import { RenderPass } from './jsm/postprocessing/RenderPass.js';
+			import { FilmPass } from './jsm/postprocessing/FilmPass.js';
+			import { GlitchPass } from './jsm/postprocessing/GlitchPass2.js';
+			import { UnrealBloomPass } from './jsm/postprocessing/UnrealBloomPass.js';
+      
+      import { Interaction } from './jsm/inter/three.interaction.module.js';
+   
+
+  
+    // Déclarez une variable pour stocker l'animation
+      let mixer; 
+
+    //composer 
+    let glitchPass;
+
+    var childToTransform;
+
+			let camera, scene, renderer,composer,
+			light1, light2, light3, light4,light5,
+			object, stats, texture;
+
+			const clock = new THREE.Clock();
+			let mouseX = 0;
+			let mouseY = 0;
+
+    const loader = new GLTFLoader();
+
+  const loader2 = new THREE.CubeTextureLoader();
+  loader2.setPath( 'envmap/typo/' );
+  const textureCube = loader2.load(['px.png', 'nx.png','py.png', 'ny.png','pz.png', 'nz.png']);
+  const textureCube2 = loader2.load(['ext/px.png', 'ext/nx.png','ext/py.png', 'ext/ny.png','ext/pz.png', 'ext/nz.png']);
+
+
+init()
+
+function init(){
+
+
+
+
+
+      // Créer une scène
+      const scene = new THREE.Scene();
+      textureCube.mapping = THREE.CubeRefractionMapping;
+      textureCube2.mapping = THREE.CubeRefractionMapping;
+      textureCube.minFilter = THREE.LinearFilter;
+      textureCube2.minFilter = THREE.LinearFilter;
+
+
+      camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight,1, 1000 );
+			camera.position.z = 10;
+   
+      const container = new THREE.Object3D();
+      scene.add(container);
+
+
+      
+      ////image de fond variation 
+
+
+      // const planeGeometry = new THREE.PlaneGeometry(400, 200);
+
+      // const texture = new THREE.TextureLoader().load('envmap/typo/fond2.png');
+      // const material3 = new THREE.MeshStandardMaterial({
+      //   map: texture ,
+      //    transparence:true,
+      //    opacity:0.3
+        
+      //   });
+      // const plane = new THREE.Mesh(planeGeometry, material3);
+      // //scene.add(plane);
+      // plane.position.z = -40;
+
+
+        /////CUBE IMAGES FOND
+
+
+        
+        // Créer un cube
+        const geometry = new THREE.BoxGeometry(window.innerWidth , window.innerHeight, 1);
+        // Créer le matériau du cube
+          const material = new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            metalness: 1,
+            roughness: 0,    
+            envMap: textureCube, // Utilisez la texture cube pour l'environnement,
+            transparent: true,
+        // Réglez l'opacité selon vos besoins.
+          });
+
+        
+          const cube = new THREE.Mesh(geometry, material);
+          cube.position.z = -10;
+          ////a interpoler plus tard pour par exemple changement de fond 
+          //gsap.to  ( material,{opacity:0.1,duration:2,delay:3})
+          material.opacity= 0.9  
+          scene.add(cube);
+
+
+       
+          const materialTest = new THREE.MeshStandardMaterial({
+    color: 0xff0000,  // Rouge
+    metalness: 0.5,
+    roughness: 0.5,
+  });
+
+
+
+
+
+
+
+// Créez votre material2 avec la texture alpha map
+const material2 = new THREE.MeshPhongMaterial({
+  color: 0xfffffd,
+  flatShading: true,
+  envMap: textureCube2,
+  reflectivity: 1,
+  refractionRatio: 0.9,
+  specular: 0x000000,
+  transparent: true,
+  opacity: 1,
+
+});
+material2.opacity= 1
+
+
+
+
+
+        
+         
+          // Charger le modèle  // Charger le modèle  // Charger le modèle  // Charger le modèle  // Charger le modèle  // Charger le modèle
+          // Charger le modèle  // Charger le modèle  // Charger le modèle  // Charger le modèle  // Charger le modèle  // Charger le modèle
+
+
+          loader.load('/envmap/cube2.glb', (gltf) => {
+           
+           
+          const model = gltf.scene;
+          const scale =6; 
+          model.scale.set(scale, scale, scale);
+          model.position.y=0
+          model.position.z=0
+          container.add(model);
+
+
+
+          ///recuperer les elements du model 3d (child)
+
+
+          model.traverse((child) => {
+
+          if (child instanceof THREE.Mesh) {
+
+
+
+
+            child.material = material2.clone();
+
+
+         childToTransform= model.children[0]
+          //Supposons que vous avez un objet raycaster
+          var raycaster = new THREE.Raycaster();
+          var mouse = new THREE.Vector2();
+
+          // Ajoutez un gestionnaire d'événements pour le mouvement de la souris
+          window.addEventListener('mousemove', onMouseMove);
+
+          // La fonction pour gérer le mouvement de la souris
+          function onMouseMove(event) {
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+
+    // Parcourez tous les enfants du modèle
+    model.traverse(function (child) {
+      if (child instanceof THREE.Mesh) {
+            var intersects = raycaster.intersectObject(child);
+            if (intersects.length > 0) {
+                // L'objet est survolé, augmentez son opacité
+             //   child.material.opacity = 0.2;  
+              child.scale.set(1.2, 1.2, 1.2);
+           
+             
+    
+            } else {
+                // L'objet n'est pas survolé, réduisez son opacité
+              //  child.material.opacity = 1; // Vous pouvez définir l'opacité souhaitée
+                child.scale.set(1, 1, 1);   
+                
+            }
+        }
+    });
+}
+              
+            ///cahnger la reference image dans material2 (object blender child)
+              //   gsap.to('#carre', {
+              // scrollTrigger: {
+              //   trigger: '#carre',
+              //     start: 'top 10%',
+              //     end: 'bottom 10%',
+              //     scrub: true,
+              // markers:true,
+
+              //  onEnter: () =>  { 
+              //   material2.envMap= textureCube2
+              //   material.envMap= textureCube2
+              
+              // },
+              // onEnterBack: () =>  { 
+              //   material2.envMap= textureCube
+              //   material.envMap= textureCube
+              
+              // },
+
+              //       },
+              //   });
+
+              }
+            }); ///fin  de  model.traverse
+
+
+            ////animation
+            mixer = new THREE.AnimationMixer(model);
+            let totalDuration ;
+
+                  gltf.animations.forEach((clip) => {
+                  const action = mixer.clipAction(clip);
+                  // Mettre l'animation en pause au début après avoir mis en play
+                  action.play();
+                  action.paused = true;
+                  totalDuration = clip.duration;///elles ont toute la meme duree
+
+                  gsap.to(action, {
+                  
+                  time: totalDuration , 
+          
+              scrollTrigger: {
+                trigger: '#carre',
+                    start: "top 20%",
+                    end: "+=30%",
+                    scrub:true,
+                  // markers: true
+                  }
+                });
+
+                  });
+
+
+            
+
+document.addEventListener('mousemove', function (e) {
+    mouse.x = e.clientX || e.pageX;
+    mouse.y = e.clientY || e.pageY;
+
+
+    // Utilisez la position de la souris pour effectuer des modifications légères
+    const rotationIntensity = 1; // Augmentez cette valeur pour un effet plus fort
+    const rotationIntensity2 = 1; // Augmentez cette valeur pour un effet plus fort
+     var test = (mouse.y / window.innerHeight- 0.5)*rotationIntensity
+     var test2 = (mouse.x / window.innerWidth- 0.5)*rotationIntensity2
+    inn.innerHTML= test
+    gsap.to ( model.rotation,
+    {
+      duration:2,
+     x:test *0.5 ,
+     y: test2*0.5
+    })
+
+
+    gsap.to ( model.position,
+    {
+      duration:2,
+     x:test2*10  ,
+     y: test*4
+
+    })
+
+    // Mettez à jour la scène
+    renderer.render(scene, camera);
+});
+          }, undefined, (error) => {
+            console.error('Erreur de chargement du modèle:', error);
+          });
+
+
+
+
+
+
+
+
+
+
+//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light
+//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light//:light
+
+
+const ambient = new THREE.AmbientLight( 0xffffff,1.5);
+			scene.add( ambient );
+
+
+
+ //////SCROLLTRIGE ELEMENT HTML//////SCROLLTRIGE ELEMENT HTML //////SCROLLTRIGE ELEMENT HTM //////SCROLLTRIGE ELEMENT HTML
+//////SCROLLTRIGE ELEMENT HTML//////SCROLLTRIGE ELEMENT HTML //////SCROLLTRIGE ELEMENT HTM //////SCROLLTRIGE ELEMENT HTML    
+ gsap.to (".txt",
+              {
+              
+            scrollTrigger:{
+              trigger: ".txt",
+              start: "0% 7%",
+              end: "+=500%",
+              scrub:true,
+              pin:true,
+          
+                        }
+              
+              })
+
+
+
+////+SOURIS////+SOURIS////+SOURIS////+SOURIS////+SOURIS////+SOURIS////+SOURIS////+SOURIS////+SOURIS
+////+SOURIS////+SOURIS////+SOURIS////+SOURIS////+SOURIS////+SOURIS////+SOURIS////+SOURIS////+SOURIS
+   
+    const mouse = { x: 0, y: 0 };
+
+document.addEventListener('mousemove', function (e) {
+    mouse.x = e.clientX || e.pageX;
+    mouse.y = e.clientY || e.pageY;
+
+    // Utilisez la position de la souris pour effectuer des modifications légères
+    const rotationIntensity = 0.19; // Augmentez cette valeur pour un effet plus fort
+
+  gsap.to (   camera.rotation,
+    {
+      duration:3,
+     x: (mouse.y / window.innerHeight - 0.5) * rotationIntensity,
+     y:(mouse.x / window.innerWidth - 0.5) * rotationIntensity, 
+     ease: "power2.out"
+    
+    })
+    gsap.to (   camera.rotation,
+    {
+      duration:3,
+     x: (mouse.y / window.innerHeight - 0.5) * rotationIntensity,
+     y:(mouse.x / window.innerWidth - 0.5) * rotationIntensity,
+     ease: "power2.out"
+    
+    })
+
+
+
+    // Mettez à jour la scène
+    renderer.render(scene, camera);
+});
+
+
+
+
+
+///CREATION RENDU///CREATION RENDU///CREATION RENDU///CREATION RENDU///CREATION RENDU///CREATION RENDU///CREATION RENDU
+///CREATION RENDU///CREATION RENDU///CREATION RENDU///CREATION RENDU///CREATION RENDU///CREATION RENDU///CREATION RENDU
+
+renderer = new THREE.WebGLRenderer( { antialias: true,alpha:true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.shadowMap.enabled = true;
+				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+				//renderer.outputEncoding = THREE.sRGBEncoding;
+
+
+
+			///composer
+				composer = new EffectComposer( renderer );
+				document.body.appendChild( renderer.domElement );
+
+			///filtre
+
+			const renderScene = new RenderPass( scene, camera );
+      const filmPass = new FilmPass( 0.3,0, 1928, false );
+   
+
+
+      ///GLITCH MODIFIE, 
+       // ajout de deux parametres dan le le fichier glitch = modifictaction du cosntructeur avec parametre amount et col_s
+      ///ajuts uniform value  dans fichier du shader 
+
+        glitchPass = new GlitchPass(64,0.005,0)//nouveau constructor 3 parametre, para2 = amouht,para3 col_s
+        // Réglez la distorsion
+        glitchPass.amount=0.000
+        glitchPass.col_s = 0.0;
+
+        gsap.to ( glitchPass,
+            {
+              duration:0.5,
+              col_s:1,
+              delay:0
+            })
+
+            gsap.to ( glitchPass,
+            {
+              duration:1,
+              col_s:0.0,
+              delay:0.5
+            })
+
+
+
+			composer.addPass( renderScene );
+	
+
+			composer.addPass( glitchPass );
+
+			composer.addPass(filmPass);
+
+
+
+       //agrandir la scene en fonction de la fenetre
+
+       window.addEventListener('resize', (event) => {
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+
+      renderer.setSize(newWidth, newHeight);
+
+      // Mettez à jour le rapport d'aspect de la caméra
+      camera.aspect = newWidth / newHeight;
+      camera.updateProjectionMatrix();
+});
+
+
+
+
+
+// const stats = new Stats();
+//       //  document.body.appendChild( stats.dom ).setAttribute("id", "democlass"); ;
+			
+//             democlass.style.top='750px'
+//             democlass.style.left='80px'
+//     democlass.style.opacity=1;
+
+
+//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE
+//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE//ANIMATE
+
+      const clock = new THREE.Clock();
+      // Animation
+      const animate = () => {
+       
+      // container.rotation.x += 0.002;
+       //  container.rotation.y += 0.002;
+        const time2 = - performance.now() * 0.005;
+         container.rotation.x =0.1+ Math.cos( time2 * 0.1 ) * 0.1;
+         container.position.y =0- Math.cos( time2 * 0.1 ) * 1;
+         //container.rotation.y += 0.001;
+         container.rotation.z +=0.001
+        //  container.rotation.z = Math.sin( time2 * 0.05 ) * 3.14;
+
+ 
+        if (mixer) {
+          const delta = clock.getDelta(); // Utilisez une instance de Clock pour suivre le temps
+          mixer.update(delta);
+        }
+
+
+       //  stats.begin()
+        requestAnimationFrame(animate);
+      composer.render();
+      //  stats.end();
+      };
+
+      animate();
+    }
+    </script>
+  </body>
+</html>

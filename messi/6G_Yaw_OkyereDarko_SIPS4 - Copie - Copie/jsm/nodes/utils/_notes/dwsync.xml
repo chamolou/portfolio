@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="BypassNode.d.ts" server="ftp.pierredebroux.be" local="132553008988853881" remote="132552975000000000" Dst="1" />
+<file name="BypassNode.js" server="ftp.pierredebroux.be" local="132553008988863883" remote="132552975000000000" Dst="1" />
+<file name="ColorSpaceNode.d.ts" server="ftp.pierredebroux.be" local="132553008988873890" remote="132552975000000000" Dst="1" />
+<file name="ColorSpaceNode.js" server="ftp.pierredebroux.be" local="132553008988883895" remote="132552975000000000" Dst="1" />
+<file name="JoinNode.d.ts" server="ftp.pierredebroux.be" local="132553008988893896" remote="132552975000000000" Dst="1" />
+<file name="JoinNode.js" server="ftp.pierredebroux.be" local="132553008988903896" remote="132552975000000000" Dst="1" />
+<file name="MaxMIPLevelNode.d.ts" server="ftp.pierredebroux.be" local="132553008988913898" remote="132552975000000000" Dst="1" />
+<file name="MaxMIPLevelNode.js" server="ftp.pierredebroux.be" local="132553008989013935" remote="132552975000000000" Dst="1" />
+<file name="SpecularMIPLevelNode.d.ts" server="ftp.pierredebroux.be" local="132553008989023933" remote="132552975000000000" Dst="1" />
+<file name="SpecularMIPLevelNode.js" server="ftp.pierredebroux.be" local="132553008989043922" remote="132552975000000000" Dst="1" />
+<file name="SubSlot.d.ts" server="ftp.pierredebroux.be" local="132553008989053927" remote="132552975000000000" Dst="1" />
+<file name="SubSlotNode.js" server="ftp.pierredebroux.be" local="132553008989063935" remote="132552975000000000" Dst="1" />
+<file name="SwitchNode.d.ts" server="ftp.pierredebroux.be" local="132553008989073934" remote="132552975000000000" Dst="1" />
+<file name="SwitchNode.js" server="ftp.pierredebroux.be" local="132553008989083935" remote="132552975000000000" Dst="1" />
+<file name="TimerNode.d.ts" server="ftp.pierredebroux.be" local="132553008989093939" remote="132552975000000000" Dst="1" />
+<file name="TimerNode.js" server="ftp.pierredebroux.be" local="132553008989103939" remote="132552975000000000" Dst="1" />
+<file name="UVTransformNode.d.ts" server="ftp.pierredebroux.be" local="132553008989133952" remote="132552975000000000" Dst="1" />
+<file name="UVTransformNode.js" server="ftp.pierredebroux.be" local="132553008989143940" remote="132552975000000000" Dst="1" />
+<file name="VelocityNode.d.ts" server="ftp.pierredebroux.be" local="132553008989153942" remote="132552975000000000" Dst="1" />
+<file name="VelocityNode.js" server="ftp.pierredebroux.be" local="132553008989163959" remote="132552975000000000" Dst="1" />
+<file name="BypassNode.d.ts" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="BypassNode.js" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="ColorSpaceNode.d.ts" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="JoinNode.d.ts" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="ColorSpaceNode.js" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="JoinNode.js" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="MaxMIPLevelNode.d.ts" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="MaxMIPLevelNode.js" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="SpecularMIPLevelNode.d.ts" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="SpecularMIPLevelNode.js" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="SubSlot.d.ts" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="SubSlotNode.js" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="SwitchNode.d.ts" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="SwitchNode.js" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="TimerNode.js" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="TimerNode.d.ts" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="UVTransformNode.d.ts" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="UVTransformNode.js" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="VelocityNode.d.ts" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+<file name="VelocityNode.js" server="can-nicula.inraci.be//" local="132553009000000000" remote="132595077000000000" Dst="1" />
+</dwsync>

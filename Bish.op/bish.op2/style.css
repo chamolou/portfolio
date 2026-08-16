@@ -1,0 +1,428 @@
+* {
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+a {
+    text-decoration: none;
+    color: var(--color-black);
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden; /* prevent page scrolling so only carousel scrolls */
+    background-color: var(--color-white);
+    transition: background-color 0.4s ease;
+}
+
+:root{
+    /* color variables */
+    --color-black: #000000;
+    --color-white: #ffffff;
+    --color-border: var(--color-black);
+}
+
+/* Inverted theme: swap black/white */
+html[data-theme="inverted"] {
+    --color-black: #ffffff;
+    --color-white: #000000;
+    --color-border: var(--color-black);
+}
+
+.middle-color-texte-element {
+    cursor: pointer;
+    transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+    @font-face {
+        font-family: "Rand Mono";
+        src: url("/fonts/RandMono-Regular.woff2") format("woff2"),
+            url("/fonts/RandMono-Regular.woff") format("woff");
+        font-weight: 400;
+        font-style: normal;
+    }
+
+
+
+    .sec1 {
+        height: 100vh;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        column-gap: 20px;
+        /* espace horizontal et vertical entre les cellules */
+        padding: 0 20px;
+        /* marge latérale de 20px autour des colonnes */
+        grid-template-rows: repeat(39, 1fr);
+    }
+
+    .main-texte-element {
+        grid-column: 1/6;
+        grid-row: 2/9;
+        font-size: 13.8vw;
+        font-family: 'Helvetica Neue', sans-serif;
+        align-self: start;
+        justify-self: end;
+        text-align: right;
+        max-width: 100%;
+        line-height: 0.75;
+        margin-right: 18px;
+        color: var(--color-black);
+    }
+
+    .first-texte-element {
+        grid-row: 12/14;
+        grid-column: 1/2;
+        font-family: 'Helvetica Neue', sans-serif;
+        text-transform: uppercase;
+        color: var(--color-black);
+    }
+
+    .second-texte-element {
+        grid-row: 14/18;
+        grid-column: 1/4;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 100;
+        text-align: justify;
+        font-size: 0.8vw;
+        color: var(--color-black);
+    }
+
+    .third-texte-element {
+        grid-row: 13/17;
+        grid-column: 3/6;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 100;
+        text-align: justify;
+        text-align: right;
+        font-size: 0.8vw;
+        color: var(--color-black);
+    }
+
+
+    /* gallery */
+
+    .first-galery {
+        grid-row: 27/28;
+        grid-column: 1/6;
+    border-top: solid 1.5px var(--color-border);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-size: 0.8vw;
+        color: var(--color-black);
+        display: flex;
+        
+    }
+
+    .second-galery {
+        grid-row: 28/29;
+        grid-column: 1/6;
+    border-top: solid 1.5px var(--color-border);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-size: 0.8vw;
+        color: var(--color-black);
+         display: flex;
+
+    }
+
+    .third-galery {
+        grid-row: 29/30;
+        grid-column: 1/6;
+    border-top: solid 1.5px var(--color-border);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-size: 0.8vw;
+        color: var(--color-black);
+         display: flex;
+    }
+
+    .fourth-galery {
+        grid-row: 30/31;
+        grid-column: 1/6;
+    border-top: solid 1.5px var(--color-border);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-size: 0.8vw;
+        color: var(--color-black);
+         display: flex;
+    }
+
+    .fifth-galery {
+        grid-row: 31/32;
+        grid-column: 1/6;
+    border-top: solid 1.5px var(--color-border);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-size: 0.8vw;
+        color: var(--color-black);
+         display: flex;
+
+    }
+
+    .sixth-galery {
+        grid-row: 32/33;
+        grid-column: 1/6;
+    border-top: solid 1.5px var(--color-border);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-size: 0.8vw;
+        color: var(--color-black);
+         display: flex;
+    }
+
+    .seventh-galery {
+        grid-row: 33/34;
+        grid-column: 1/6;
+    border-top: solid 1.5px var(--color-border);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-size: 0.8vw;
+        color: var(--color-black);
+         display: flex;
+    }
+
+    .eighth-galery {
+        grid-row: 34/35;
+        grid-column: 1/6;
+    border-top: solid 1.5px var(--color-border);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-size: 0.8vw;
+        color: var(--color-black);
+         display: flex;
+    }
+
+    .ninth-galery {
+        grid-row: 35/36;
+        grid-column: 1/6;
+    border-top: solid 1.5px var(--color-border);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-size: 0.8vw;
+        color: var(--color-black);
+         display: flex;
+    }
+
+    .tenth-galery {
+        grid-row: 36/37;
+        grid-column: 1/6;
+    border-top: solid 1.5px var(--color-border);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-size: 0.8vw;
+        color: var(--color-black);
+         display: flex;
+    }
+
+    .eleventh-galery {
+        grid-row: 37/38;
+        grid-column: 1/6;
+    border-top: solid 1.5px var(--color-border);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 400;
+        font-size: 0.8vw;
+        color: var(--color-black);
+         display: flex;
+    }
+
+    .twelfth-galery {
+        grid-row: 38/39;
+        grid-column: 1/6;
+    border-top: solid 1.5px var(--color-border);
+    border-bottom: solid 1.5px var(--color-border);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 200;
+        font-size: 0.8vw;
+        color: var(--color-black);
+         display: flex;
+    }
+
+    .plus-svg {
+        /* prevent the svg from stretching its container and align it to the right */
+        flex: 0 0 auto;
+        max-width: 25px; /* fixed maximum width */
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        margin-left: auto; /* push to the right when inside a flex parent */
+
+    }
+/* ── hover animation gallery ── */
+
+/* Sélectionner tous les divs galerie en une seule règle */
+[class$="-galery"] {
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.4s ease;
+    cursor: pointer;
+}
+
+[class$="-galery"]:hover {
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+/* Inverser le SVG (noir → blanc) au hover */
+[class$="-galery"]:hover .plus-svg {
+    filter: invert(1);
+}
+
+/* When the global theme is already inverted, hovering should invert back */
+html[data-theme="inverted"] [class$="-galery"]:hover .plus-svg {
+    filter: invert(0);
+}
+
+.plus-svg {
+    transition: filter 0.25s ease;
+}
+
+/* Invert the SVG automatically whenever the global theme is inverted */
+html[data-theme="inverted"] .plus-svg {
+    filter: invert(1);
+}
+
+/* Apply the same hover animation to menu items */
+[class$="-menu"] {
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.4s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+[class$="-menu"]:hover {
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+[class$="-menu"]:hover a {
+    color: var(--color-white);
+}
+
+[class$="-menu"] a {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+[class$="-menu"]:hover .plus-svg {
+    filter: invert(1);
+}
+
+/* When the global theme is already inverted, hovering should invert back */
+html[data-theme="inverted"] [class$="-menu"]:hover .plus-svg {
+    filter: invert(0);
+}
+
+
+/* middle */
+
+
+.first-menu{
+    grid-column: 6/8;
+    grid-row: 2/3;
+    border-top: solid 1.5px var(--color-border);
+    display: flex;
+}
+
+.second-menu{
+    grid-column: 6/8;
+    grid-row: 3/4;
+     border-top: solid 1.5px var(--color-border);
+    display: flex;
+}
+
+.third-menu{
+    grid-column: 6/8;
+    grid-row: 4/5;
+     border-top: solid 1.5px var(--color-border);
+     border-bottom: solid 1.5px var(--color-border);
+    display: flex;
+
+}
+
+.middle-menu-first-texte{
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.8vw;
+    color: var(--color-black);
+}
+
+.middle-menu-second-texte{
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.8vw;
+    text-align: right;
+    color: var(--color-black);
+}
+
+.middle-menu-third-texte{
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.8vw;
+    text-align: right;
+    color: var(--color-black);
+}
+
+.left-color-texte-element {
+    grid-column: 6/7;
+    grid-row: 38/39;
+     font-family: "IBM Plex Mono", monospace;
+     font-weight: 400;
+     font-size: 0.8vw;
+    align-self: end;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    transition: opacity 0.25s ease, color 0.25s ease;
+    color: var(--color-black);
+}
+
+.left-color-texte-element:hover {
+    opacity: 0.5;
+}
+
+.middle-down-second-texte-element {
+    grid-column: 6/8;
+    grid-row: 38/39; /* move to last row */
+     font-family: "IBM Plex Mono", monospace;
+     font-weight: 400;
+     font-size: 0.8vw;
+     text-align: right;
+    align-self: end; 
+    color: var(--color-black);
+}
+
+
+/* right */
+
+
+.carrousel{
+    grid-column: 8/10;
+    grid-row: 2/39;
+    overflow-y: auto; /* only this column scrolls */
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.img-carrousel {
+    position: static;
+    display: block;
+    width: 100%;
+    height: auto; /* keep aspect ratio */
+    object-fit: cover;
+    padding-bottom: 10Px;
+}
+
+/* Longhand border-color so GSAP theme animation can interpolate via --color-black */
+[class$="-galery"],
+[class$="-menu"] {
+    border-top-color: var(--color-black);
+}
+
+.twelfth-galery,
+.third-menu {
+    border-bottom-color: var(--color-black);
+}
