@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://db.onlinewebfonts.com/c/c5c9157a20810aac79a10bf84a37bdb4?family=Neue+Montreal+Medium" rel="stylesheet"> 
+    <link href="https://db.onlinewebfonts.com/c/86491e13bc132c38bdba0c2f57051023?family=GTSectra-Regular" rel="stylesheet"> 
+    <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Carré 3D avec Three.js</title>
+
+    <style>
+      body { margin: 0; font-family: "GTSectra-Regular";  }
+      section {
+        height: 100vh;
+        position: relative;
+       
+
+      }
+      .gsap-marker-start{
+        z-index: 99999999999;
+        position: relative;
+      }
+      .background {
+    height: 100%;
+    width: 100%;
+ 
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+      canvas{
+        position: fixed;
+ top:0;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+     .header{
+        width: 96vw;
+        margin-left: 2vw;
+        height: 6vh;
+    
+        position: fixed;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 10px;
+        letter-spacing: 1px;
+        font-family: "Neue Montreal Medium"; 
+
+     }
+     .header div{
+        width:33.33%;
+        text-transform: uppercase;
+     }
+     .header div:nth-child(3){
+      text-align: right;
+
+     }
+     .header div:nth-child(2){
+      text-align: center;
+      
+     }
+     h1{
+        font-size: 5vw;
+        width: 30%;
+        text-align: right;
+        line-height: 5vw;
+        text-transform: uppercase;
+        color: white;
+        margin-left: 10%;
+        margin-top: 10vw;color: #edcfcf;
+     }
+     h2 {
+  font-size: 0.5vw;
+  width: 8%;
+ 
+  text-align: right;
+  line-height: 0.55vw;
+  text-transform: uppercase;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  margin-left: 32%;
+  font-weight: 500;
+  margin-top: -1vw;color: #edcfcf;
+}
+    </style>
+  </head>
+  <body>
+
+    <div class="header">
+        <div>THREE.JS</div>
+        <div>scrollsmoother</div>
+        <div>scrolltrigger</div>
+
+    </div>
+    <div class="background"> </div>
+
+<div id="smoothContent">
+    <section class="section1">
+        <h1 data-speed="1" data-lag="0.8">We<br>
+            try<br>
+            Good<br>
+            things</h1>
+            <h2 class='txt' data-speed="0.8" data-lag="0.4">Dogstudio is a multidisciplinary creative studio at the intersection of art, design and technology. </h2>
+    </section>
+    <section class="section2" ></section>
+    <section></section>
+
+
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="gsap.js"></script>
+    <script src="ScrollTrigger.min.js"></script>
+     <script src="ScrollSmoother.min.js"></script>
+
+     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+     
+
+
+
+    <script>
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+var smoother =  ScrollSmoother.create({
+  content: "#smoothContent",
+  smooth: 2,
+  effects: true
+
+  });
+
+  const loader2 = new THREE.CubeTextureLoader();
+loader2.setPath( 'cubemap/' );
+  const textureCube = loader2.load(['image1/px.png', 'image1/nx.png','image1/py.png', 'image1/ny.png','image1/pz.png', 'image1/nz.png']);
+  
+  const textureCube2 = loader2.load(['image2/px.png', 'image2/nx.png','image2/py.png', 'image2/ny.png','image2/pz.png', 'image2/nz.png']);
+
+
+
+init()
+
+function init(){
+      // Créer une scène
+      const scene = new THREE.Scene();
+        textureCube.mapping = THREE.CubeRefractionMapping;
+        textureCube.minFilter = THREE.LinearFilter;
+scene.background =  textureCube;
+//scene.background.encoding = THREE.sRGBEncoding;
+      // Créer une caméra
+
+      
+     //idees =
+    //  const scene2 = new THREE.Scene();
+
+
+      camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight,1, 1000 );
+				camera.position.z = 10;
+   
+
+      //agrandir la scene en fonction de la fenetre
+
+      window.addEventListener('resize', (event) => {
+  const newWidth = window.innerWidth;
+  const newHeight = window.innerHeight;
+
+  renderer.setSize(newWidth, newHeight);
+
+  // Mettez à jour le rapport d'aspect de la caméra
+  camera.aspect = newWidth / newHeight;
+  camera.updateProjectionMatrix();
+});
+
+
+const container = new THREE.Object3D();
+scene.add(container);
+
+// Créer un cube
+const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+// Shader pour le matériau personnalisé
+const material = new THREE.MeshStandardMaterial({
+  color: 0xeeeeee,
+  metalness: 1, // 1 pour un matériau métallique
+  roughness: 0.2, // Rugosité (0 à 1, 0 = lisse, 1 = rugueux)
+});
+const cube = new THREE.Mesh(geometry, material);
+
+
+//:light
+
+
+const ambient = new THREE.AmbientLight( 0xffffff, 1);
+			scene.add( ambient );
+
+// const cubeTextureLoader = new THREE.CubeTextureLoader();
+// const texture = cubeTextureLoader.load([
+//   'cubemap/px.png', 'cubemap/nx.png',  // Face droite (positive X) et gauche (négative X)
+//   'cubemap/py.png', 'cubemap/ny.png',  // Face supérieure (positive Y) et inférieure (négative Y)
+//   'cubemap/pz.png', 'cubemap/nz.png'   // Face avant (positive Z) et arrière (négative Z)
+// ]);
+
+				//cubemap
+
+
+
+		
+
+
+const material2 =  new THREE.MeshPhongMaterial( { color: 0xfffffd,flatShading:true, envMap:  textureCube, reflectivity:1,refractionRatio: 0.9 } );
+
+const loader = new THREE.GLTFLoader();
+
+// Charger le modèle
+loader.load('ecran.glb', (gltf) => {
+  const model = gltf.scene;
+      // Changer la taille du modèle
+      const scale =50; // Modifiez cette valeur en fonction de la taille souhaitée
+
+model.scale.set(scale, 100, scale);
+model.position.y=-0.2
+
+model.traverse((child) => {
+    if (child instanceof THREE.Mesh) {
+      child.material = material2;
+    }
+  });
+
+  container.add(model);
+
+  gsap.to (model.rotation,
+    {
+        // Rotation de 360 degrés autour de l'axe X
+  y: "+=" +  Math.PI * 2, // Rotation de 360 degrés autour de l'axe Y
+  x: "+=" +  Math.PI * 2,
+   scrollTrigger:{
+    trigger:'.section2',
+    start:"top bottom",
+    end:"center 10%",
+    scrub:true,
+    //markers:true,
+              }
+    
+    })
+ 
+    gsap.to (model.scale,
+    {
+        x:  0.2, // Rotation de 360 degrés autour de l'axe X
+  y: 0.2, // Rotation de 360 degrés autour de l'axe Y
+ 
+   scrollTrigger:{
+    trigger: '.section1',
+    start: "40% center",
+    end: "center 10%",
+    scrub:true,
+
+              }
+    
+    })
+
+
+
+
+
+
+
+
+   
+
+  // Vous pouvez ajouter des transformations, des matériaux, etc. au modèle ici
+}, undefined, (error) => {
+  console.error('Erreur de chargement du modèle:', error);
+});
+
+
+
+function updateSceneBackground(x) {
+    scene.background = x;
+}
+
+
+gsap.to('.section1', {
+    scrollTrigger: {
+      trigger: '.section1',
+        start: '20% center',
+        end: '+=50%',
+        scrub: true,
+        markers:true,
+        onUpdate: (self) => {
+            // Appelez la fonction pour mettre à jour le fond en fonction de la progression
+            updateSceneBackground(textureCube);
+        },
+    },
+});
+
+
+gsap.to('.section2', {
+    scrollTrigger: {
+      trigger: '.section1',
+        start: '70% center',
+        end: '+=30%',
+        scrub: true,
+     // markers:true,
+        onUpdate: (self) => {
+            // Appelez la fonction pour mettre à jour le fond en fonction de la progression
+            updateSceneBackground(textureCube2);
+        },
+    },
+});
+
+
+
+
+
+
+gsap.to (".txt",
+    {
+    
+   scrollTrigger:{
+    trigger: ".txt",
+    start: "0% 7%",
+    end: "+=500%",
+    scrub:true,
+    pin:true,
+ 
+              }
+    
+    })
+
+
+
+
+   
+    const mouse = { x: 0, y: 0 };
+
+document.addEventListener('mousemove', function (e) {
+    mouse.x = e.clientX || e.pageX;
+    mouse.y = e.clientY || e.pageY;
+
+    // Utilisez la position de la souris pour effectuer des modifications légères
+    const rotationIntensity = 0.29; // Augmentez cette valeur pour un effet plus fort
+
+  gsap.to (   camera.rotation,
+    {
+      duration:2,
+     x: (mouse.y / window.innerHeight - 0.5) * rotationIntensity,
+     y:(mouse.x / window.innerWidth - 0.5) * rotationIntensity,
+    
+    })
+    // Mettez à jour la scène
+    renderer.render(scene, camera);
+});
+
+
+
+
+
+
+   // Créer un rendu
+   renderer = new THREE.WebGLRenderer();			
+   renderer.setPixelRatio( window.devicePixelRatio );
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+
+
+      // Animation
+      const animate = () => {
+       
+        container.rotation.x += 0.0005;
+  container.rotation.y += 0.0005;
+
+      
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+      };
+
+      animate();
+    }
+    </script>
+  </body>
+</html>

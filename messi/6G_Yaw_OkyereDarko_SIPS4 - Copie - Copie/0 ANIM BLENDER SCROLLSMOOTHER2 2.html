@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      href="https://db.onlinewebfonts.com/c/c5c9157a20810aac79a10bf84a37bdb4?family=Neue+Montreal+Medium"
+      rel="stylesheet"
+    />
+    <link
+      href="https://db.onlinewebfonts.com/c/86491e13bc132c38bdba0c2f57051023?family=GTSectra-Regular"
+      rel="stylesheet"
+    />
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Carré 3D avec Three.js</title>
+  </head>
+
+  <body>
+    <div class="header">
+      <div id="button" class="grand">home</div>
+      <div class="logo">
+        <svg
+          width="71"
+          height="62"
+          viewBox="0 0 71 62"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0.00167197 0.00167197C0.00167197 0.00167197 3.27134 3.76614 3.17104 6.83688L3.46859 31.7004C4.49997 33.5024 16.4954 45.3708 20.8533 48.5402C20.8533 48.5402 15.7031 40.6652 15.999 36.6032C16.2949 32.5412 15.8502 18.7722 15.8502 18.7722C15.8502 18.7722 14.5129 11.2432 8.56867 8.1725C8.56867 8.1725 14.8589 8.02373 23.329 13.3729C23.329 13.3729 13.077 3.0206 0 0L0.00167197 0.00167197Z"
+            fill="white"
+          />
+          <path
+            d="M28.8771 27.0334V55.6112L35.5017 62.0001L41.7552 55.2636V27.0317C41.7552 27.0317 36.2071 31.0938 35.3161 33.8168C35.3161 33.8168 31.4029 27.4279 28.8771 27.0317V27.0334Z"
+            fill="white"
+          />
+          <path
+            d="M70.8027 0.00167197C70.8027 0.00167197 67.533 3.76614 67.6333 6.83688L67.3358 31.7004C66.3044 33.5024 54.3089 45.3708 49.9511 48.5402C49.9511 48.5402 55.1013 40.6652 54.8054 36.6032C54.5079 32.5412 54.9542 18.7722 54.9542 18.7722C54.9542 18.7722 56.2915 11.2432 62.2357 8.1725C62.2357 8.1725 55.9454 8.02373 47.4754 13.3729C47.4754 13.3729 57.7274 3.0206 70.8044 0L70.8027 0.00167197Z"
+            fill="white"
+          />
+        </svg>
+      </div>
+      <div class="info open-sans">
+        <div class="m grand">mute</div>
+        <div><a href="https://www.adidas.be/en">contact</a></div>
+      </div>
+    </div>
+    <div class="menu ">
+      <svg
+        width="27"
+        height="38"
+        viewBox="0 0 27 38"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="t"
+        id="t1"
+      >
+        <path
+          d="M26.2231 18.7726C23.2115 16.3398 15.0443 5.01837 13.4901 0.411023C13.3992 0.14198 13.321 0 13.1832 0C13.0472 0 12.9684 0.14198 12.8781 0.411023C11.3227 5.01837 3.15667 16.3398 0.14443 18.7726C0.0662773 18.8352 0 18.9537 0 19C0 19.0463 0.0662773 19.1649 0.14443 19.2269C3.15667 21.6596 11.3227 32.981 12.8781 37.5891C12.9684 37.858 13.0472 38 13.1832 38C13.321 38 13.3992 37.858 13.4901 37.5891C15.0443 32.981 23.2115 21.6596 26.2231 19.2269C26.3007 19.1649 26.3681 19.0464 26.3681 19C26.3681 18.9537 26.3007 18.8351 26.2231 18.7726Z"
+          fill="#D76C58"
+        />
+      </svg>
+
+      <svg
+        width="27"
+        height="38"
+        viewBox="0 0 27 38"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="t"
+        id="t2"
+      >
+        <path
+          d="M26.2231 18.7726C23.2115 16.3398 15.0443 5.01837 13.4901 0.411023C13.3992 0.14198 13.321 0 13.1832 0C13.0472 0 12.9684 0.14198 12.8781 0.411023C11.3227 5.01837 3.15667 16.3398 0.14443 18.7726C0.0662773 18.8352 0 18.9537 0 19C0 19.0463 0.0662773 19.1649 0.14443 19.2269C3.15667 21.6596 11.3227 32.981 12.8781 37.5891C12.9684 37.858 13.0472 38 13.1832 38C13.321 38 13.3992 37.858 13.4901 37.5891C15.0443 32.981 23.2115 21.6596 26.2231 19.2269C26.3007 19.1649 26.3681 19.0464 26.3681 19C26.3681 18.9537 26.3007 18.8351 26.2231 18.7726Z"
+          fill="white"
+        />
+      </svg>
+
+      <svg
+        width="27"
+        height="38"
+        viewBox="0 0 27 38"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="t"
+        id="t3"
+      >
+        <path
+          d="M26.2231 18.7726C23.2115 16.3398 15.0443 5.01837 13.4901 0.411023C13.3992 0.14198 13.321 0 13.1832 0C13.0472 0 12.9684 0.14198 12.8781 0.411023C11.3227 5.01837 3.15667 16.3398 0.14443 18.7726C0.0662773 18.8352 0 18.9537 0 19C0 19.0463 0.0662773 19.1649 0.14443 19.2269C3.15667 21.6596 11.3227 32.981 12.8781 37.5891C12.9684 37.858 13.0472 38 13.1832 38C13.321 38 13.3992 37.858 13.4901 37.5891C15.0443 32.981 23.2115 21.6596 26.2231 19.2269C26.3007 19.1649 26.3681 19.0464 26.3681 19C26.3681 18.9537 26.3007 18.8351 26.2231 18.7726Z"
+          fill="white"
+        />
+      </svg>
+
+      <svg
+        width="27"
+        height="38"
+        viewBox="0 0 27 38"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="t"
+        id="t4"
+      >
+        <path
+          d="M26.2231 18.7726C23.2115 16.3398 15.0443 5.01837 13.4901 0.411023C13.3992 0.14198 13.321 0 13.1832 0C13.0472 0 12.9684 0.14198 12.8781 0.411023C11.3227 5.01837 3.15667 16.3398 0.14443 18.7726C0.0662773 18.8352 0 18.9537 0 19C0 19.0463 0.0662773 19.1649 0.14443 19.2269C3.15667 21.6596 11.3227 32.981 12.8781 37.5891C12.9684 37.858 13.0472 38 13.1832 38C13.321 38 13.3992 37.858 13.4901 37.5891C15.0443 32.981 23.2115 21.6596 26.2231 19.2269C26.3007 19.1649 26.3681 19.0464 26.3681 19C26.3681 18.9537 26.3007 18.8351 26.2231 18.7726Z"
+          fill="white"
+        />
+      </svg>
+
+      
+    </div>
+
+    <div class="background"></div>
+
+    <div id="smoothContent">
+      <section class="section1 grid" id="oo">
+        <div class="b1"></div>
+        <div class="b2"></div>
+        <div class="b3"></div>
+        <div class="b4"></div>
+
+        <div class="un playfair-display" data-speed="1" data-lag="0.8">
+          <h1 class="startdos">
+            A<br />
+            Design<br />
+            Inspired<br />
+            by Messi’s
+          </h1>
+        </div>
+
+        <div class="deux open-sans startdos up">
+          <p>
+            Une Analyse de l'Impact du Style de Jeu <br />
+            Unique de Lionel Messi sur la Conception,<br />
+            l'Innovation Technologique, la Performance <br />
+            et l'Esthétique.
+          </p>
+        </div>
+      </section>
+
+      <section class="section2 grid">
+        <div class="b1"></div>
+        <div class="b2"></div>
+        <div class="b3"></div>
+        <div class="b4"></div>
+
+        <div class="arturo un">
+          <h1 class="playfair-display start" id="dt">
+            WHAT<br />
+            is it made<br />
+            of
+          </h1>
+        </div>
+
+        <div class="div1 arturo">
+          <p class="trois open-sans arturo2 up">The Adidas Messi 15.1 FG</p>
+
+          <p class="quatre open-sans arturo2 up">
+            is designed for ultimate <br />
+            precision and agility, <br />
+            featuring a lightweight <br />
+            Messitouch synthetic upper <br />
+            that delivers excellent ball <br />
+            control and a close fit,
+          </p>
+        </div>
+      </section>
+
+      <section class="section3 grid">
+        <div class="b1"></div>
+        <div class="b2"></div>
+        <div class="b3"></div>
+        <div class="b4"></div>
+
+        <div class="div2 arturo3">
+          <p class="cinq open-sans up">
+            enhancing your feel for <br />
+            the ball. The MessiFRAME <br />
+            internal cage provides <br />
+            added stability, locking the <br />
+            foot in place for better <br />
+            support during rapid <br />
+            changes in direction.
+          </p>
+          <p class="six open-sans up">MessiFRAME : Stabilité et Contrôle</p>
+        </div>
+
+        <h1 class="neuf arturo3">Unleash Your Agility</h1>
+
+        <div class="div3 arturo3">
+          <p class="cinq open-sans up">
+            Its TPU outsole, equipped <br />
+            with the unique <br />
+            MessiGAMBETRAX stud <br />
+            configuration, ensures <br />
+            superior traction.
+          </p>
+        </div>
+      </section>
+
+      <section class="section4 grid">
+        <div class="b1"></div>
+        <div class="b2"></div>
+        <div class="b3"></div>
+        <div class="b4"></div>
+        
+        <div class="qaf">
+          <p class="pa1">first</p>
+          <p class="pa2">second</p>
+          <p class="pa3">third</p>
+        </div>
+        <div class="qau">
+          <div class="qadu">
+            
+            <p class="up grand">difference</p>
+          </div>
+
+          <div class="qadd">
+            
+            <p class="up grand">soft-light</p>
+          </div>
+
+          <div class="qadt">
+           
+            <p class="up grand">plus-lighte</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section5 grid">
+        <div class="b1"></div>
+        <div class="b2"></div>
+        <div class="b3"></div>
+        <div class="b4"></div>
+
+        <div class="qas">
+          <p class="pa4">fourth</p>
+          <p class="pa5">fifth</p>
+        </div>
+
+        <div class="qad">
+          <div class="qadq">
+            
+            <p class="up grand">normal</p>
+          </div>
+          <div class="qadc">
+            
+            <p class="up grand">luminosity</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section6 grid">
+        <div class="b1"></div>
+        <div class="b2"></div>
+        <div class="b3"></div>
+        <div class="b4"></div>
+
+        <div class="vid">
+          <video
+            src="video/adidas Messi15 Soccer Boots.mp4"
+            loop
+            id="video"
+          ></video>
+        </div>
+      </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="gsap.js"></script>
+    <script src="ScrollTrigger.min.js"></script>
+    <script src="ScrollSmoother.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+    <script src="index2.js"></script>
+  </body>
+</html>

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://db.onlinewebfonts.com/c/c5c9157a20810aac79a10bf84a37bdb4?family=Neue+Montreal+Medium" rel="stylesheet"> 
+    <link href="https://db.onlinewebfonts.com/c/86491e13bc132c38bdba0c2f57051023?family=GTSectra-Regular" rel="stylesheet"> 
+    <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Carré 3D avec Three.js</title>
+
+    <style>
+      body { margin: 0; font-family: "GTSectra-Regular";  }
+      section {
+        height: 100vh;
+        position: relative;
+       
+
+      }
+      
+      .background {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to bottom, #04132a 0%, #33050d 100%);
+
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.blob {
+    position: absolute;
+    z-index: 999999999;
+    top:0%;
+
+left: 0%;   
+ width: 30vw;
+    height: 30vw;
+    background-color: #d74e6716;
+    border-radius: 50%;
+    animation: blobMove 4s linear infinite;
+    transform-origin: center;
+    filter: blur(200px);
+}
+
+@keyframes blobMove {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform:scale(2.5);
+    }
+}
+      canvas{
+        position: fixed;
+ top:0;
+        z-index: 999;
+        pointer-events: none;
+      }
+
+     .header{
+        width: 96vw;
+        margin-left: 2vw;
+        height: 6vh;
+    
+        position: fixed;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.496);
+        font-size: 10px;
+        letter-spacing: 1px;
+        font-family: "Neue Montreal Medium"; 
+        z-index: 999;
+
+     }
+     .header div{
+        width:33.33%;
+        text-transform: uppercase;
+     }
+     .header div:nth-child(3){
+      text-align: right;
+
+     }
+     .header div:nth-child(2){
+      text-align: center;
+      
+     }
+ 
+.sectin2 {
+  /* background-color: rgba(0, 255, 255, 0.073); */
+}
+
+
+    </style>
+  </head>
+  <body>
+
+    <div class="header">
+        <div>THREE.JS</div>
+        <div>scrollsmoother</div>
+        <div>scrolltrigger</div>
+
+    </div>
+    <div class="background"> </div>
+
+<div id="smoothContent">
+    <section class="section1">
+     
+            <h2 class='txt' data-speed="1" data-lag="1"> </h2>
+    </section>
+    <section class="section2" ></section>
+    <section></section>
+
+
+</div>
+
+
+    <script src="gsap.js"></script>
+    <script src="ScrollTrigger.min.js"></script>
+     <script src="ScrollSmoother.min.js"></script>
+
+
+     
+
+  
+
+     <script type="module">
+
+
+
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+var smoother =  ScrollSmoother.create({
+  content: "#smoothContent",
+  smooth: 2,
+  effects: true
+
+  });
+
+  
+
+
+        import * as THREE from '../build/three.module.js';
+        import { GLTFLoader } from './jsm/loaders/GLTFLoader.js';
+          
+       import { Reflector } from './jsm/objects/Reflector.js';
+      import Stats from './jsm/libs/stats.module.js'
+      import { GUI } from './jsm/libs/dat.gui.module.js';
+      import { OrbitControls } from './jsm/controls/OrbitControls.js';
+      import { RectAreaLightHelper } from './jsm/helpers/RectAreaLightHelper.js';
+			import { RectAreaLightUniformsLib } from './jsm/lights/RectAreaLightUniformsLib.js';
+			import { EffectComposer } from './jsm/postprocessing/EffectComposer.js';
+			import { RenderPass } from './jsm/postprocessing/RenderPass.js';
+			import { FilmPass } from './jsm/postprocessing/FilmPass.js';
+			import { GlitchPass } from './jsm/postprocessing/GlitchPass2.js';
+			import { UnrealBloomPass } from './jsm/postprocessing/UnrealBloomPass.js';
+		
+
+			const origin = new THREE.Vector3();
+
+			let rectLight, rectLightHelper,lightHelper1, lightHelper2, lightHelper3;
+
+
+
+			let camera, scene, renderer,composer,
+			light1, light2, light3, light4,light5,
+			object, stats, texture;
+
+			const clock = new THREE.Clock();
+			let mouseX = 0;
+			let mouseY = 0;
+
+			let windowHalfX = window.innerWidth / 2;
+			let windowHalfY = window.innerHeight / 2;
+
+      const boxHelpers = [];
+
+
+//////////CREATION DE LA SCENE 		//////////CREATION DE LA SCENE 		//////////CREATION DE LA SCENE 		//////////CREATION DE LA SCENE 
+ //////////CREATION DE LA SCENE 		//////////CREATION DE LA SCENE 		//////////CREATION DE LA SCENE 		//////////CREATION DE LA SCENE 
+ //////////CREATION DE LA SCENE 		//////////CREATION DE LA SCENE 		//////////CREATION DE LA SCENE 
+
+      camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 1, 300 );
+      camera.position.set(0,30, 60 );
+			scene = new THREE.Scene();
+           
+
+
+
+   ///OBJET IMPORTANT
+
+   const container = new THREE.Object3D();
+    scene.add(container);
+
+
+    ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET
+    ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET
+    ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET
+    ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET  ////CREATION OBJET
+    ////CREATION OBJET
+
+    ///sol		
+
+        const geoFloor = new THREE.BoxBufferGeometry( 200, 0.1, 20 );
+				const matStdFloor = new THREE.MeshStandardMaterial( { color: 0x416667, roughness: 0, metalness: 0.5 } );
+				const mshStdFloor = new THREE.Mesh( geoFloor, matStdFloor );
+        mshStdFloor.position.set (0,-50,0)
+				scene.add( mshStdFloor );
+		
+		// Positionnez le Reflector
+const reflectorGeometry = new THREE.PlaneGeometry(10, 10);
+const reflectorGeometry2 = new THREE.PlaneGeometry(10, 10);
+
+const reflector3 = new Reflector(reflectorGeometry, {
+  textureWidth: window.innerWidth * window.devicePixelRatio,
+  textureHeight: window.innerHeight * window.devicePixelRatio,
+  color: 0xffffff,
+});
+const reflector4= new Reflector(reflectorGeometry2, {
+  textureWidth: window.innerWidth * window.devicePixelRatio,
+  textureHeight: window.innerHeight * window.devicePixelRatio,
+  color: 0xffffff,
+});
+reflector3.position.set(-10, 0, 0);
+reflector4.position.set(1, 0, 0);
+// Orientez le Reflector vers le haut
+//reflector.rotateX(Math.PI / 2.8);
+reflector3.rotateY(Math.PI/3 );
+reflector4.rotateY(-Math.PI/3 );
+scene.add(reflector3);scene.add(reflector4);
+
+
+//////////LAODER//////////LAODER//////////LAODER//////////LAODER//////////LAODER//////////LAODER//////////LAODER//////////LAODER
+//////////LAODER//////////LAODER//////////LAODER//////////LAODER//////////LAODER//////////LAODER//////////LAODER//////////LAODER
+//////////LAODER//////////LAODER//////////LAODER//////////LAODER//////////LAODER//////////LAODER//////////LAODER//////////LAODER
+
+//creation materiel
+const material = new THREE.MeshStandardMaterial( { color: 0xafffff, roughness: 0.5, metalness: 1 } );
+const loader = new GLTFLoader();
+
+let mixer; // Déclarez une variable pour stocker l'animation mixer
+// Charger le modèle
+
+let reflector;
+
+loader.load('x.gltf', (gltf) => {
+  const model = gltf.scene;
+
+ 
+
+
+
+
+model.traverse((child) => {
+    if (child instanceof THREE.Mesh) {
+      child.material = material;
+      const scale = 10; // Modifiez cette valeur en fonction de la taille souhaitée
+      child.scale.set(scale, scale, scale);
+   
+      console.log('Position du réflecteur:', model.children[1].position);
+
+      if (child === model.children[1]) {
+            // Utilisez la géométrie du child pour le réflecteur
+            const reflectorGeometry = child.geometry;
+
+            // Créez un réflecteur à partir de la géométrie
+          reflector = new Reflector(reflectorGeometry, {
+                textureWidth: window.innerWidth * window.devicePixelRatio,
+                textureHeight: window.innerHeight * window.devicePixelRatio,
+                color: 0xffffff,
+            })
+            
+         // Définissez la position du réflecteur pour correspondre à la position de l'enfant
+     
+        reflector.position.set(-20,0,-0.17000000178813934)
+         reflector.scale.set(scale, scale, scale);
+        // Définissez la position du réflecteur pour correspondre à la position du modèle
+   
+
+        child.visible = false; // Cela masquera l'enfant
+          container.add(reflector);
+         
+      
+        }
+
+    }
+    //const boxHelper = new THREE.BoxHelper(child, 0x00ff00); // Crée la boîte englobante pour cet objet
+  //scene.add(boxHelper);
+ // boxHelpers.push(boxHelper); 
+  //const axesHelper = new THREE.AxesHelper(50);
+  //axesHelper.position.copy(boxHelper.position);
+  //scene.add(axesHelper);
+  });
+
+
+  mixer = new THREE.AnimationMixer(model);
+  let totalDuration ;
+  gltf.animations.forEach((clip) => {
+    const action = mixer.clipAction(clip);
+
+  // Mettre l'animation en pause au début après avoir mis en play
+  action.play();
+  action.paused = true;
+  totalDuration = clip.duration;///elles ont toute la meme duree
+
+
+
+
+  gsap.to(action, {
+    time: totalDuration , // Définissez ici le pourcentage de progression souhaité (0 à 1)
+  
+  scrollTrigger: {
+    trigger: ".section1",
+    start: "top 0%",
+    end: "+=150%",
+    scrub:true,
+    markers: true
+  }
+});
+  });
+  container.add(model);
+
+
+  // Vous pouvez ajouter des transformations, des matériaux, etc. au modèle ici
+}, undefined, (error) => {
+  console.error('Erreur de chargement du modèle:', error);
+});
+
+
+
+
+////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHTv////LIGHT////LIGHT////LIGHT
+////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT
+////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT
+////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT////LIGHT
+
+
+///spolight + helper 
+const spotLight1 = new THREE.SpotLight(0xffffff, 10 );
+
+spotLight1 .castShadow = true;
+spotLight1 .angle = 0.3; ///angle largeru spot diffusion
+spotLight1 .penumbra = 0.2;/// avoir
+spotLight1 .decay = 0.9; //puissance
+spotLight1 .distance = 120; ///longeur du flux
+spotLight1.position.set( 84, 2,56 );
+spotLight1.rotation.set( 0, Math.PI/4, 0 );
+
+
+spotLight1.target =  container; ///de base sans target cible x0.y0
+////si tu veux suivre la postion de la target n'oublie pas lookAt () dans animate.
+//lightHelper1 = new THREE.SpotLightHelper( spotLight1 );
+scene.add( spotLight1 );
+//scene.add( lightHelper1);
+
+
+
+
+
+
+      const ambient = new THREE.AmbientLight( 0xffffff, 0.7);
+			scene.add( ambient );
+
+
+				const rect = RectAreaLightUniformsLib.init();
+
+				rectLight = new THREE.RectAreaLight( 0xb0b19e, 1,500, 500 );
+				rectLight.position.set( 1, 30, 1 );
+				scene.add( rectLight );
+				
+			
+       //gsap.to(rectLight.position, {duration:5,x:500});
+
+			//	rectLightHelper = new RectAreaLightHelper( rectLight );
+			//	rectLight.add( rectLightHelper );
+
+
+
+
+
+///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS
+///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS
+///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS///SOURIS
+
+   
+
+
+  const mouse = { x: 0, y: 0 };
+
+    document.addEventListener('mousemove', function (e) {
+        mouse.x = e.clientX ;
+        mouse.y = e.clientY ;
+
+        // Utilisez la position de la souris pour effectuer des modifications légères
+        const rotationIntensity = 0.2; // Augmentez cette valeur pour un effet plus fort
+
+      gsap.to (   camera.rotation,
+        {
+          duration:2,
+        x: -0.2+(mouse.y / window.innerHeight - 0.5) * rotationIntensity,
+        y:(mouse.x / window.innerWidth - 0.5) * rotationIntensity,
+        
+        })
+        // Mettez à jour la scène
+        renderer.render(scene, camera);
+    });
+
+//////////////////////////MOTERU//////////////////////////MOTERU//////////////////////////MOTERU//////////////////////////MOTERU
+//////////////////////////MOTERU//////////////////////////MOTERU//////////////////////////MOTERU
+//////////////////////////MOTERU//////////////////////////MOTERU//////////////////////////MOTERU//////////////////////////MOTERU
+    	
+	 		//renderer
+       renderer = new THREE.WebGLRenderer( { antialias: true,alpha:true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.shadowMap.enabled = true;
+				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+				//renderer.outputEncoding = THREE.sRGBEncoding;
+
+
+
+			///composer
+				composer = new EffectComposer( renderer );
+				document.body.appendChild( renderer.domElement );
+
+			///filtre
+
+			const renderScene = new RenderPass( scene, camera );
+
+			const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ),0, 1, 1);
+			bloomPass.threshold = 0.1;
+			bloomPass.strength = 0.3;
+			bloomPass.radius = 1;
+
+
+			composer.addPass( renderScene );
+			composer.addPass( bloomPass );
+
+			const filmPass = new FilmPass( 0.1,0.1, 1928, false );
+			composer.addPass(filmPass);
+
+
+      ///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS
+    ///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS
+    ///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS
+    ///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS
+    ///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS///STATS
+
+        stats = new Stats();
+				document.body.appendChild( stats.dom ).setAttribute("id", "democlass"); ;
+			
+				democlass.style.top='750px'
+				democlass.style.left='80px'
+        democlass.style.opacity=1;
+
+
+
+                
+			///axes helpers  ///axes helpers  	///axes helpers  	///axes helpers  			///axes helpers  ///axes helpers  	///axes helpers  	///axes helpers       
+			///axes helpers ///axes helpers  	///axes helpers  	///axes helpers          ///axes helpers	///axes helpers  	///axes helpers  	///axes helpers       
+			///axes helpers ///axes helpers  	///axes helpers  	///axes helpers            ///axes helpers	///axes helpers  	///axes helpers  	///axes helpers       
+			///axes helpers ///axes helpers  	///axes helpers  	///axes helpers             
+	
+
+                  //const axesHelper = new THREE.AxesHelper( 25 );
+                //	axesHelper.position.y=10;
+                // scene.add( axesHelper );
+               
+                
+
+         ///////////////////////GUI
+         
+         
+         const gui = new GUI();
+     // Sélectionnez tous les éléments avec la classe CSS 'dg'
+const guiElements = document.querySelector('.dg');
+guiElements.style.zIndex = '1000'; // Remplacez '100' par la valeur de z-index souhaitée
+const reflectorConfig = {
+  positionX: -20,
+  positionY: 0,
+  positionZ: -0.17,
+  rotationX: 0,
+  rotationY: 0,
+  rotationZ: 0,
+};
+
+
+const positionFolder = gui.addFolder('Position du réflecteur');
+positionFolder.add(reflectorConfig, 'positionX', -50, 50).onChange(updateReflectorPosition);
+positionFolder.add(reflectorConfig, 'positionY', -50, 50).onChange(updateReflectorPosition);
+positionFolder.add(reflectorConfig, 'positionZ', -50, 50).onChange(updateReflectorPosition);
+
+const rotationFolder = gui.addFolder('Rotation du réflecteur');
+rotationFolder.add(reflectorConfig, 'rotationX', -Math.PI, Math.PI).onChange(updateReflectorRotation);
+rotationFolder.add(reflectorConfig, 'rotationY', -Math.PI, Math.PI).onChange(updateReflectorRotation);
+rotationFolder.add(reflectorConfig, 'rotationZ', -Math.PI, Math.PI).onChange(updateReflectorRotation);
+
+function updateReflectorPosition() {
+  reflector.position.set(reflectorConfig.positionX, reflectorConfig.positionY, reflectorConfig.positionZ);
+}
+
+function updateReflectorRotation() {
+  reflector.rotation.set(reflectorConfig.rotationX, reflectorConfig.rotationY, reflectorConfig.rotationZ);
+}
+
+const spotLightParameters = {
+  x: 0,
+  y: 10,
+  z: 0,
+  decay: 1, // Valeur par défaut pour decay
+  angle: Math.PI / 4,
+};
+gui.add(spotLightParameters, 'x', -100, 100).onChange(function (value) {
+  spotLight1.position.x = value;
+});
+
+gui.add(spotLightParameters, 'y', -100, 100).onChange(function (value) {
+  spotLight1.position.y = value;
+});
+
+gui.add(spotLightParameters, 'z', -100, 100).onChange(function (value) {
+  spotLight1.position.z = value;
+});
+
+gui.add(spotLightParameters, 'decay', 0, 2).onChange(function (value) {
+  spotLight1.decay = value;
+});
+
+gui.add(spotLightParameters, 'angle', 0, Math.PI).onChange(function (value) {
+  spotLight1.angle = value;
+});
+///////////////////////////////////////ANIMATE///////////////////////////////////////ANIMATE///////////////////////////////////////ANIMATE///////////////////////////////////////ANIMATE
+///////////////////////////////////////ANIMATE///////////////////////////////////////ANIMATE///////////////////////////////////////ANIMATE
+///////////////////////////////////////ANIMATE///////////////////////////////////////ANIMATE///////////////////////////////////////ANIMATE
+///////////////////////////////////////ANIMATE///////////////////////////////////////ANIMATE///////////////////////////////////////ANIMATE
+
+
+
+  
+      const animate = () => {
+
+
+      if (mixer) {
+        const delta = clock.getDelta(); // Utilisez une instance de Clock pour suivre le temps
+        mixer.update(delta);
+          }
+          boxHelpers.forEach((boxHelper) => {
+    boxHelper.update();
+  });
+
+
+      ///LIGHTHELPER
+     // lightHelper1.update()
+
+
+    //  const time2 = - performance.now() * 0.000009;
+//camera.position.x = -1 * Math.cos( time2 );
+
+
+    //  camera.lookAt( container.position );
+
+
+          const t = ( Date.now() / 9000 );
+        // move light in circle around center
+        // change light height with sine curve
+
+        const r = 14.0;
+        const lx = 2 * Math.cos( t );
+        const lz = 2 * Math.sin( t );
+        const ly = 100 + 5.0 * Math.sin( t / 10.0 );
+        rectLight.position.set(lx, ly, lz );
+        rectLight.lookAt( origin );
+        //rectLightHelper.update();
+
+       // camera.lookAt();
+         stats.begin()
+        composer.render();
+        stats.end();
+        requestAnimationFrame(animate);
+      };
+
+    animate();
+
+
+
+/////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE 
+/////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE 
+/////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE 
+/////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE /////RESIZE 
+
+
+
+      window.addEventListener('resize', (event) => {
+  const newWidth = window.innerWidth;
+  const newHeight = window.innerHeight;
+
+  renderer.setSize(newWidth, newHeight);
+
+
+
+  // Mettez à jour le rapport d'aspect de la caméra
+  camera.aspect = newWidth / newHeight;
+  camera.updateProjectionMatrix();
+});
+
+    </script>
+  </body>
+</html>
