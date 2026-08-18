@@ -1,8 +1,98 @@
 // ============================================
 
 const EXPLORE_TRANSITION_MS = 1600;
+const COMPACT_HOME_MAX = 1024;
 let exploreTransitioning = false;
 let isExploring = false;
+let homeLayoutTimeout = null;
+
+function isCompactHomeLayout() {
+    return window.innerWidth <= COMPACT_HOME_MAX;
+}
+
+function initCompactHomeView() {
+    const grillElements = document.querySelectorAll('.grill');
+    const grElements = document.querySelectorAll('.gr');
+    const listeSections = document.querySelectorAll('.sec-liste');
+    const egrillElement = document.querySelector('.egrill');
+
+    destroyInfiniteCarousel();
+    preloadExploreImages();
+
+    isExploring = true;
+    document.body.classList.add('is-exploring', 'is-compact-home');
+
+    grillElements.forEach((element) => {
+        element.classList.add('is-hidden');
+        element.style.display = 'none';
+    });
+
+    if (egrillElement) {
+        egrillElement.style.display = 'none';
+    }
+
+    grElements.forEach((element) => {
+        element.style.display = 'block';
+        element.style.transitionDelay = '0ms';
+        element.classList.add('is-shown', 'is-settled');
+    });
+
+    listeSections.forEach((listeSection) => {
+        listeSection.style.display = 'flex';
+        listeSection.style.transitionDelay = '0ms';
+        listeSection.classList.add('is-visible', 'is-settled');
+    });
+}
+
+function restoreDesktopHomeView() {
+    const grillElements = document.querySelectorAll('.grill');
+    const grElements = document.querySelectorAll('.gr');
+    const listeSections = document.querySelectorAll('.sec-liste');
+    const egrillElement = document.querySelector('.egrill');
+
+    isExploring = false;
+    document.body.classList.remove('is-exploring', 'is-compact-home');
+
+    grillElements.forEach((element) => {
+        element.classList.remove('is-hidden');
+        element.style.display = '';
+    });
+
+    grElements.forEach((element) => {
+        element.style.display = 'none';
+        element.style.transitionDelay = '';
+        element.classList.remove('is-shown', 'is-settled');
+    });
+
+    listeSections.forEach((listeSection) => {
+        listeSection.style.display = 'none';
+        listeSection.style.transitionDelay = '';
+        listeSection.classList.remove('is-visible', 'is-settled');
+    });
+
+    if (egrillElement) {
+        egrillElement.style.display = '';
+        egrillElement.textContent = 'EXPLORE';
+    }
+
+    ensureCarouselInit();
+}
+
+function applyHomeLayout() {
+    if (isCompactHomeLayout()) {
+        initCompactHomeView();
+        return;
+    }
+
+    restoreDesktopHomeView();
+
+    if (carouselState.track) {
+        carouselState.loopWidth = measureCarouselLoopWidth(carouselState.track);
+        wrapCarouselOffset();
+        applyCarouselTransform();
+        if (isCarouselVisible()) startCarouselLoop();
+    }
+}
 
 function setExploreLabel(egrillElement, text) {
     if (!egrillElement) return;
@@ -105,6 +195,7 @@ function hideExploreElements(grElements, listeSections) {
 }
 
 function toggleGrillElements() {
+    if (isCompactHomeLayout()) return;
     if (exploreTransitioning) return;
 
     const grillElements = document.querySelectorAll('.grill');
@@ -437,7 +528,7 @@ function bindCarouselPointerControls() {
     carouselState.listenersBound = true;
 }
 
-function initInfiniteCarousel() {
+function ensureCarouselInit() {
     if (carouselInitialized) {
         buildInfiniteCarousel();
         return;
@@ -446,20 +537,13 @@ function initInfiniteCarousel() {
     carouselInitialized = true;
     buildInfiniteCarousel();
 
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            if (!carouselState.track) return;
-            carouselState.loopWidth = measureCarouselLoopWidth(carouselState.track);
-            wrapCarouselOffset();
-            applyCarouselTransform();
-            if (isCarouselVisible()) startCarouselLoop();
-        }, 150);
-    });
-
     window.addEventListener('load', () => {
-        buildInfiniteCarousel();
+        if (!isCompactHomeLayout()) buildInfiniteCarousel();
     });
+}
+
+function initInfiniteCarousel() {
+    ensureCarouselInit();
 }
 
 // Fonction pour changer l'image de secc1img1
@@ -533,5 +617,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    initInfiniteCarousel();
+    applyHomeLayout();
+
+    window.addEventListener('resize', () => {
+        clearTimeout(homeLayoutTimeout);
+        homeLayoutTimeout = setTimeout(applyHomeLayout, 150);
+    });
 });

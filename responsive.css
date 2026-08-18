@@ -33,7 +33,147 @@
     font-size: 10px;
   }
 
-  /* ===== INDEX ===== */
+  /* ===== INDEX — mobile/tablette : grille directe, pas de carrousel ===== */
+  body.is-compact-home .s1h1,
+  body.is-compact-home .s1p1,
+  body.is-compact-home .projects-carousel {
+    display: none !important;
+  }
+
+  body.is-compact-home #uno {
+    height: auto;
+    min-height: auto;
+    align-items: stretch;
+  }
+
+  /* Explore cards — marges, images et titres alignés sur us1 */
+  body.is-compact-home {
+    --explore-gutter: 12px;
+    --explore-gap: 10px;
+  }
+
+  body.is-compact-home #uno .sec1 {
+    display: block;
+    min-height: auto;
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: calc(44px + 12px) var(--explore-gutter) 0;
+    gap: 0;
+  }
+
+  body.is-compact-home .sec-liste,
+  body.is-compact-home .sec-liste.is-settled {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    min-height: auto;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: var(--explore-gap) var(--explore-gutter) 0;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  body.is-compact-home .sec-liste-compact {
+    padding-bottom: 24px;
+    padding-right: var(--explore-gutter);
+  }
+
+  body.is-compact-home section {
+    min-height: auto;
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  body.is-compact-home .sec2,
+  body.is-compact-home .sec3 {
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    gap: var(--explore-gap);
+    box-sizing: border-box;
+  }
+
+  body.is-compact-home .us1,
+  body.is-compact-home .us2,
+  body.is-compact-home .us3,
+  body.is-compact-home .us4,
+  body.is-compact-home .us5,
+  body.is-compact-home .us6 {
+    grid-column: 1 / -1 !important;
+    grid-row: auto !important;
+    width: 100%;
+    max-width: 100%;
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+    margin: 0;
+    box-sizing: border-box;
+    contain: none;
+    content-visibility: visible;
+    contain-intrinsic-size: auto;
+  }
+
+  body.is-compact-home .us1 {
+    transform: none;
+  }
+
+  body.is-compact-home .us1.is-shown {
+    transform: none;
+  }
+
+  body.is-compact-home .im1gr,
+  body.is-compact-home .s2im1,
+  body.is-compact-home .s2im2,
+  body.is-compact-home .s2im3,
+  body.is-compact-home .s3im1,
+  body.is-compact-home .s3im2 {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  body.is-compact-home .us1p1,
+  body.is-compact-home .us2p2,
+  body.is-compact-home .us3p3,
+  body.is-compact-home .us4p4,
+  body.is-compact-home .us5p5,
+  body.is-compact-home .us6p6 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    top: auto;
+    z-index: 2;
+    margin: 0;
+    padding: 14px 16px;
+    font-family: 'Impact', sans-serif;
+    color: white;
+    text-transform: uppercase;
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+  }
+
+  body.is-compact-home .gr.is-shown {
+    opacity: 1;
+  }
+
+  /* Pas d'effet hover grayscale sur mobile/tablette */
+  body.is-exploring .gr.is-shown,
+  body.is-exploring:has(.gr.is-shown:hover) .gr.is-shown,
+  body.is-exploring .gr.is-shown:hover {
+    filter: none !important;
+    transition: none;
+  }
+
+  /* ===== INDEX (desktop-like tablet fallback) ===== */
   section {
     height: auto;
     min-height: 100vh;
@@ -76,7 +216,7 @@
     height: 36vh;
   }
 
-  /* Mode EXPLORE */
+  /* Mode EXPLORE (desktop toggle — conservé pour >1024px) */
   .sec-liste,
   .sec-liste.is-settled {
     height: auto;
@@ -259,18 +399,19 @@
     grid-column: 12 / 15;
   }
 
-  .project-card {
-    flex: 0 0 84vw;
-    height: 32vh;
+  body.is-compact-home {
+    --explore-gutter: 10px;
+    --explore-gap: 10px;
   }
 
-  .us1,
-  .us2,
-  .us3,
-  .us4,
-  .us5,
-  .us6 {
-    min-height: 65vw;
+  body.is-compact-home .us1p1,
+  body.is-compact-home .us2p2,
+  body.is-compact-home .us3p3,
+  body.is-compact-home .us4p4,
+  body.is-compact-home .us5p5,
+  body.is-compact-home .us6p6 {
+    font-size: clamp(1.6rem, 9vw, 2.25rem);
+    padding: 12px 14px;
   }
 
   .sec11 {
@@ -304,11 +445,5 @@
 
   .pj-grid {
     column-count: 1;
-  }
-}
-
-@media (max-width: 1024px) and (hover: none) {
-  body.is-exploring:has(.gr.is-shown:hover) .gr.is-shown {
-    filter: grayscale(0);
   }
 }
