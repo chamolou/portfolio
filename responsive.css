@@ -41,7 +41,7 @@
 
   body.is-compact-home #uno {
     height: auto;
-    min-height: 100svh;
+    min-height: auto;
     align-items: stretch;
   }
 
@@ -52,20 +52,22 @@
   }
 
   body.is-compact-home #uno .sec1 {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    min-height: calc(100svh - 44px);
+    display: block;
+    min-height: auto;
     height: auto;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    padding: calc(44px + 12px) var(--explore-gutter) 24px;
+    padding: 0 var(--explore-gutter) 0;
     gap: 0;
   }
 
   body.is-compact-home .s1h1 {
-    align-self: stretch;
+    display: flex;
+    align-items: center;
+    min-height: calc(100svh - 44px);
+    margin: 0;
+    padding: 0;
   }
 
   body.is-compact-home .sec-liste,
@@ -409,13 +411,11 @@
     --explore-gap: 10px;
   }
 
-  /* Téléphone uniquement : la section uno n'occupe plus qu'un demi-écran */
-  body.is-compact-home #uno {
-    min-height: 50svh;
-  }
-
-  body.is-compact-home #uno .sec1 {
-    min-height: calc(50svh - 44px);
+  /* Téléphone : us1 remonte juste sous PORTFOLIO (pas de réservation 100vh) */
+  body.is-compact-home .s1h1 {
+    min-height: auto;
+    padding-top: calc(44px + 24px);
+    padding-bottom: 16px;
   }
 
   body.is-compact-home .us1p1,
