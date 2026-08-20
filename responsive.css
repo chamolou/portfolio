@@ -34,7 +34,6 @@
   }
 
   /* ===== INDEX — mobile/tablette : grille directe, pas de carrousel ===== */
-  body.is-compact-home .s1h1,
   body.is-compact-home .s1p1,
   body.is-compact-home .projects-carousel {
     display: none !important;
@@ -42,7 +41,7 @@
 
   body.is-compact-home #uno {
     height: auto;
-    min-height: auto;
+    min-height: 100svh;
     align-items: stretch;
   }
 
@@ -53,14 +52,20 @@
   }
 
   body.is-compact-home #uno .sec1 {
-    display: block;
-    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: calc(100svh - 44px);
     height: auto;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    padding: calc(44px + 12px) var(--explore-gutter) 0;
+    padding: calc(44px + 12px) var(--explore-gutter) 24px;
     gap: 0;
+  }
+
+  body.is-compact-home .s1h1 {
+    align-self: stretch;
   }
 
   body.is-compact-home .sec-liste,
