@@ -409,6 +409,15 @@
     --explore-gap: 10px;
   }
 
+  /* Téléphone uniquement : la section uno n'occupe plus qu'un demi-écran */
+  body.is-compact-home #uno {
+    min-height: 50svh;
+  }
+
+  body.is-compact-home #uno .sec1 {
+    min-height: calc(50svh - 44px);
+  }
+
   body.is-compact-home .us1p1,
   body.is-compact-home .us2p2,
   body.is-compact-home .us3p3,
