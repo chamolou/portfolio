@@ -64,10 +64,10 @@
 
   body.is-compact-home .s1h1 {
     display: flex;
-    align-items: center;
-    min-height: calc(100svh - 44px);
+    align-items: flex-end;
+    min-height: 50svh;
     margin: 0;
-    padding: 0;
+    padding: 0 0 16px;
   }
 
   body.is-compact-home .sec-liste,
@@ -357,38 +357,77 @@
 
   /* ===== ABOUT ===== */
   .sec1:has(.sec1p2) {
+    display: flex;
+    flex-direction: column;
     margin: 0;
-    padding: calc(5vh + 12px) 16px 32px;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    gap: 16px;
+    padding: calc(5vh + 12px) 16px 48px;
     height: auto;
     width: 100%;
     box-sizing: border-box;
   }
 
   .sec1p2 {
-    grid-column: 1;
-    grid-row: auto;
+    grid-column: unset;
+    grid-row: unset;
     font-size: clamp(2.25rem, 13vw, 4.5rem);
     line-height: 0.9;
+    margin-bottom: 32px;
   }
 
   .sec1p1,
   .sec1p3,
   .sec1p4 {
-    grid-column: 1;
-    grid-row: auto;
+    grid-column: unset;
+    grid-row: unset;
     margin-left: 0;
     margin-top: 0;
+    margin-bottom: 24px;
     font-size: 11px;
     line-height: 1.6;
+    max-width: 640px;
+  }
+
+  .sec1p4 {
+    margin-bottom: 0;
+  }
+
+  /* Les <br> du HTML sont calés sur l'étroite colonne desktop :
+     on les neutralise pour laisser le texte se réajuster sur toute la largeur */
+  .sec1p1 br,
+  .sec1p3 br,
+  .sec1p4 br {
+    display: none;
   }
 
   /* ===== PROJECT gallery ===== */
   .pj-grid {
     padding-left: 12px;
     padding-right: 12px;
+  }
+}
+
+/* Tablette : us1 remplit l'écran jusqu'en bas, PORTFOLIO garde juste sa place au-dessus */
+@media (min-width: 769px) and (max-width: 1024px) {
+  body.is-compact-home #uno .sec1 {
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+  }
+
+  body.is-compact-home .s1h1 {
+    flex: 0 0 auto;
+    align-self: stretch;
+    align-items: flex-end;
+    min-height: auto;
+    padding-top: 84px;
+    padding-bottom: 16px;
+  }
+
+  body.is-compact-home .us1 {
+    flex: 1 1 auto;
+    align-self: stretch;
+    aspect-ratio: auto;
+    min-height: 0;
   }
 }
 
@@ -409,14 +448,6 @@
   body.is-compact-home {
     --explore-gutter: 10px;
     --explore-gap: 10px;
-  }
-
-  /* Téléphone : PORTFOLIO au milieu de l'écran, us1 juste en dessous */
-  body.is-compact-home .s1h1 {
-    align-items: flex-end;
-    min-height: 50svh;
-    padding-top: 0;
-    padding-bottom: 16px;
   }
 
   body.is-compact-home .us1p1,
