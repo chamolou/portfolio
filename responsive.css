@@ -411,10 +411,11 @@
     --explore-gap: 10px;
   }
 
-  /* Téléphone : us1 remonte juste sous PORTFOLIO (pas de réservation 100vh) */
+  /* Téléphone : PORTFOLIO au milieu de l'écran, us1 juste en dessous */
   body.is-compact-home .s1h1 {
-    min-height: auto;
-    padding-top: calc(44px + 24px);
+    align-items: flex-end;
+    min-height: 50svh;
+    padding-top: 0;
     padding-bottom: 16px;
   }
 

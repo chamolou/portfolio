@@ -32,9 +32,9 @@ body {
   transition: filter 0.45s ease;
 }
 
-/* EXPLORE : survol = mise en évidence (les autres passent en grayscale) */
+/* EXPLORE : survol = mise en évidence (les autres passent en flou) */
 body.is-exploring .gr.is-shown:not(.is-settled) {
-  filter: grayscale(0);
+  filter: blur(0);
   transition:
     opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
     filter 0.45s ease;
@@ -48,16 +48,16 @@ body.is-exploring .us1.is-shown:not(.is-settled) {
 }
 
 body.is-exploring .gr.is-shown.is-settled {
-  filter: grayscale(0);
+  filter: blur(0);
   transition: filter 0.45s ease;
 }
 
 body.is-exploring:has(.gr.is-shown:hover) .gr.is-shown {
-  filter: grayscale(1);
+  filter: blur(3px);
 }
 
 body.is-exploring:has(.gr.is-shown:hover) .gr.is-shown:hover {
-  filter: grayscale(0);
+  filter: blur(0);
 }
 
 .grill {

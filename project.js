@@ -5,6 +5,35 @@
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Espace réservé pour toute interaction propre à la grille
-    // (ex: ouvrir une image en plein écran au clic, si besoin plus tard).
+    const grid = document.querySelector('.pj-grid');
+    if (!grid) return;
+
+    const lightbox = document.createElement('div');
+    lightbox.className = 'pj-lightbox';
+    const lightboxImg = document.createElement('img');
+    lightbox.appendChild(lightboxImg);
+    document.body.appendChild(lightbox);
+
+    function openLightbox(img) {
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt || '';
+        lightbox.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        document.body.style.overflow = '';
+    }
+
+    grid.addEventListener('click', function (e) {
+        const img = e.target.closest('.pj-item img');
+        if (img) openLightbox(img);
+    });
+
+    lightbox.addEventListener('click', closeLightbox);
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeLightbox();
+    });
 });
