@@ -210,6 +210,11 @@ function toggleGrillElements() {
 
     document.body.classList.toggle('is-exploring', isExploring);
 
+    if (egrillElement) {
+        egrillElement.classList.add('is-bursting');
+        setTimeout(() => egrillElement.classList.remove('is-bursting'), 550);
+    }
+
     if (isExploring) {
         // Stopper le carrousel tout de suite pour libérer le main thread au scroll
         destroyInfiniteCarousel();
