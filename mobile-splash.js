@@ -1,17 +1,14 @@
 (function () {
-    var MOBILE_MAX = 768;
+    // L'intro s'affiche désormais sur toutes les tailles d'écran (phone,
+    // tablette, desktop) — plus de restriction de largeur.
     var HOLD_MS = 900;
     var LEAVE_MS = 420;
-
-    function isPhone() {
-        return window.innerWidth <= MOBILE_MAX;
-    }
 
     function prefersReducedMotion() {
         return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
 
-    if (!isPhone() || sessionStorage.getItem('yawSplashShown')) {
+    if (sessionStorage.getItem('yawSplashShown')) {
         document.addEventListener('DOMContentLoaded', function () {
             var existing = document.getElementById('splash');
             if (existing) existing.remove();

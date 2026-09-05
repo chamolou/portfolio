@@ -1,4 +1,4 @@
-/* Écran de chargement — uniquement au premier chargement sur téléphone */
+/* Écran de chargement — au tout premier chargement, phone/tablette/desktop */
 .mobile-splash {
   position: fixed;
   inset: 0;
@@ -16,7 +16,7 @@ body.has-mobile-splash .mobile-splash {
 .mobile-splash-word {
   font-family: 'Impact', sans-serif;
   font-weight: 300;
-  font-size: 22vw;
+  font-size: clamp(3rem, 22vw, 14rem);
   color: #000;
   opacity: 0;
   transform: scale(0.7);
@@ -73,30 +73,29 @@ body.has-mobile-splash .mobile-splash-word {
   }
 }
 
-/* Le splash ne concerne que le téléphone, jamais desktop/tablette */
-@media (min-width: 769px) {
-  .mobile-splash {
-    display: none !important;
-  }
-}
-
 /* Révélation en cascade de la page derrière le splash : chaque élément
    part masqué puis apparaît l'un après l'autre plutôt que d'un coup */
 body.has-mobile-splash .yaw,
 body.has-mobile-splash .header .h1,
+body.has-mobile-splash .header .h2,
+body.has-mobile-splash .header .h3,
 body.has-mobile-splash .s1h1,
-body.has-mobile-splash .us1.gr.is-shown {
+body.has-mobile-splash .us1.gr.is-shown,
+body.has-mobile-splash .sec-liste.is-settled {
   opacity: 0 !important;
-  transform: translateY(16px);
+  transform: translateY(16px) !important;
 }
 
 body.mobile-reveal-stagger .yaw,
 body.mobile-reveal-stagger .header .h1,
+body.mobile-reveal-stagger .header .h2,
+body.mobile-reveal-stagger .header .h3,
 body.mobile-reveal-stagger .s1h1,
-body.mobile-reveal-stagger .us1.gr.is-shown {
+body.mobile-reveal-stagger .us1.gr.is-shown,
+body.mobile-reveal-stagger .sec-liste.is-settled {
   opacity: 1 !important;
-  transform: translateY(0);
-  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(0) !important;
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 
 body.mobile-reveal-stagger .yaw {
@@ -107,12 +106,24 @@ body.mobile-reveal-stagger .header .h1 {
   transition-delay: 0.08s !important;
 }
 
-body.mobile-reveal-stagger .s1h1 {
+body.mobile-reveal-stagger .header .h2 {
+  transition-delay: 0.14s !important;
+}
+
+body.mobile-reveal-stagger .header .h3 {
   transition-delay: 0.2s !important;
 }
 
+body.mobile-reveal-stagger .s1h1 {
+  transition-delay: 0.32s !important;
+}
+
 body.mobile-reveal-stagger .us1.gr.is-shown {
-  transition-delay: 0.38s !important;
+  transition-delay: 0.48s !important;
+}
+
+body.mobile-reveal-stagger .sec-liste.is-settled {
+  transition-delay: 0.62s !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -125,12 +136,18 @@ body.mobile-reveal-stagger .us1.gr.is-shown {
 
   body.has-mobile-splash .yaw,
   body.has-mobile-splash .header .h1,
+  body.has-mobile-splash .header .h2,
+  body.has-mobile-splash .header .h3,
   body.has-mobile-splash .s1h1,
   body.has-mobile-splash .us1.gr.is-shown,
+  body.has-mobile-splash .sec-liste.is-settled,
   body.mobile-reveal-stagger .yaw,
   body.mobile-reveal-stagger .header .h1,
+  body.mobile-reveal-stagger .header .h2,
+  body.mobile-reveal-stagger .header .h3,
   body.mobile-reveal-stagger .s1h1,
-  body.mobile-reveal-stagger .us1.gr.is-shown {
+  body.mobile-reveal-stagger .us1.gr.is-shown,
+  body.mobile-reveal-stagger .sec-liste.is-settled {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
