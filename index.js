@@ -270,12 +270,12 @@ const CAROUSEL_BASE_SPEED = 2;
 const CAROUSEL_DRAG_THRESHOLD = 6;
 
 const projectRoutes = {
-    pj1: 'guggenheime.html',
-    pj2: 'agro_vida.html',
-    pj3: 'ian_campo.html',
-    pj4: 'control.html',
-    pj5: 'bish_op.html',
-    pj6: 'messi.html'
+    pj1: 'guggenhiem/guggenheime.html',
+    pj2: 'agro-vida/agro_vida.html',
+    pj3: 'ian-campo/ian_campo.html',
+    pj4: 'control/control.html',
+    pj5: 'Bish.op/bish_op.html',
+    pj6: 'messi/messi.html'
 };
 
 const carouselState = {
@@ -601,12 +601,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Navigation grille EXPLORE (les cards du carrousel passent par la délégation)
     const exploreLinks = [
-        ['.us1', 'guggenheime.html'],
-        ['.us2', 'agro_vida.html'],
-        ['.us3', 'ian_campo.html'],
-        ['.us4', 'control.html'],
-        ['.us5', 'bish_op.html'],
-        ['.us6', 'messi.html']
+        ['.us1', 'guggenhiem/guggenheime.html'],
+        ['.us2', 'agro-vida/agro_vida.html'],
+        ['.us3', 'ian-campo/ian_campo.html'],
+        ['.us4', 'control/control.html'],
+        ['.us5', 'Bish.op/bish_op.html'],
+        ['.us6', 'messi/messi.html']
     ];
 
     exploreLinks.forEach(([selector, href]) => {
