@@ -657,7 +657,8 @@ let isDarkTheme = false;
 // Fonction pour passer en mode sombre (appelée une seule fois par nvbb2)
 function toggleTheme() {
     isDarkTheme = !isDarkTheme;
-    
+    localStorage.setItem('yawTheme', isDarkTheme ? 'dark' : 'light');
+
     // Animer la transition de couleur pour nvbb et nvbb2
     gsap.to(['.nvbb', '.nvbb2'], {
         color: isDarkTheme ? '#FFFFFF' : '#000000',
@@ -672,6 +673,7 @@ function toggleTheme() {
 function revertTheme() {
     if (isDarkTheme) {
         isDarkTheme = false;
+        localStorage.setItem('yawTheme', 'light');
         applyTheme();
     }
 }
@@ -916,6 +918,16 @@ function applyTheme() {
             child.style.setProperty('color', invertedColor, 'important');
         });
     }
+}
+
+// Restaure le thème choisi précédemment (même s'il vient d'une autre page,
+// index2/index3), pour que "in black" reste actif en naviguant sur le site
+if (localStorage.getItem('yawTheme') === 'dark') {
+    isDarkTheme = true;
+    document.addEventListener('DOMContentLoaded', function () {
+        gsap.set(['.nvbb', '.nvbb2'], { color: '#FFFFFF' });
+        applyTheme();
+    });
 }
 
 // Intro section scroll animation

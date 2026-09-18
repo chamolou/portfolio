@@ -81,7 +81,8 @@ body.has-mobile-splash .header .h2,
 body.has-mobile-splash .header .h3,
 body.has-mobile-splash .s1h1,
 body.has-mobile-splash .us1.gr.is-shown,
-body.has-mobile-splash .sec-liste.is-settled {
+body.has-mobile-splash .sec-liste.is-settled,
+body.has-mobile-splash .projects-carousel.grill {
   opacity: 0 !important;
   transform: translateY(16px) !important;
 }
@@ -92,7 +93,8 @@ body.mobile-reveal-stagger .header .h2,
 body.mobile-reveal-stagger .header .h3,
 body.mobile-reveal-stagger .s1h1,
 body.mobile-reveal-stagger .us1.gr.is-shown,
-body.mobile-reveal-stagger .sec-liste.is-settled {
+body.mobile-reveal-stagger .sec-liste.is-settled,
+body.mobile-reveal-stagger .projects-carousel.grill {
   opacity: 1 !important;
   transform: translateY(0) !important;
   transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) !important;
@@ -118,7 +120,8 @@ body.mobile-reveal-stagger .s1h1 {
   transition-delay: 0.32s !important;
 }
 
-body.mobile-reveal-stagger .us1.gr.is-shown {
+body.mobile-reveal-stagger .us1.gr.is-shown,
+body.mobile-reveal-stagger .projects-carousel.grill {
   transition-delay: 0.48s !important;
 }
 
@@ -141,13 +144,15 @@ body.mobile-reveal-stagger .sec-liste.is-settled {
   body.has-mobile-splash .s1h1,
   body.has-mobile-splash .us1.gr.is-shown,
   body.has-mobile-splash .sec-liste.is-settled,
+  body.has-mobile-splash .projects-carousel.grill,
   body.mobile-reveal-stagger .yaw,
   body.mobile-reveal-stagger .header .h1,
   body.mobile-reveal-stagger .header .h2,
   body.mobile-reveal-stagger .header .h3,
   body.mobile-reveal-stagger .s1h1,
   body.mobile-reveal-stagger .us1.gr.is-shown,
-  body.mobile-reveal-stagger .sec-liste.is-settled {
+  body.mobile-reveal-stagger .sec-liste.is-settled,
+  body.mobile-reveal-stagger .projects-carousel.grill {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
