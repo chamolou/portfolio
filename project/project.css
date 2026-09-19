@@ -24,8 +24,10 @@
     transition: transform 0.4s ease;
 }
 
-.pj-item img:hover {
-    transform: scale(1.03);
+@media (hover: hover) {
+    .pj-item img:hover {
+        transform: scale(1.03);
+    }
 }
 
 .pj-item img {

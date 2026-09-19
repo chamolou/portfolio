@@ -45,6 +45,9 @@ function buildScroll() {
     scrollTween = gsap.to(rightContent, {
         y: () => -getScrollDistance(),
         ease: 'none',
+        // Garde la colonne en transform 3D (couche GPU) sur toute la course : en "auto", GSAP
+        // repasse en translate() 2D dès que l'animation est terminée, au bout du pin
+        force3D: true,
         scrollTrigger: {
             trigger: section,
             start: 'top top',
@@ -58,6 +61,12 @@ function buildScroll() {
 }
 
 function setupWheelProxy() {
+    // Avec le défilement fluide (Lenis), la molette est déjà gérée sur toute la page :
+    // ce relais la ferait défiler une deuxième fois
+    if (window.smoothScroll) {
+        return;
+    }
+
     const right = document.querySelector('.right');
     if (!right) {
         return;

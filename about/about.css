@@ -12,12 +12,15 @@ a{
 }
 
 section{
-  width: 100vw;
+  position: relative;
+  width: 100%;
   min-height: 100vh;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 9vh;
+  /* Le haut du titre tombe au même niveau que celui des pages projet (formule calée sur
+     leur mise en page en grille, vérifiée de 1025 à 1920 px de large ; en dessous, voir responsive.css) */
+  padding-top: max(2vh, calc(7vh - 1.6vw - 7px));
   box-sizing: border-box;
 }
 /* header */
@@ -52,12 +55,30 @@ section{
 
 
 
+/* Étoile en bas à droite de la page, qui tourne lentement.
+   La marge (30 % de sa taille) empêche le coin de l'image en rotation de dépasser de la page. */
 .etoile{
-  grid-row: 3/7;
-  grid-column: 11/14;
-  width: 100%;
-  height: 100%;
-  object-fit: cover ;
+  --etoile-size: clamp(64px, 8vw, 130px);
+  position: absolute;
+  right: calc(var(--etoile-size) * 0.3);
+  bottom: calc(var(--etoile-size) * 0.3);
+  width: var(--etoile-size);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  animation: etoile-spin 12s linear infinite;
+}
+
+@keyframes etoile-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .etoile {
+    animation: none;
+  }
 }
 
 
@@ -101,6 +122,10 @@ section{
   grid-row: 1;
   font-size: 16vw;
   font-weight: 300;
+  /* Espace titre → paragraphes = espace en-tête → titre (2vh + 1.6vw - 7px) :
+     -0.204em retire l'interligne sous le titre, 48px = row-gap de la grille,
+     5px = décalage des capitales du paragraphe */
+  margin-bottom: calc(-0.204em + 2vh + 1.6vw - 58px);
 }
 
 .sec1p3{

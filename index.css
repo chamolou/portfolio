@@ -49,9 +49,26 @@ body.is-exploring .gr.is-shown.is-settled {
   transition: scale 0.45s ease;
 }
 
-body.is-exploring .gr.is-shown:hover {
-  scale: 1.02;
-  z-index: 3;
+/* Hors mode EXPLORE — notamment pendant le fondu de sortie qui suit BACK — la grille ne doit
+   plus capter la molette ni les clics : sinon la carte Guggenheim, encore au-dessus du
+   carrousel, empêche de le faire défiler */
+body:not(.is-exploring) .gr,
+body:not(.is-exploring) .sec-liste {
+  pointer-events: none;
+}
+
+/* Pendant ce même fondu, les sections d'EXPLORE occupent encore de la place sous l'accueil :
+   on bloque le défilement de la page pour qu'elle ne parte pas vers le bas */
+html.is-leaving-explore {
+  overflow: hidden;
+}
+
+/* seulement là où le survol existe : sur écran tactile, :hover resterait collé après un tap */
+@media (hover: hover) {
+  body.is-exploring .gr.is-shown:hover {
+    scale: 1.02;
+    z-index: 3;
+  }
 }
 
 .grill {
@@ -433,6 +450,11 @@ section {
   transform: scale(1.28) skewX(-8deg);
 }
 
+.s1p1:focus-visible {
+  outline: 2px solid red;
+  outline-offset: 4px;
+}
+
 .s1p1.is-swapping {
   opacity: 0;
 }
@@ -546,7 +568,6 @@ section {
 .pj5,
 .pj6{
   background-color: white;
-  border: solid 10 px black;
   display: flex;
   align-items: flex-start;
   justify-content: center;

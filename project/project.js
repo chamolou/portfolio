@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const lightbox = document.createElement('div');
     lightbox.className = 'pj-lightbox';
     const lightboxImg = document.createElement('img');
+    lightboxImg.alt = '';
     lightbox.appendChild(lightboxImg);
     document.body.appendChild(lightbox);
 
@@ -19,11 +20,14 @@ document.addEventListener('DOMContentLoaded', function () {
         lightboxImg.alt = img.alt || '';
         lightbox.classList.add('is-open');
         document.body.style.overflow = 'hidden';
+        // Lenis scrolle via window.scrollTo, que overflow:hidden n'empêche pas
+        window.smoothScroll?.stop();
     }
 
     function closeLightbox() {
         lightbox.classList.remove('is-open');
         document.body.style.overflow = '';
+        window.smoothScroll?.start();
     }
 
     grid.addEventListener('click', function (e) {

@@ -106,9 +106,22 @@ function scheduleExploreTimer(callback, delay) {
     exploreTimers.push(setTimeout(callback, delay));
 }
 
+// Bloque le défilement de la page : overflow:hidden pour le scroll natif, et arrêt de Lenis
+// (window.scrollTo ignore overflow:hidden)
+function setPageScrollLocked(locked) {
+    document.documentElement.classList.toggle('is-leaving-explore', locked);
+
+    if (locked) {
+        window.smoothScroll?.stop();
+    } else {
+        window.smoothScroll?.start();
+    }
+}
+
 function clearExploreTimers() {
     exploreTimers.forEach(clearTimeout);
     exploreTimers = [];
+    setPageScrollLocked(false);
 }
 
 function setExploreLabel(egrillElement, text) {
@@ -272,6 +285,10 @@ function toggleGrillElements() {
         playCarouselEntrance();
         hideExploreElements(grElements, listeSections);
         setExploreLabel(egrillElement, 'EXPLORE');
+
+        // La page ne défile pas tant que les sections d'EXPLORE finissent de disparaître
+        setPageScrollLocked(true);
+        scheduleExploreTimer(() => setPageScrollLocked(false), EXPLORE_TRANSITION_MS);
 
         // Relancer le carrousel dès que la grille redevient visible
         scheduleExploreTimer(() => {
@@ -641,6 +658,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Ajouter un événement de clic
     if (egrillElement) {
         egrillElement.addEventListener('click', toggleGrillElements);
+        egrillElement.addEventListener('keydown', (event) => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            toggleGrillElements();
+        });
         egrillElement.addEventListener('pointerenter', preloadExploreImages, { once: true });
         egrillElement.addEventListener('pointerdown', preloadExploreImages, { once: true });
     }

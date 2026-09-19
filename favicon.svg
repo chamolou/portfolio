@@ -1,0 +1,10 @@
+<svg viewBox="0 0 357 359" fill="none" xmlns="http://www.w3.org/2000/svg">
+<style>
+  rect { fill: #000; }
+  @media (prefers-color-scheme: dark) { rect { fill: #fff; } }
+</style>
+<rect x="158.44" y="358.661" width="357.002" height="52.8892" transform="rotate(-92.0431 158.44 358.661)"/>
+<rect x="286.022" y="324.249" width="357.002" height="52.8892" transform="rotate(-135 286.022 324.249)"/>
+<rect x="357.002" y="205.774" width="357.002" height="52.8892" transform="rotate(180 357.002 205.774)"/>
+<rect x="323.419" y="71.8083" width="357.002" height="52.8892" transform="rotate(135 323.419 71.8083)"/>
+</svg>
