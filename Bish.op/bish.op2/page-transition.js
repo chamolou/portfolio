@@ -55,6 +55,9 @@
         if (isExternal) return;
 
         e.preventDefault();
+        if (link.parentElement.querySelector(':scope > .plus-svg')) {
+            link.parentElement.setAttribute('data-active', '');
+        }
         document.body.classList.remove('is-loaded');
         document.body.classList.add('is-leaving');
 

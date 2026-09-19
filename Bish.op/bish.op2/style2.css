@@ -135,9 +135,14 @@ section {
     height: auto;
     object-fit: contain;
     margin-left: auto;
-    transition: filter 0.25s ease;
+    transition: filter 0.25s ease, transform 0.4s ease;
     /* push to the right when inside a flex parent */
 
+}
+
+/* The plus turns into a cross on the selected menu row */
+[data-active] .plus-svg {
+    transform: rotate(45deg);
 }
 
 /* Invert the SVG automatically whenever the global theme is inverted */

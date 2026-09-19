@@ -256,23 +256,31 @@ html[data-theme="inverted"] {
     cursor: pointer;
 }
 
-[class$="-galery"]:hover {
+[class$="-galery"]:hover,
+[class$="-galery"][data-active] {
     background-color: var(--color-black);
     color: var(--color-white);
 }
 
 /* Inverser le SVG (noir → blanc) au hover */
-[class$="-galery"]:hover .plus-svg {
+[class$="-galery"]:hover .plus-svg,
+[class$="-galery"][data-active] .plus-svg {
     filter: invert(1);
 }
 
 /* When the global theme is already inverted, hovering should invert back */
-html[data-theme="inverted"] [class$="-galery"]:hover .plus-svg {
+html[data-theme="inverted"] [class$="-galery"]:hover .plus-svg,
+html[data-theme="inverted"] [class$="-galery"][data-active] .plus-svg {
     filter: invert(0);
 }
 
 .plus-svg {
-    transition: filter 0.25s ease;
+    transition: filter 0.25s ease, transform 0.4s ease;
+}
+
+/* The plus turns into a cross on the selected row (open gallery, current page) */
+[data-active] .plus-svg {
+    transform: rotate(45deg);
 }
 
 /* Invert the SVG automatically whenever the global theme is inverted */
@@ -405,6 +413,25 @@ html[data-theme="inverted"] [class$="-menu"]:hover .plus-svg {
     display: flex;
     flex-direction: column;
     gap: 0;
+    visibility: hidden; /* revealed by "photo one" (home-gallery.js) */
+}
+
+.carrousel.is-open,
+.gallery-empty.is-open {
+    visibility: visible;
+}
+
+.gallery-empty {
+    grid-column: 8/10;
+    grid-row: 2/4;
+    align-self: start;
+    padding-top: 0.5vw;
+    border-top: solid 1.5px var(--color-black);
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.8vw;
+    color: var(--color-black);
+    visibility: hidden;
 }
 
 .img-carrousel {
