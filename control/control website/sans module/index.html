@@ -15,7 +15,8 @@
     rel="stylesheet">
   <!-- <link href="https://db.onlinewebfonts.com/c/c5c9157a20810aac79a10bf84a37bdb4?family=Neue+Montreal+Medium" rel="stylesheet"> 
 <link href="https://db.onlinewebfonts.com/c/86491e13bc132c38bdba0c2f57051023?family=GTSectra-Regular" rel="stylesheet">  -->
-  <title>Carré 3D avec Three.js</title>
+  <title>CONTROL — Remedy Entertainment</title>
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
 
 
 </head>
@@ -165,7 +166,7 @@
   <section class="section1">
     <div class="sec">
       <h1 class="sec1h">
-        mytologies
+        mythologies
       </h1>
       <h1 class="sec2h">
         of impossible
@@ -2056,7 +2057,7 @@
     function changeTrack() {
       audioSource.src = musiques[currentIndex];
       audio.load(); // Recharge la source audio pour prendre en compte la nouvelle
-      audio.play(); // Lance la lecture de la nouvelle musique
+      audio.play().catch(() => {}); // Lance la lecture (ignoré si le navigateur bloque l'autoplay)
 
       // Réinitialisation de la mise à l'échelle pour tous les éléments
       pmElements.forEach((el) => {

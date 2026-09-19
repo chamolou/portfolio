@@ -442,6 +442,13 @@ video {
   letter-spacing: 9px;
  }
 
+/* Libellés des modes de fusion : une seule ligne quelle que soit la largeur d'écran
+   (sous 1920px, "soft-light" et "plus-lighter" se coupaient en deux lignes) */
+.qau .grand,
+.qad .grand{
+  white-space: nowrap;
+}
+
 .qadu{
   display: flex;
   flex-direction: row;

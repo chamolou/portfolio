@@ -556,6 +556,9 @@ a{
   position: absolute;
   top: 90%;
   left: 91%;
+  /* la boîte (réduite par scale) déborde de l'écran sous ~1480px : on la borne au bord droit,
+     sans rien changer aux écrans plus larges */
+  left: min(91%, calc(100% - 145px));
 }
 
 .bar {
