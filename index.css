@@ -29,35 +29,29 @@ body {
 }
 
 .gr.is-settled {
-  transition: filter 0.45s ease;
+  transition: scale 0.25s ease;
 }
 
-/* EXPLORE : survol = mise en évidence (les autres passent en flou) */
 body.is-exploring .gr.is-shown:not(.is-settled) {
-  filter: blur(0);
   transition:
     opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.45s ease;
+    scale 0.45s ease;
 }
 
 body.is-exploring .us1.is-shown:not(.is-settled) {
   transition:
     opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1),
     transform 1.4s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.45s ease;
+    scale 0.45s ease;
 }
 
 body.is-exploring .gr.is-shown.is-settled {
-  filter: blur(0);
-  transition: filter 0.45s ease;
+  transition: scale 0.45s ease;
 }
 
-body.is-exploring:has(.gr.is-shown:hover) .gr.is-shown {
-  filter: blur(1.2px);
-}
-
-body.is-exploring:has(.gr.is-shown:hover) .gr.is-shown:hover {
-  filter: blur(0);
+body.is-exploring .gr.is-shown:hover {
+  scale: 1.02;
+  z-index: 3;
 }
 
 .grill {
@@ -104,7 +98,7 @@ body.is-exploring:has(.gr.is-shown:hover) .gr.is-shown:hover {
 }
 
 .us1.is-settled {
-  transition: filter 0.45s ease;
+  transition: scale 0.45s ease;
 }
 
 .us1p1{
@@ -520,6 +514,28 @@ section {
   border-radius: 0;
   border: 1px solid #11111100;
   cursor: pointer;
+}
+
+/* Entrée du carrousel : les cartes montent depuis le bas (déclenchée en JS via .is-entering).
+   On anime `translate` et pas `transform`, que le track pilote déjà à chaque frame. */
+.projects-carousel.is-entering .project-card {
+  animation: card-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--rise-base, 0ms) + var(--i, 0) * 90ms);
+}
+
+@keyframes card-rise {
+  from {
+    translate: 0 115%;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projects-carousel.is-entering .project-card {
+    animation: none;
+  }
 }
 
 

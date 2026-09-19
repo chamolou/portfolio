@@ -1,8 +1,13 @@
 // ============================================
 
 const EXPLORE_TRANSITION_MS = 1600;
+const EXPLORE_FIRST_DELAY_MS = 80;
+// Entrée du carrousel au chargement : alignée sur la page qui se révèle (avec ou sans intro)
+const CAROUSEL_ENTRANCE_DELAY_MS = 120;
+const CAROUSEL_ENTRANCE_AFTER_SPLASH_MS = 480;
 const COMPACT_HOME_MAX = 1024;
-let exploreTransitioning = false;
+let exploreTimers = [];
+let burstTimeout = null;
 let isExploring = false;
 let homeLayoutTimeout = null;
 
@@ -11,6 +16,7 @@ function isCompactHomeLayout() {
 }
 
 function initCompactHomeView() {
+    clearExploreTimers();
     const grillElements = document.querySelectorAll('.grill');
     const grElements = document.querySelectorAll('.gr');
     const listeSections = document.querySelectorAll('.sec-liste');
@@ -45,6 +51,7 @@ function initCompactHomeView() {
 }
 
 function restoreDesktopHomeView() {
+    clearExploreTimers();
     const grillElements = document.querySelectorAll('.grill');
     const grElements = document.querySelectorAll('.gr');
     const listeSections = document.querySelectorAll('.sec-liste');
@@ -94,11 +101,21 @@ function applyHomeLayout() {
     }
 }
 
+// Timers de la transition en cours : annulés à chaque clic pour que le dernier clic gagne
+function scheduleExploreTimer(callback, delay) {
+    exploreTimers.push(setTimeout(callback, delay));
+}
+
+function clearExploreTimers() {
+    exploreTimers.forEach(clearTimeout);
+    exploreTimers = [];
+}
+
 function setExploreLabel(egrillElement, text) {
     if (!egrillElement) return;
 
     egrillElement.classList.add('is-swapping');
-    setTimeout(() => {
+    scheduleExploreTimer(() => {
         egrillElement.textContent = text;
         egrillElement.classList.remove('is-swapping');
     }, 200);
@@ -126,6 +143,17 @@ function preloadExploreImages() {
     });
 }
 
+// Charge et décode les images d'EXPLORE avant le clic, pour que l'ouverture ne les attende pas
+function schedulePreloadExploreImages() {
+    const run = () => preloadExploreImages();
+
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(run, { timeout: 2000 });
+    } else {
+        setTimeout(run, 500);
+    }
+}
+
 function prepareExploreTransition(grElements, listeSections) {
     grElements.forEach((element) => {
         element.classList.remove('is-settled');
@@ -143,24 +171,25 @@ function showExploreElements(grElements, listeSections) {
 
         // us1 suit le même rythme que .sec-liste (1re étape)
         if (element.classList.contains('us1')) {
-            element.style.transitionDelay = '320ms';
+            element.style.transitionDelay = `${EXPLORE_FIRST_DELAY_MS}ms`;
         } else {
             element.style.transitionDelay = `${120 + index * 90}ms`;
         }
-
-        element.offsetHeight;
-        element.classList.add('is-shown');
     });
 
     listeSections.forEach((listeSection, index) => {
         listeSection.style.display = 'flex';
-        // après us1 : 600ms, 880ms...
-        listeSection.style.transitionDelay = `${320 + (index + 1) * 280}ms`;
-        listeSection.offsetHeight;
-        listeSection.classList.add('is-visible');
+        // après us1 : +280ms par section
+        listeSection.style.transitionDelay = `${EXPLORE_FIRST_DELAY_MS + (index + 1) * 280}ms`;
     });
 
-    setTimeout(() => {
+    // un seul reflow pour tout le lot (au lieu d'un par élément)
+    document.body.offsetHeight;
+
+    grElements.forEach((element) => element.classList.add('is-shown'));
+    listeSections.forEach((listeSection) => listeSection.classList.add('is-visible'));
+
+    scheduleExploreTimer(() => {
         if (isExploring) settleExploreElements(grElements, listeSections);
     }, EXPLORE_TRANSITION_MS + 400);
 }
@@ -178,25 +207,20 @@ function hideExploreElements(grElements, listeSections) {
         listeSection.classList.remove('is-visible');
     });
 
-    setTimeout(() => {
+    scheduleExploreTimer(() => {
         grElements.forEach((element) => {
-            if (!isExploring) {
-                element.style.display = 'none';
-                element.style.transitionDelay = '';
-            }
+            element.style.display = 'none';
+            element.style.transitionDelay = '';
         });
         listeSections.forEach((listeSection) => {
-            if (!isExploring) {
-                listeSection.style.display = 'none';
-                listeSection.style.transitionDelay = '';
-            }
+            listeSection.style.display = 'none';
+            listeSection.style.transitionDelay = '';
         });
     }, EXPLORE_TRANSITION_MS);
 }
 
 function toggleGrillElements() {
     if (isCompactHomeLayout()) return;
-    if (exploreTransitioning) return;
 
     const grillElements = document.querySelectorAll('.grill');
     const grElements = document.querySelectorAll('.gr');
@@ -205,14 +229,20 @@ function toggleGrillElements() {
 
     if (!grillElements.length) return;
 
-    exploreTransitioning = true;
+    clearExploreTimers();
+    // la cascade d'intro est finie dès qu'on interagit ; ses règles !important retarderaient l'animation
+    document.body.classList.remove('mobile-reveal-stagger');
     isExploring = !isExploring;
 
     document.body.classList.toggle('is-exploring', isExploring);
 
     if (egrillElement) {
+        // relance l'animation même si un clic précédent la joue encore
+        egrillElement.classList.remove('is-bursting');
+        egrillElement.offsetWidth;
         egrillElement.classList.add('is-bursting');
-        setTimeout(() => egrillElement.classList.remove('is-bursting'), 550);
+        clearTimeout(burstTimeout);
+        burstTimeout = setTimeout(() => egrillElement.classList.remove('is-bursting'), 550);
     }
 
     if (isExploring) {
@@ -224,7 +254,7 @@ function toggleGrillElements() {
             element.classList.add('is-hidden');
         });
 
-        setTimeout(() => {
+        scheduleExploreTimer(() => {
             grillElements.forEach((element) => {
                 element.style.display = 'none';
             });
@@ -239,18 +269,15 @@ function toggleGrillElements() {
             element.classList.remove('is-hidden');
         });
 
+        playCarouselEntrance();
         hideExploreElements(grElements, listeSections);
         setExploreLabel(egrillElement, 'EXPLORE');
 
         // Relancer le carrousel dès que la grille redevient visible
-        setTimeout(() => {
+        scheduleExploreTimer(() => {
             buildInfiniteCarousel();
         }, 80);
     }
-
-    setTimeout(() => {
-        exploreTransitioning = false;
-    }, isExploring ? EXPLORE_TRANSITION_MS + 80 : 700);
 }
 
 // Tableau des images du dossier Guggenheim
@@ -306,6 +333,32 @@ function isCarouselVisible() {
 
     const style = window.getComputedStyle(carousel);
     return style.display !== 'none' && style.visibility !== 'hidden';
+}
+
+// Les cartes montent depuis le bas, de la gauche vers la droite
+function playCarouselEntrance(baseDelay = 0) {
+    const carousel = carouselState.carousel || document.querySelector('.projects-carousel');
+    const track = carousel && carousel.querySelector('.carousel-track');
+    if (!track || !isCarouselVisible()) return;
+
+    const cards = Array.from(track.children);
+    const onScreen = cards.map((card) => {
+        const rect = card.getBoundingClientRect();
+        return rect.right > 0 && rect.left < window.innerWidth;
+    });
+    const visibleCount = onScreen.filter(Boolean).length;
+
+    // Rang d'apparition = position à l'écran (le carrousel a pu défiler avant) ;
+    // les cartes hors champ montent en dernier, quand elles arrivent
+    let rank = 0;
+    cards.forEach((card, index) => {
+        card.style.setProperty('--i', onScreen[index] ? rank++ : visibleCount);
+    });
+
+    carousel.style.setProperty('--rise-base', `${baseDelay}ms`);
+    carousel.classList.remove('is-entering');
+    carousel.offsetWidth; // relance l'animation si elle jouait déjà
+    carousel.classList.add('is-entering');
 }
 
 function ensureCarouselClones(track) {
@@ -588,6 +641,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Ajouter un événement de clic
     if (egrillElement) {
         egrillElement.addEventListener('click', toggleGrillElements);
+        egrillElement.addEventListener('pointerenter', preloadExploreImages, { once: true });
+        egrillElement.addEventListener('pointerdown', preloadExploreImages, { once: true });
+    }
+
+    if (document.readyState === 'complete') {
+        schedulePreloadExploreImages();
+    } else {
+        window.addEventListener('load', schedulePreloadExploreImages, { once: true });
     }
     
     // Sélectionner l'élément secc1img1 pour le hover
@@ -623,6 +684,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     applyHomeLayout();
+
+    if (document.body.classList.contains('has-mobile-splash')) {
+        document.addEventListener('splash:dismissed', () => {
+            playCarouselEntrance(CAROUSEL_ENTRANCE_AFTER_SPLASH_MS);
+        }, { once: true });
+    } else {
+        playCarouselEntrance(CAROUSEL_ENTRANCE_DELAY_MS);
+    }
 
     window.addEventListener('resize', () => {
         clearTimeout(homeLayoutTimeout);

@@ -175,6 +175,7 @@
   body.is-exploring:has(.gr.is-shown:hover) .gr.is-shown,
   body.is-exploring .gr.is-shown:hover {
     filter: none !important;
+    scale: none !important;
     transition: none;
   }
 

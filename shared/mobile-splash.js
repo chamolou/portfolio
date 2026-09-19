@@ -3,6 +3,10 @@
     // tablette, desktop) — plus de restriction de largeur.
     var HOLD_MS = 900;
     var LEAVE_MS = 420;
+    // Durée de la cascade (plus long délai 0.62s + transition 0.55s) : passé ce
+    // temps la classe mobile-reveal-stagger doit partir, sinon ses règles
+    // !important restent sur <body> et retardent l'animation d'EXPLORE.
+    var STAGGER_MS = 1300;
 
     function prefersReducedMotion() {
         return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -28,10 +32,14 @@
         revealPageBehindSplash();
         splash.classList.add('is-leaving');
         document.body.classList.add('mobile-reveal-stagger');
+        document.dispatchEvent(new Event('splash:dismissed'));
         setTimeout(function () {
             splash.remove();
             document.body.classList.remove('has-mobile-splash');
         }, LEAVE_MS);
+        setTimeout(function () {
+            document.body.classList.remove('mobile-reveal-stagger');
+        }, STAGGER_MS);
     }
 
     document.addEventListener('DOMContentLoaded', function () {
