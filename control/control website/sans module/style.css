@@ -575,3 +575,10 @@ a{
   50% { height: 30px; }
   75% { height: 60px; }
 }
+
+/* Titres blancs : une ombre douce les garde lisibles sur les murs blancs de la scène 3D */
+.sec1h,
+.sec2h,
+.hd3 {
+  text-shadow: 0 0 28px rgba(0, 0, 0, 0.7), 0 0 6px rgba(0, 0, 0, 0.35);
+}
