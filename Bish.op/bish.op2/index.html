@@ -11,11 +11,30 @@
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="page-transition.js"></script>
+    <script src="intro.js"></script>
     <title>BISH.OP</title>
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
 </head>
 
 <body>
+    <!-- intro screen: only displayed when intro.js asks for it (first visit of the session) -->
+    <div class="intro" id="intro" aria-hidden="true">
+        <div class="intro-word">
+            <span class="intro-char" style="--i:0"><span>B</span></span>
+            <span class="intro-char" style="--i:1"><span>I</span></span>
+            <span class="intro-char" style="--i:2"><span>S</span></span>
+            <span class="intro-char" style="--i:3"><span>H</span></span>
+            <span class="intro-char" style="--i:4"><span>.</span></span>
+            <span class="intro-char" style="--i:5"><span>O</span></span>
+            <span class="intro-char" style="--i:6"><span>P</span></span>
+        </div>
+        <p class="intro-meta intro-roles">director | photographer | videographer</p>
+        <p class="intro-meta intro-cities">NYC | PARIS | LA</p>
+        <p class="intro-count">000</p>
+        <img src="starr.svg" alt="" class="intro-star">
+        <span class="intro-bar"></span>
+    </div>
+
     <main>
 
 <!-- theme/event handlers moved to index.js -->
