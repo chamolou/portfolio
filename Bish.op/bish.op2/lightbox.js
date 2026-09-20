@@ -1,6 +1,6 @@
-// Lightbox: click a gallery image to view it enlarged.
+// Lightbox: click a gallery image (or a home carousel image) to view it enlarged.
 document.addEventListener('DOMContentLoaded', function () {
-    const galleryItems = document.querySelectorAll('.gallery-item');
+    const galleryItems = document.querySelectorAll('.gallery-item, .img-carrousel');
     if (!galleryItems.length) return;
 
     // Build the overlay once.
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     galleryItems.forEach(function (item) {
-        const img = item.querySelector('img');
+        const img = item.tagName === 'IMG' ? item : item.querySelector('img');
         if (!img) return;
         item.addEventListener('click', function () {
             openLightbox(img.src, img.alt);
