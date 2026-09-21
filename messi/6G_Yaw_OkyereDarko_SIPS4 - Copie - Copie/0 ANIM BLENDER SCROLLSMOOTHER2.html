@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <link
       href="https://db.onlinewebfonts.com/c/c5c9157a20810aac79a10bf84a37bdb4?family=Neue+Montreal+Medium"
@@ -10,20 +10,66 @@
       rel="stylesheet"
     />
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Messi 15.1 × adidas — an animated 3D look at the adidas Messi 15.1 boot, built around Lionel Messi's game."
+    />
+    <meta name="theme-color" content="#03000f" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Loaded here rather than with @import in style.css: an @import that isn't the first
+         rule of the stylesheet is ignored, so these two fonts never used to load. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@300;400&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
+    <!-- Start downloading the 3D scene right away instead of after the scripts have run -->
+    <link rel="preload" href="3d2/animasionmessi13_lite.glb" as="fetch" crossorigin />
+    <link rel="preload" href="3d2/textures/Textured_baseColor_lite.jpg" as="image" crossorigin />
+    <script src="intro.js"></script>
     <title>Messi 15.1 × adidas</title>
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   </head>
 
   <body>
+    <!-- intro screen: only displayed when intro.js asks for it (first visit of the session) -->
+    <div class="intro" id="intro" aria-hidden="true">
+      <div class="intro-lines">
+        <span style="--i: 0"></span>
+        <span style="--i: 1"></span>
+        <span style="--i: 2"></span>
+        <span style="--i: 3"></span>
+      </div>
+      <svg
+        class="intro-logo"
+        width="71"
+        height="62"
+        viewBox="0 0 71 62"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M0.00167197 0.00167197C0.00167197 0.00167197 3.27134 3.76614 3.17104 6.83688L3.46859 31.7004C4.49997 33.5024 16.4954 45.3708 20.8533 48.5402C20.8533 48.5402 15.7031 40.6652 15.999 36.6032C16.2949 32.5412 15.8502 18.7722 15.8502 18.7722C15.8502 18.7722 14.5129 11.2432 8.56867 8.1725C8.56867 8.1725 14.8589 8.02373 23.329 13.3729C23.329 13.3729 13.077 3.0206 0 0L0.00167197 0.00167197Z"
+          fill="white"
+        />
+        <path
+          d="M28.8771 27.0334V55.6112L35.5017 62.0001L41.7552 55.2636V27.0317C41.7552 27.0317 36.2071 31.0938 35.3161 33.8168C35.3161 33.8168 31.4029 27.4279 28.8771 27.0317V27.0334Z"
+          fill="white"
+        />
+        <path
+          d="M70.8027 0.00167197C70.8027 0.00167197 67.533 3.76614 67.6333 6.83688L67.3358 31.7004C66.3044 33.5024 54.3089 45.3708 49.9511 48.5402C49.9511 48.5402 55.1013 40.6652 54.8054 36.6032C54.5079 32.5412 54.9542 18.7722 54.9542 18.7722C54.9542 18.7722 56.2915 11.2432 62.2357 8.1725C62.2357 8.1725 55.9454 8.02373 47.4754 13.3729C47.4754 13.3729 57.7274 3.0206 70.8044 0L70.8027 0.00167197Z"
+          fill="white"
+        />
+      </svg>
+      <p class="intro-meta intro-title">Messi 15.1 × adidas</p>
+      <p class="intro-meta intro-hint">Scroll to explore</p>
+      <p class="intro-count">000</p>
+      <span class="intro-bar"></span>
+    </div>
     <div class="header">
-      <div id="button" class="grand">home</div>
+      <div id="button" class="grand" role="button" tabindex="0">home</div>
       <div class="logo">
         <svg
           width="71"
@@ -47,7 +93,7 @@
         </svg>
       </div>
       <div class="info open-sans">
-        <div class="m grand">mute</div>
+        <div class="m grand" id="mute" role="button" tabindex="0" aria-pressed="false">mute</div>
         <div><a href="https://www.adidas.be/en">contact</a></div>
       </div>
     </div>
@@ -58,7 +104,7 @@
         viewBox="0 0 27 38"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        class="t"
+        class="t is-active"
         id="t1"
       >
         <path
@@ -262,10 +308,15 @@
         <div class="b4"></div>
 
         <div class="vid">
+          <!-- preload="none": the 13 MB video is only fetched when section 6 is about to
+               scroll into view (see index2.js), so it doesn't compete with the 3D scene -->
           <video
             src="video/adidas Messi15 Soccer Boots.mp4"
             loop
+            playsinline
+            preload="none"
             id="video"
+            aria-label="adidas Messi 15 soccer boots film, click to play or pause"
           ></video>
         </div>
       </section>

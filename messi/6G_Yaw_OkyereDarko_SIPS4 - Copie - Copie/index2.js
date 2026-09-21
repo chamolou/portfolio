@@ -14,6 +14,27 @@ var smoother = ScrollSmoother.create({
 
 });
 
+// First visit of the session: intro.js covers the page while the scene loads (it only
+// defines window.MessiIntro in that case). The page can't scroll under the cover.
+const messiIntro = window.MessiIntro;
+if (messiIntro) {
+    smoother.paused(true);
+    messiIntro.onLeave(() => smoother.paused(false));
+}
+
+// The intro counter follows the real loading progress: the model is most of the weight.
+const loadProgress = { model: 0, texture: 0 };
+
+function reportProgress() {
+    const total = loadProgress.model * 0.7 + loadProgress.texture * 0.3;
+    if (total >= 1) {
+        // Draw once now so the 4096px texture is uploaded to the GPU while the intro
+        // still covers the page, not during the reveal.
+        renderer.render(scene, camera);
+    }
+    if (messiIntro) messiIntro.setProgress(total);
+}
+
 
 
 
@@ -27,6 +48,7 @@ camera.position.z = 3;
 
 // Créer un rendu
 const renderer = new THREE.WebGLRenderer({ alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Ajouter la classe 'start' au canvas
@@ -81,12 +103,21 @@ let mixer; // Déclarez une variable pour stocker l'animation mixer
 // Texture loader
 const textureLoader = new THREE.TextureLoader();
 
-const bakedTexture = textureLoader.load('3d2/textures/Textured_baseColor.jpeg');
+// Same baked texture and model as before, re-encoded lighter (the model without the PBR
+// textures it carried but never used: 4.8 MB instead of 17.3 MB, texture 1.7 MB instead of 4.2 MB)
+const bakedTexture = textureLoader.load('3d2/textures/Textured_baseColor_lite.jpg', () => {
+    loadProgress.texture = 1;
+    reportProgress();
+}, undefined, () => {
+    loadProgress.texture = 1; // don't keep the intro waiting on a failed texture
+    reportProgress();
+});
 bakedTexture.flipY = false;
+bakedTexture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture });
 
 
-loader.load('3d2/animasionmessi13.glb', (gltf) => {
+loader.load('3d2/animasionmessi13_lite.glb', (gltf) => {
     const model = gltf.scene;
     // Changer la taille du modèle
     const scale = 1.7; // Modifiez cette valeur en fonction de la taille souhaitée
@@ -154,8 +185,17 @@ loader.load('3d2/animasionmessi13.glb', (gltf) => {
     container.add(model);
 
     // Vous pouvez ajouter des transformations, des matériaux, etc. au modèle ici
-}, undefined, (error) => {
+    loadProgress.model = 1;
+    reportProgress();
+}, (event) => {
+    if (event.lengthComputable) {
+        loadProgress.model = Math.min(event.loaded / event.total, 0.99);
+        reportProgress();
+    }
+}, (error) => {
     console.error('Erreur de chargement du modèle:', error);
+    loadProgress.model = 1; // don't keep the intro waiting on a failed model
+    reportProgress();
 });
 
 
@@ -170,24 +210,17 @@ loader.load('3d2/animasionmessi13.glb', (gltf) => {
 
 
 
-const mouse = { x: 0, y: 0 };
+// One reusable tween per axis instead of a new one on every mouse event; the render loop
+// below already redraws the scene every frame.
+const cameraRotX = gsap.quickTo(camera.rotation, 'x', { duration: 2 });
+const cameraRotY = gsap.quickTo(camera.rotation, 'y', { duration: 2 });
 
 document.addEventListener('mousemove', function (e) {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-
     // Utilisez la position de la souris pour effectuer des modifications légères
     const rotationIntensity = 0.09; // Augmentez cette valeur pour un effet plus fort
 
-    gsap.to(camera.rotation,
-        {
-            duration: 2,
-            x: (mouse.y / window.innerHeight - 0.5) * rotationIntensity,
-            y: (mouse.x / window.innerWidth - 0.5) * rotationIntensity,
-
-        });
-    // Mettez à jour la scène
-    renderer.render(scene, camera);
+    cameraRotX((e.clientY / window.innerHeight - 0.5) * rotationIntensity);
+    cameraRotY((e.clientX / window.innerWidth - 0.5) * rotationIntensity);
 });
 
 
@@ -236,14 +269,6 @@ gsap.to(".arturo3", {
 });
             
 
-gsap.to(".arturo4", {
-  opacity:1, duration: 5, stagger:1,  scrollTrigger: {
-          trigger: ".section4",
-          start: "top 50%",
-          markers: false
-      }
-});
-          
    
 
 
@@ -253,68 +278,47 @@ gsap.to(".arturo4", {
 
 
 
-gsap.to("#t1 path", {
-    fill: "white", // Couleur de destination en descendant
-    duration: 1,
-    scrollTrigger: {
-      trigger: ".section2",
-      start: "top 10%",
-      markers: false,
-      onEnter: () => {
-        // Animation lorsque tu scrolles vers le bas
-        gsap.to("#t1 path", { fill: "white", duration: 1 });
-        gsap.to("#t2 path", { fill: "rgb(149, 22, 22)", duration: 1 });
-      },
-      onLeaveBack: () => {
-        // Animation lorsque tu scrolles vers le haut (inversée)
-        gsap.to("#t1 path", { fill: "rgb(149, 22, 22)", duration: 1 });
-        gsap.to("#t2 path", { fill: "white", duration: 1 });
-      }
-    }
+// Menu diamonds: the one for the current part of the page is lit (red), the others are white.
+// Between two parts of the page the red is handed over from one diamond to the next as you
+// scroll: it drains out of the current diamond from the top while it fills the next one. Each
+// hand-off is scrubbed over the last third of a screen before the next part reaches the top,
+// so it follows the (smoothed) scroll and reverses exactly when scrolling back up.
+const diamonds = [...document.querySelectorAll('.menu .t')];
+const handoffs = [0, 0, 0]; // progress 0 → 1 of the hand-off between diamond i and i + 1
+
+// the red copy of each diamond, clipped to its lit part in style.css
+diamonds.forEach((diamond) => {
+  const base = diamond.querySelector('path');
+  const lit = base.cloneNode();
+  lit.classList.add('t-lit');
+  base.after(lit);
+});
+
+function paintDiamonds() {
+  diamonds.forEach((diamond, index) => {
+    const arrived = index === 0 ? 1 : handoffs[index - 1];
+    const left = index === diamonds.length - 1 ? 0 : handoffs[index];
+    diamond.style.setProperty('--a', left);
+    diamond.style.setProperty('--b', arrived);
   });
 
+  // the "current" diamond changes halfway through a hand-off
+  const current = handoffs.filter((progress) => progress >= 0.5).length;
+  diamonds.forEach((diamond, index) => diamond.classList.toggle('is-active', index === current));
+}
 
-
-  gsap.to("#t2 path", {
-    fill: "white", // Couleur de destination en descendant
-    duration: 1,
-    scrollTrigger: {
-      trigger: ".section4",
-      start: "top 10%",
-      markers: false,
-      onEnter: () => {
-        // Animation lorsque tu scrolles vers le bas
-        gsap.to("#t2 path", { fill: "white", duration: 1 });
-        gsap.to("#t3 path", { fill: "rgb(149, 22, 22)", duration: 1 });
-      },
-      onLeaveBack: () => {
-        // Animation lorsque tu scrolles vers le haut (inversée)
-        gsap.to("#t2 path", { fill: "rgb(149, 22, 22)", duration: 1 });
-        gsap.to("#t3 path", { fill: "white", duration: 1 });
-      }
-    }
+// hand-off 1 leads into section 2, 2 into section 4, 3 into section 6
+['.section2', '.section4', '.section6'].forEach((selector, index) => {
+  ScrollTrigger.create({
+    trigger: selector,
+    start: "top 45%",
+    end: "top 10%",
+    // the progress is stored on every update and on every refresh (page load, resize), so
+    // the result depends only on where the page is, not on the order the callbacks run in
+    onUpdate: (self) => { handoffs[index] = self.progress; paintDiamonds(); },
+    onRefresh: (self) => { handoffs[index] = self.progress; paintDiamonds(); }
   });
-
-
-  gsap.to("#t3 path", {
-    fill: "white", // Couleur de destination en descendant
-    duration: 1,
-    scrollTrigger: {
-      trigger: ".section6",
-      start: "top 10%",
-      markers: false,
-      onEnter: () => {
-        // Animation lorsque tu scrolles vers le bas
-        gsap.to("#t3 path", { fill: "white", duration: 1 });
-        gsap.to("#t4 path", { fill: "rgb(149, 22, 22)", duration: 1 });
-      },
-      onLeaveBack: () => {
-        // Animation lorsque tu scrolles vers le haut (inversée)
-        gsap.to("#t3 path", { fill: "rgb(149, 22, 22)", duration: 1 });
-        gsap.to("#t4 path", { fill: "white", duration: 1 });
-      }
-    }
-  });
+});
 
   // let top = ScrollSmother.create({});
 
@@ -332,53 +336,106 @@ gsap.to("#t1 path", {
             }
         });
 
+// The 13 MB film only starts downloading when section 6 is one screen away, so it doesn't
+// compete with the 3D scene at load. "metadata" is enough to show its first frame.
+const videoSection = document.querySelector('.section6');
+if ('IntersectionObserver' in window) {
+    const videoObserver = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+            video.preload = 'metadata';
+            video.load();
+            videoObserver.disconnect();
+        }
+    }, { rootMargin: '100% 0px' });
+    videoObserver.observe(videoSection);
+} else {
+    video.preload = 'metadata';
+}
 
-gsap.from('.startdos', { duration: 4, opacity: 0, stagger: 0.5, delay:0.5 })
+// The "mute" label in the header now does what it says (the film has a soundtrack)
+const muteButton = document.getElementById('mute');
 
-
-document.querySelector('.qadc').addEventListener('mouseover', function() {
-  document.querySelector('canvas').style.mixBlendMode = 'luminosity';
+muteButton.addEventListener('click', () => {
+    video.muted = !video.muted;
+    muteButton.textContent = video.muted ? 'unmute' : 'mute';
+    muteButton.setAttribute('aria-pressed', String(video.muted));
 });
 
-document.querySelector('.qadc').addEventListener('mouseout', function() {
-  document.querySelector('canvas').style.mixBlendMode = 'color-dodge'; 
-});
-
-document.querySelector('.qadq').addEventListener('mouseover', function() {
-  document.querySelector('canvas').style.mixBlendMode = 'normal';
-});
-
-document.querySelector('.qadq').addEventListener('mouseout', function() {
-  document.querySelector('canvas').style.mixBlendMode = 'color-dodge'; 
-});
-
-
-document.querySelector('.qadt').addEventListener('mouseover', function() {
-  document.querySelector('canvas').style.mixBlendMode = 'plus-lighter';
-});
-
-document.querySelector('.qadt').addEventListener('mouseout', function() {
-  document.querySelector('canvas').style.mixBlendMode = 'color-dodge'; 
-});
-
-document.querySelector('.qadd').addEventListener('mouseover', function() {
-  document.querySelector('canvas').style.mixBlendMode = 'soft-light';
-  document.querySelector('canvas').style.filter = 'brightness(2)';
-});
-
-document.querySelector('.qadd').addEventListener('mouseout', function() {
-  document.querySelector('canvas').style.mixBlendMode = 'color-dodge'; 
-  document.querySelector('canvas').style.filter = 'brightness(1.1)'; 
+// The header buttons are <div role="button">: Enter and Space activate them too
+document.querySelectorAll('.header [role="button"]').forEach((element) => {
+    element.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            element.click();
+        }
+    });
 });
 
 
+// With the intro, the title fades in as the cover lifts; without it, straight away as before
+const fadeInHero = () => gsap.fromTo('.startdos', { opacity: 0 }, { opacity: 1, duration: 4, stagger: 0.5, delay:0.5 });
+if (messiIntro) {
+    gsap.set('.startdos', { opacity: 0 });
+    messiIntro.onLeave(fadeInHero);
+} else {
+    fadeInHero();
+}
 
-document.querySelector('.qadu').addEventListener('mouseover', function() {
-  document.querySelector('canvas').style.mixBlendMode = 'difference';
-});
 
-document.querySelector('.qadu').addEventListener('mouseout', function() {
-  document.querySelector('canvas').style.mixBlendMode = 'color-dodge'; 
+// Hovering one of the blend-mode labels changes how the shoe is blended with the page. CSS can't
+// animate mix-blend-mode, so instead of cutting from one look to the next the shoe dissolves out
+// (with a blur), the mode is swapped while it is invisible, then it dissolves back in.
+const shoeCanvas = document.querySelector('canvas');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DEFAULT_LOOK = { mode: 'color-dodge', brightness: 1.1, grayscale: 0.2 };
+const shoeLook = { dip: 0, brightness: DEFAULT_LOOK.brightness, grayscale: DEFAULT_LOOK.grayscale };
+let shownMode = DEFAULT_LOOK.mode;
+let lookTimeline = null;
+
+function paintShoeLook() {
+  shoeCanvas.style.opacity = shoeLook.dip ? 1 - shoeLook.dip : '';
+  shoeCanvas.style.filter = `brightness(${shoeLook.brightness}) grayscale(${shoeLook.grayscale})`
+    + (shoeLook.dip ? ` blur(${shoeLook.dip * 12}px)` : '');
+}
+
+function setShoeLook(look) {
+  if (lookTimeline) lookTimeline.kill();
+
+  if (reduceMotion) {
+    Object.assign(shoeLook, { dip: 0, brightness: look.brightness, grayscale: look.grayscale });
+    shoeCanvas.style.mixBlendMode = shownMode = look.mode;
+    paintShoeLook();
+    return;
+  }
+
+  lookTimeline = gsap.timeline({ onUpdate: paintShoeLook });
+  // A look that is only passed over (the pointer leaves before the dip is complete) never gets
+  // swapped: the shoe just fades back in as it was
+  if (look.mode !== shownMode) {
+    lookTimeline
+      .to(shoeLook, { dip: 1, duration: 0.2, ease: 'power2.in' })
+      .call(() => { shoeCanvas.style.mixBlendMode = shownMode = look.mode; });
+  }
+  lookTimeline.to(shoeLook, {
+    dip: 0,
+    brightness: look.brightness,
+    grayscale: look.grayscale,
+    duration: 0.6,
+    ease: 'power2.out'
+  });
+}
+
+[
+  ['.qadu', { mode: 'difference', brightness: 1.1, grayscale: 0.2 }],
+  ['.qadd', { mode: 'soft-light', brightness: 2, grayscale: 0 }],
+  ['.qadt', { mode: 'plus-lighter', brightness: 1.1, grayscale: 0.2 }],
+  ['.qadq', { mode: 'normal', brightness: 1.1, grayscale: 0.2 }],
+  ['.qadc', { mode: 'luminosity', brightness: 1.1, grayscale: 0.2 }]
+].forEach(([selector, look]) => {
+  const label = document.querySelector(selector);
+  // pointerenter/leave don't bubble from the label's children, unlike mouseover/mouseout
+  label.addEventListener('pointerenter', () => setShoeLook(look));
+  label.addEventListener('pointerleave', () => setShoeLook(DEFAULT_LOOK));
 });
 
 
