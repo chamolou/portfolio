@@ -426,6 +426,22 @@ section {
   margin-left: 6px;
 }
 
+/* EXPLORE: its colour and size "breathe" together (--s1p1-breathe runs 0 → 1 → 0) and hovering
+   blends into that through --s1p1-pop, so nothing snaps when the pointer enters or leaves.
+   Registered as numbers so both can be animated and transitioned; where @property isn't
+   supported they simply switch without easing. */
+@property --s1p1-breathe {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --s1p1-pop {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
 .s1p1 {
   font-family: 'Druk Trial', 'Impact', sans-serif;
   font-size: clamp(1rem, 1.7vw, 1.6rem);
@@ -440,14 +456,18 @@ section {
   align-items: end;
   cursor: pointer;
   transform-origin: right bottom;
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.15s ease, opacity 0.2s ease;
-  animation: s1p1-blink 0.5s steps(1, end) infinite, s1p1-pulse 1.4s ease-in-out infinite;
+  color: red; /* where color-mix() isn't supported */
+  color: color-mix(in srgb, red calc((var(--s1p1-breathe) * (1 - var(--s1p1-pop)) + var(--s1p1-pop)) * 100%), black);
+  transform: scale(calc(1 + 0.1 * var(--s1p1-breathe) * (1 - var(--s1p1-pop)) + 0.28 * var(--s1p1-pop))) skewX(calc(-8deg * var(--s1p1-pop)));
+  transition: --s1p1-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+  animation: s1p1-breathe 1.4s ease-in-out infinite;
 }
 
-.s1p1:hover {
-  animation-play-state: paused;
-  color: red;
-  transform: scale(1.28) skewX(-8deg);
+/* Hover (or keyboard focus): red, larger, slanted. An animation would override these
+   declarations even when paused, hence the variable. */
+.s1p1:hover,
+.s1p1:focus-visible {
+  --s1p1-pop: 1;
 }
 
 .s1p1:focus-visible {
@@ -459,35 +479,24 @@ section {
   opacity: 0;
 }
 
+/* Keeping s1p1-breathe in the list lets it run on through the burst instead of restarting */
 .s1p1.is-bursting {
-  animation: s1p1-burst 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97), s1p1-blink 0.5s steps(1, end) infinite;
+  animation: s1p1-burst 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97), s1p1-breathe 1.4s ease-in-out infinite;
 }
 
-@keyframes s1p1-blink {
-  0%,
-  49% {
-    color: red;
-  }
-  50%,
-  100% {
-    color: black;
-  }
-}
-
-@keyframes s1p1-pulse {
+@keyframes s1p1-breathe {
   0%,
   100% {
-    transform: scale(1);
+    --s1p1-breathe: 0;
   }
   50% {
-    transform: scale(1.1);
+    --s1p1-breathe: 1;
   }
 }
 
+/* No 0% / 100% keyframes: the burst starts from, and settles back to, whatever pose the
+   button is in (resting, breathing or hovered) instead of snapping to scale(1) */
 @keyframes s1p1-burst {
-  0% {
-    transform: scale(1) rotate(0deg);
-  }
   22% {
     transform: scale(1.7) rotate(-8deg);
   }
@@ -497,8 +506,12 @@ section {
   72% {
     transform: scale(1.18) rotate(-3deg);
   }
-  100% {
-    transform: scale(1) rotate(0deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s1p1,
+  .s1p1.is-bursting {
+    animation: none;
   }
 }
 
