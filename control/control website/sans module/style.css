@@ -48,13 +48,20 @@ header {
 .mn1 {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
+  gap: 16px;
 
 }
+/* The 4 icons: each viewBox is cropped to its own artwork plus a matching 12% margin
+   (see the portfolio repo history for how it was measured), so a single shared height
+   renders them at the same visual size and weight instead of the mismatched sizes
+   (24x34, two at 720x720 shown at 25% width, 34x22 scaled 1.4x) and left offsets
+   (0 / 24px / 0 / 20px) this replaces. */
 .mn {
-  width: 25%;
-  height: auto;
+  height: 40px;
+  width: auto;
+  display: block;
 }
 
 .hd1 {
@@ -85,15 +92,6 @@ header {
   font-weight: 300;
   font-style: normal;
 }
-#logo1{
-  margin-left: 24px;
-}
-
-#logo4{
-  margin-left: 20px;
-  scale: 1.4;
-}
-
 .foot {
   margin-top: 750px;
 }
