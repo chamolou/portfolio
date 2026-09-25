@@ -342,6 +342,8 @@ canvas {
 }
 
 .ent {
+  position: relative;
+  overflow: hidden;
   color: white;
   display: flex;
   align-items: center;
@@ -355,12 +357,45 @@ canvas {
   width: 75%;
   height: 75%;
   font-size: 20px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
   transform: translate(50px, -88px);
-  transition: background-color 1s ease, color 1s ease;
+  background: rgba(255, 255, 255, 0.04);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: transform 0.15s ease;
 }
-.ent:hover {
-  background-color: white;
+
+/* Le hover anime .ent::before et .ent p, pas .ent : le script des éléments .big
+   (plus bas) réécrit style.transition en ligne sur .ent au mouseenter, ce qui
+   écraserait toute transition posée ici sur background/color. */
+.ent::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: white;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1), box-shadow 0.6s ease;
+}
+
+.ent p {
+  transition: color 0.6s ease;
+}
+
+.ent:hover::before {
+  transform: scaleX(1);
+  box-shadow: 0 0 28px 4px rgba(255, 20, 20, 0.35);
+}
+
+.ent:hover p {
   color: black;
+}
+
+.ent:active {
+  transform: translate(50px, -88px) scale(0.95);
 }
 
 .playlist {
@@ -449,11 +484,51 @@ img {
   border-bottom: 1px solid white;
   grid-row: 10;
   grid-column: 12/18;
+  position: relative;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.time-fill {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: 0%;
+  background: white;
+  pointer-events: none;
+  transition: left 0.2s linear, width 0.2s linear;
+}
+
+.time-thumb {
+  position: absolute;
+  bottom: -4px;
+  left: 0%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: white;
+  transform: translate(-50%, 0);
+  box-shadow: 0 0 8px 1px rgba(255, 255, 255, 0.55);
+  cursor: grab;
+  touch-action: none;
+  transition: left 0.2s linear, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.time-thumb:hover,
+.time-thumb.dragging {
+  transform: translate(-50%, 0) scale(1.35);
+  cursor: grabbing;
+}
+
+.time.is-seeking .time-fill,
+.time.is-seeking .time-thumb {
+  transition: none;
 }
 
 .ppl{
  grid-column: 14/15;
- grid-row: 11/12;
+ grid-row: 12/13;
  display: flex;
  justify-content: flex-end;
 
@@ -462,13 +537,13 @@ img {
 }
 
 .ppa{
-  grid-row: 11/12;
+  grid-row: 12/13;
   grid-column: 15/16;
   display: flex;
  justify-content: center;
 
 
-  
+
 }
 .btn{
   transform: translateY(30px);
@@ -480,15 +555,15 @@ img {
 
 .next{
   grid-column: 17/18;
-  grid-row: 11/12;
+  grid-row: 12/13;
   display: flex;
   justify-content: flex-end;
 
 }
 .before{
   grid-column: 12/13;
-  grid-row: 11/12;
- 
+  grid-row: 12/13;
+
 }
 p.pm1, p.pm2, p.pm3, p.pm4, p.pm5 {
   transition: transform 0.3s ease; 
