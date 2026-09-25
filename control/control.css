@@ -141,6 +141,13 @@ font-family: "inter";
   gap: 20px;
 }
 
+/* Le scroll piné (control.js) applique un transform sur .r2 à chaque tick ;
+   un ancêtre transformé casse le plein écran natif des <video> sur desktop.
+   On l'annule pendant le plein écran (voir setupVideoFullscreenFix). */
+.is-video-fullscreen .r2{
+  transform: none !important;
+}
+
 .i1,
 .i4,
 .i5,

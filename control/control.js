@@ -88,9 +88,34 @@ function setupWheelProxy() {
     }, { passive: false, capture: true });
 }
 
+function setupVideoFullscreenFix() {
+    // Sur desktop, le scroll piné applique un CSS transform sur .r2 à chaque tick.
+    // Un ancêtre transformé casse le plein écran natif des <video> (bug Chrome/Firefox) :
+    // on neutralise ce transform pendant le plein écran, puis on le restaure à la sortie.
+    const r2 = document.querySelector('.r2');
+    if (!r2) {
+        return;
+    }
+
+    function handleFullscreenChange() {
+        const fsElement = document.fullscreenElement || document.webkitFullscreenElement;
+        const isOurVideo = !!fsElement && r2.contains(fsElement);
+
+        document.documentElement.classList.toggle('is-video-fullscreen', isOurVideo);
+
+        if (!isOurVideo) {
+            scrollTween?.scrollTrigger?.update();
+        }
+    }
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     buildScroll();
     setupWheelProxy();
+    setupVideoFullscreenFix();
 
     window.addEventListener('load', () => {
         buildScroll();
@@ -98,8 +123,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.addEventListener('resize', () => {
+        // Entrer/sortir du plein écran déclenche un resize de la fenêtre. Si on
+        // reconstruit le pin à ce moment-là, GSAP détache puis réinsère .sec1 dans
+        // le DOM (kill + recréation du pin-spacer) : le navigateur considère que
+        // l'élément plein écran est déconnecté du document et quitte le plein
+        // écran aussitôt. On ignore donc les resize pendant que le plein écran
+        // vidéo est actif.
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+            return;
+        }
+
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
+            if (document.fullscreenElement || document.webkitFullscreenElement) {
+                return;
+            }
             buildScroll();
             ScrollTrigger.refresh();
         }, 150);
