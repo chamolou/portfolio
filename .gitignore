@@ -1,2 +1,340 @@
 .DS_Store
 .claude/settings.local.json
+
+# Fichiers de travail que le site ne charge pas (gardés en local, exclus du dépôt et du déploiement Vercel)
+*.blend
+*.blend1
+/control/control website/sans module/yaw_okyere_darko_sips5blend55.glb
+/control/control website/sans module/yaw_texture65.png
+/control/control website/sans module/cblanc.png
+/control/control website/sans module/VIDEO2.mp4
+/agro-vida/Agro_vida_presentation_4 (1).pdf
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/animasionmessi13.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/animationmessi.glb
+/control/control website/sans module/cubemap/image2/23.png
+/control/control website/sans module/displacement/23.png
+/control/control website/sans module/envmap/image2/23.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image2/23.png
+/control/control website/sans module/cubemap/image2/StandardCubeMap.png
+/control/control website/sans module/envmap/image2/StandardCubeMap.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/scene 2.bin
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/scene.bin
+/control/control website/sans module/displacement/clouds2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/displacement/clouds2 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/textures/Textured_normal.jpeg
+/control/control website/sans module/cubemap/image2/46545.png
+/control/control website/sans module/displacement/46545.png
+/control/control website/sans module/envmap/image2/46545.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image2/46545.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/displacement/46545 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/displacement/46545.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image2/46545.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/textures/Textured_baseColor.jpeg
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/textures/Textured_metallicRoughness.png
+/control/Packaging_SIPS5.pdf
+/control/control website/sans module/musique11 2.mp3
+/control/control website/sans module/Substance_graph_roughness.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/textures/Textured_baseColor copy.jpeg
+/control/control website/sans module/displacement/texturetrans.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/displacement/texturetrans 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/displacement/texturetrans.png
+/control/control website/sans module/musique2 2.mp3
+/agro-vida/pexels-zen-chung-5529604.jpg
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image2/B0000412.jpg
+/control/control website/sans module/jsm/libs/rhino3dm/rhino3dm.wasm
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/jsm/libs/rhino3dm/rhino3dm.wasm
+/control/untitled.png
+/control/control website/sans module/envmap/image1/py.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image1/py.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image1/py.png
+/control/control website/sans module/envmap/image1/nx.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image1/nx.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image1/nx.png
+/control/control website/sans module/envmap/image1/px.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image1/px.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image1/px.png
+/control/control website/sans module/envmap/image1/nz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image1/nz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image1/nz.png
+/control/general-bg.jpg
+/guggenhiem/yaw-okyere-darko-6g-sips6/image/imgp21.png
+/control/control website/sans module/envmap/image1/pz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image1/pz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image1/pz.png
+/control/control website/sans module/envmap/image1/ny.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image1/ny.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image1/ny.png
+/control/control website/sans module/Substance_graph_basecolor.jpg
+/agro-vida/Frame 24.jpg
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/2 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/2.png
+/agro-vida/Frame 23.jpg
+/ian-campo/plain-magazine-7.jpg
+/agro-vida/Frame 27.jpg
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/1 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/1.png
+/control/Capture d’écran 2026-07-12 à 21.15.32.png
+/control/control website/sans module/Substance_graph_normal.jpg
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/6 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/6.png
+/control/Capture d’écran 2026-09-19 à 21.23.38.png
+/control/control website/sans module/3cubeblanc.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/5 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/5.png
+/control/control website/sans module/envmap/untitled.obj
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/untitled 2.obj
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/untitled.obj
+/control/control website/sans module/displacement/clouds.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/displacement/clouds 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/displacement/clouds.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/5 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/5.png
+/guggenhiem/yaw-okyere-darko-6g-sips6/img2.png
+/control/control website/sans module/envmap/cube2.glb
+/control/control website/sans module/envmap/cube3.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/cube2.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/cube3.glb
+/control/control website/sans module/cube.hdr
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/l 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/l.png
+/control/control website/sans module/cube.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/2 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/3 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/3.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/4 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/4.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/3 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/3.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/6 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/6.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/4 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/imgm/4.png
+/guggenhiem/architecture-srgm-exterior-flavin-16-9-ratio-web.jpg
+/Bish.op/imgi_7_DSC03978.jpg
+/control/control website/sans module/envmap/typo/image3/nz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/nz 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/nz.png
+/guggenhiem/yaw-okyere-darko-6g-sips6/image/sec1img.png
+/messi/adidas-messi-15-1-fg-ag-j_8.jpg
+/control/control website/sans module/img3.png
+/control/control website/sans module/cubemap/image2/ny.png
+/control/control website/sans module/envmap/image2/ny.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image2/ny.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image2/ny.png
+/control/control website/sans module/cubemap/image2/px.png
+/control/control website/sans module/envmap/image2/px.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image2/px.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image2/px.png
+/control/control website/sans module/cubemap/image2/py.png
+/control/control website/sans module/envmap/image2/py.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image2/py.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image2/py.png
+/project/one pager2.jpg
+/control/control website/sans module/cubemap/image2/nx.png
+/control/control website/sans module/envmap/image2/nx.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image2/nx.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image2/nx.png
+/control/control website/sans module/cubemap/image2/pz.png
+/control/control website/sans module/envmap/image2/pz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image2/pz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image2/pz.png
+/control/control website/sans module/cubemap/image2/nz.png
+/control/control website/sans module/envmap/image2/nz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image2/nz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/image2/nz.png
+/control/W5zbnzPh72A6JCNfCKPfRJ.jpg
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/7 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/7.png
+/guggenhiem/yaw-okyere-darko-6g-sips6/image/i5.jpg
+/control/control website/sans module/envmap/typo/image3/nx.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/nx 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/nx.png
+/control/6G_YAW_OKYERE_DARKO_SIPS5_pictograme.pdf
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/1 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/1.png
+/control/control website/sans module/envmap/typo/image3/ny(1).png
+/control/control website/sans module/envmap/typo/image3/ny.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/ny 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/ny(1) 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/ny(1).png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/ny.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/8 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/8.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/9 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/img2/9.png
+/control/control website/sans module/envmap/typo/image3/px.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/px 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/px.png
+/control/6492c4ac2c27d25d8767a33b_CONTROL_WorldTrailer_covershot.webp
+/control/control website/sans module/envmap/typo/ext/nz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/nz 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/nz.png
+/guggenhiem/yaw-okyere-darko-6g-sips6/image/cimg4.png
+/guggenhiem/yaw-okyere-darko-6g-sips6/image/i4.webp
+/guggenhiem/yaw-okyere-darko-6g-sips6/image/cimg1.png
+/control/control website/sans module/envmap/cube4.fbx
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/cube4.fbx
+/guggenhiem/yaw-okyere-darko-6g-sips6/image/cimg3.png
+/control/control website/sans module/envmap/typo/nz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/nz 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/nz.png
+/project/Plan de travail 1-1.png
+/control/control website/sans module/envmap/typo/S.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/S 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/S.png
+/control/control website/sans module/envmap/cube5.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/cube5.glb
+/control/control website/sans module/envmap/cube4.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/cube4.glb
+/control/control website/sans module/envmap/typo/fond2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/fond2 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/fond2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image2/IMG_0075.JPG
+/control/control website/sans module/envmap/typo/ext/pz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/pz 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/pz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemap/image2/IMG_0072.JPG
+/control/control website/sans module/envmap/typo/image2/nz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image2/nz 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image2/nz.png
+/guggenhiem/yaw-okyere-darko-6g-sips6/image/cimg2.png
+/control/control website/sans module/envmap/typo/46545.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/46545 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/46545.png
+/control/control website/sans module/displacement/clouds.jpg
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/displacement/clouds 2.jpg
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/displacement/clouds.jpg
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/ecran 2.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/ecran.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/ecran.glb
+/guggenhiem/yaw-okyere-darko-6g-sips6/image/i3.webp
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/x.gltf
+/control/control website/sans module/envmap/typo/image2/px.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image2/px 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image2/px.png
+/Bish.op/bish.op2/photo one/13.jpg
+/control/control website/sans module/yawfinale20001-0451 2.mp4
+/control/control website/sans module/yawfinale20001-0451.mp4
+/control/control website/sans module/envmap/typo/ext/ny.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/ny 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/ny.png
+/control/control website/sans module/envmap/typo/ext/nx.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/nx 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/nx.png
+/control/control website/sans module/envmap/typo/nz(1).png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/nz(1) 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/nz(1).png
+/control/control website/sans module/envmap/typo/ext/px.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/px 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/px.png
+/control/control website/sans module/envmap/typo/image3/py.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/py 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/py.png
+/control/control website/sans module/envmap/typo/ext/py.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/py 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/py.png
+/control/control website/sans module/envmap/typo/image2/pz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image2/pz 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image2/pz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/c 2.gltf
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/c.gltf
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/c 2.gltf
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/c.gltf
+/control/control website/sans module/as.gltf
+/control/control website/sans module/envmap/typo/image3/pz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/pz 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image3/pz.png
+/control/control website/sans module/envmap/typo/testtypo1.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/testtypo1 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/testtypo1.png
+/control/control website/sans module/envmap/typo/image2/py.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image2/py 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image2/py.png
+/control/control website/sans module/envmap/typo/ext/py(1).png
+/control/control website/sans module/envmap/typo/py.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/py(1) 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ext/py(1).png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/py 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/py.png
+/control/control website/sans module/envmap/typo/image2/ny.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image2/ny 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image2/ny.png
+/control/control website/sans module/envmap/typo/ny.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ny 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ny.png
+/control/control website/sans module/envmap/typo/nx(1).png
+/control/control website/sans module/envmap/typo/ny(1).png
+/control/control website/sans module/envmap/typo/px(1).png
+/control/control website/sans module/envmap/typo/py(1).png
+/control/control website/sans module/envmap/typo/pz(1).png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/nx(1) 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/nx(1).png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ny(1) 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/ny(1).png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/px(1) 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/px(1).png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/py(1) 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/py(1).png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/pz(1) 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/pz(1).png
+/control/control website/sans module/envmap/typo/nx.png
+/control/control website/sans module/envmap/typo/px.png
+/control/control website/sans module/envmap/typo/pz.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/nx 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/nx.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/px 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/px.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/pz 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/pz.png
+/ian-campo/images.jpg
+/guggenhiem/yaw-okyere-darko-6g-sips6/image/logo2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/a 2.gltf
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/a.gltf
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/a.gltf
+/control/control website/sans module/Silhouette.png
+/guggenhiem/yaw-okyere-darko-6g-sips6/The Spaces He Shapes.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/D 2.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/D.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/D.glb
+/guggenhiem/carte de visite - 4-2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/x.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/b 2.gltf
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/b.gltf
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/b.gltf
+/control/control website/sans module/test.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/scene 2.gltf
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/scene.gltf
+/control/control website/sans module/imgplay/seven.jpg
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/a 2.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/a.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/a.glb
+/control/control website/sans module/envmap/typo/image2/nx.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image2/nx 2.png
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/typo/image2/nx.png
+/control/control website/sans module/imgplay/two.jpg
+/control/control website/sans module/imgplay/tree.jpg
+/control/control website/sans module/imgplay/one.jpg
+/control/control website/sans module/envmap/cube.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/cube 2.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/cube.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cube 2.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cube.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/envmap/cube.glb
+/guggenhiem/carte de visite - 4-1.png
+/control/control website/sans module/jsm/effects/y.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/jsm/effects/y.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/y.glb
+/control/control website/sans module/imgplay/rour.jpg
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/cubemapblender 2.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/3d2/cubemapblender.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemapblender 2.glb
+/messi/6G_Yaw_OkyereDarko_SIPS4 - Copie - Copie/cubemapblender.glb
+/control/control website/sans module/imgplay/height.jpg
+/guggenhiem/flwlogo.png
+/control/control website/sans module/imgplay/five.jpg
+/control/control website/sans module/imgplay/six.jpg
+/control/control website/sans module/img1.png
+/control/control website/sans module/img2.png
+/control/control website/sans module/image6.png
+/guggenhiem/yaw-okyere-darko-6g-sips6/image/p1IMGgggggggg.png
