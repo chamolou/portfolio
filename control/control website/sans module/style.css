@@ -6,34 +6,73 @@ body {
   overflow: hidden;
 }
 
+/* Les trois colonnes partagent une même ligne centrale ; le dégradé derrière
+   garde le logo et les liens lisibles quand la scène 3D passe au blanc. */
 header {
-  height: 5vh;
-  width: 96vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  height: 120px;
+  padding: 36px 3vw 0;
   display: flex;
   flex-direction: row;
-  margin-left: 3vw;
-  transform: translateY(40px);
-  position: fixed;
-  z-index: 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+}
+
+header a,
+header #foote {
+  pointer-events: auto;
 }
 
 .cd {
-  border: 1px solid white;
-  height: 36px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 100px;
-  margin-right: 50px;
+  gap: 6px;
+  height: 36px;
+  padding: 0 18px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: 50px;
+  background-color: rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: white;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.cd:hover {
+.cd:hover,
+.cd:focus-visible {
   background-color: white;
+  border-color: white;
   color: black;
 }
-.cd:hover a {
-  color: black;
+
+.cd:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+
+.cd .arr {
+  font-size: 12px;
+  opacity: 0.7;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.cd:hover .arr {
+  opacity: 1;
+  transform: translate(2px, -2px);
 }
 
 .menu {
@@ -65,9 +104,10 @@ header {
 }
 
 .hd1 {
-  width: 32vw;
-  height: 100%;
-  font-weight: 300;
+  flex: 1;
+  height: 36px;
+  display: flex;
+  align-items: center;
 }
 .rond{
   width: 7px;
@@ -80,36 +120,71 @@ header {
 }
 
 .hd3 {
-  width: 32vw;
-  height: 100%;
+  flex: 1;
+  min-height: 36px;
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   text-align: center;
   font-family: "IBM Plex Sans", serif;
   font-weight: 300;
   font-style: normal;
 }
-.foot {
-  margin-top: 750px;
+
+.hd3 p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+}
+
+/* Ancré au bas de l'écran plutôt que par un margin-top fixe, pour rester en place
+   quelle que soit la hauteur de la fenêtre. Centré par marges auto et pas par
+   transform : le script .bigg réécrit transform au survol. */
+.hd3 .foot {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 64px;
+  width: max-content;
+  margin: 0 auto;
+  font-size: 16px;
+  pointer-events: auto;
 }
 
 .hd2 {
-  width: 32vw;
-  height: 100%;
-  color: white;
+  flex: 1;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  gap: 12px;
+  color: white;
   font-family: "IBM Plex Sans", serif;
-  font-weight: 500;
+  font-weight: 400;
   font-style: normal;
 }
 
 .hp {
-  font-size: 20px;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* En dessous de 900px, le slogan n'a plus la place entre le logo et les liens */
+@media (max-width: 900px) {
+  .hd3 > p:first-child {
+    display: none;
+  }
+
+  .cd {
+    padding: 0 12px;
+  }
+
+  .hp {
+    font-size: 12px;
+  }
 }
 
 section {

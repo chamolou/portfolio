@@ -71,23 +71,11 @@
       </p>
     </div>
 
-    <div class="hd2">
-      <div class="cd big">
-        <a href="https://www.remedygames.com/studio" class="hp"  target="_blank">studio</a>
-      </div>
-      <div class="cd big">
-        <a href="https://www.remedygames.com/contact" class="hp"  target="_blank">contact</a>
-      </div>
-      <div class="cd big">
-        <a href="https://www.remedygames.com/news" class="hp" target="_blank"> new</a>
-      </div>
-
-
-
-
-
-
-    </div>
+    <nav class="hd2">
+      <a href="https://www.remedygames.com/studio" class="cd big hp" target="_blank" rel="noopener">studio <span class="arr">↗</span></a>
+      <a href="https://www.remedygames.com/contact" class="cd big hp" target="_blank" rel="noopener">contact <span class="arr">↗</span></a>
+      <a href="https://www.remedygames.com/news" class="cd big hp" target="_blank" rel="noopener">news <span class="arr">↗</span></a>
+    </nav>
   </header>
 
 
@@ -413,7 +401,26 @@
     camera.position.z = 16;
     camera.position.y = 4;
     camera.position.x = 1;
-    gsap.to(camera.position, { duration: 5, y: 1.5, x: 0.6, delay: 3 })
+    const introCameraTween = gsap.to(camera.position, { duration: 5, y: 1.5, x: 0.6, delay: 3 })
+
+    // Allumage des projecteurs à l'ouverture (de 8 s à 18 s). On garde les tweens
+    // pour pouvoir les terminer si on clique sur le cube avant la fin : sinon ils
+    // continuent de tourner pendant la navigation et se battent avec les animations
+    // de lumière du portal.
+    const introLightTweens = [];
+    function introLight(light, vars) {
+      const tween = gsap.to(light, { duration: 10, delay: 8, ...vars });
+      introLightTweens.push({ light, vars, tween });
+    }
+
+    function finishIntro() {
+      introCameraTween.kill();
+      introLightTweens.forEach(({ light, vars, tween }) => {
+        if (tween.progress() === 1) return;
+        tween.kill();
+        gsap.to(light, { duration: 2, ease: 'power2.out', ...vars });
+      });
+    }
 
 
     // Initialiser le moteur de rendu
@@ -423,7 +430,15 @@
     renderer.outputEncoding = THREE.sRGBEncoding;
     document.body.appendChild(renderer.domElement);
 
-    //amnient 
+    // Sans ça, le canvas garde la taille du chargement : passer en plein écran
+    // laissait une bande vide sous la scène.
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    //amnient
     const ambientLight = new THREE.AmbientLight(0xffffff, 0)
     scene.add(ambientLight)
 
@@ -783,6 +798,7 @@
 
           if (isYawCube) {
             yawCubeClicked = true; // Empêche les futurs clics
+            finishIntro();
             yawCubeBlink.kill();
             document.body.style.cursor = '';
             setCubeHovered(false);
@@ -879,8 +895,8 @@
               });
 
               // Animer l'angle de fourthSpotLight vers 0
-              gsap.to(fourthSpotLight, { duration: 4, angle: 0 });
-              gsap.to(secondSpotLight, { duration: 4, angle: 0 });
+              gsap.to(fourthSpotLight, { duration: 4, angle: 0, overwrite: 'auto' });
+              gsap.to(secondSpotLight, { duration: 4, angle: 0, overwrite: 'auto' });
             });
           });
 
@@ -1103,6 +1119,234 @@
           ecranCenter.z + ecranNormal.z * (puddleDepth / 2 + 0.3)
         );
         scene.add(puddle);
+
+        const cinemaRoom = measureCinemaRoom(ecranCenter, ecranNormal, floorY);
+        if (cinemaRoom) {
+          addCinemaLights(cinemaRoom);
+          addCinemaSeats(cinemaRoom);
+        }
+      }
+
+      // La salle de projection est mesurée par raycast depuis l'écran plutôt que
+      // codée en dur, pour suivre le modèle s'il change dans Blender.
+      function measureCinemaRoom(screenCenter, screenNormal, floorY) {
+        const roomMeshes = [];
+        model.traverse((child) => { if (child.isMesh && child.name !== 'ecran') roomMeshes.push(child); });
+        const castFrom = (origin, dir) => new THREE.Raycaster(origin, dir, 0.01, 200).intersectObjects(roomMeshes, false)[0];
+
+        const probe = screenCenter.clone().addScaledVector(screenNormal, 2);
+        const ceilingHit = castFrom(probe, new THREE.Vector3(0, 1, 0));
+        const leftHit = castFrom(probe, new THREE.Vector3(-1, 0, 0));
+        const rightHit = castFrom(probe, new THREE.Vector3(1, 0, 0));
+        if (!ceilingHit || !leftHit || !rightHit) return null;
+
+        return {
+          castFrom,
+          screenCenter,
+          screenNormal,
+          floorY,
+          ceilingY: ceilingHit.point.y - 0.02,
+          leftX: leftHit.point.x,
+          rightX: rightHit.point.x,
+        };
+      }
+
+      // Spots encastrés au plafond (disque lumineux + halo sur le plafond + tache au
+      // sol) et, le long des deux murs, de vrais projecteurs qui dessinent les arches
+      // de lumière typiques d'un cinéma.
+      function addCinemaLights({ screenCenter, screenNormal, floorY, ceilingY, leftX, rightX }) {
+        const roomHeight = ceilingY - floorY;
+
+        const warm = 0xffe2b8;
+        const radialTexture = (() => {
+          const c = document.createElement('canvas');
+          c.width = c.height = 128;
+          const ctx = c.getContext('2d');
+          const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+          g.addColorStop(0, 'rgba(255,255,255,1)');
+          g.addColorStop(0.35, 'rgba(255,255,255,0.35)');
+          g.addColorStop(1, 'rgba(255,255,255,0)');
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, 128, 128);
+          return new THREE.CanvasTexture(c);
+        })();
+
+        const bulbGeometry = new THREE.CircleGeometry(0.28, 32);
+        const bezelGeometry = new THREE.RingGeometry(0.28, 0.5, 32);
+        const haloGeometry = new THREE.PlaneGeometry(3.2, 3.2);
+        const poolGeometry = new THREE.PlaneGeometry(6, 6);
+        const bulbMaterial = new THREE.MeshBasicMaterial({ color: warm });
+        const bezelMaterial = new THREE.MeshBasicMaterial({ color: 0x1a1a1a });
+        const additive = (opacity) => new THREE.MeshBasicMaterial({
+          color: warm,
+          map: radialTexture,
+          transparent: true,
+          opacity,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        });
+        const haloMaterial = additive(0.35);
+        const poolMaterial = additive(0.12);
+
+        const facingDown = (mesh, y) => {
+          mesh.rotation.x = Math.PI / 2;
+          mesh.position.y = y;
+          return mesh;
+        };
+
+        // Grille 4 x 3 : de 2 m devant l'écran jusqu'à la poutre d'entrée de la salle
+        const columns = 4;
+        const rows = 3;
+        const margin = (rightX - leftX) * 0.12;
+        const depthStart = 4;
+        const depthStep = 6;
+
+        for (let row = 0; row < rows; row++) {
+          const z = screenCenter.z + screenNormal.z * (depthStart + row * depthStep);
+          for (let col = 0; col < columns; col++) {
+            const x = leftX + margin + (col * (rightX - leftX - 2 * margin)) / (columns - 1);
+
+            const bulb = facingDown(new THREE.Mesh(bulbGeometry, bulbMaterial), ceilingY - 0.01);
+            const bezel = facingDown(new THREE.Mesh(bezelGeometry, bezelMaterial), ceilingY);
+            const halo = facingDown(new THREE.Mesh(haloGeometry, haloMaterial), ceilingY - 0.005);
+            const pool = new THREE.Mesh(poolGeometry, poolMaterial);
+            pool.rotation.x = -Math.PI / 2;
+            pool.position.y = floorY + 0.04;
+            [bulb, bezel, halo, pool].forEach((m) => {
+              m.position.x = x;
+              m.position.z = z;
+              scene.add(m);
+            });
+          }
+
+          // Une paire de projecteurs par rangée, rasant chaque mur
+          [[leftX, 1], [rightX, -1]].forEach(([wallX, inward]) => {
+            const wash = new THREE.SpotLight(warm, 1.1, roomHeight * 1.6, 0.55, 0.9, 1);
+            wash.position.set(wallX + inward * 1.2, ceilingY - 0.3, z);
+            wash.target.position.set(wallX + inward * 0.2, floorY + roomHeight * 0.25, z);
+            scene.add(wash);
+            scene.add(wash.target);
+          });
+        }
+      }
+
+      // Rangées de fauteuils en gradins face à l'écran, du premier rang jusqu'au fond
+      // de la salle, sous la caméra d'arrivée : on découvre la salle pleine, vue d'en
+      // haut. Deux blocs séparés par une allée centrale, avec des allées le long des
+      // murs. Chaque pièce du fauteuil (assise, dossier, accoudoir) est un
+      // InstancedMesh : quelques centaines de fauteuils coûtent autant à dessiner que
+      // trois objets.
+      function addCinemaSeats({ castFrom, screenCenter, screenNormal, floorY, leftX, rightX }) {
+        const seatScale = 1.15;
+        const seatPitch = 0.62 * seatScale;   // largeur d'un fauteuil, accoudoir compris
+        const rowSpacing = 1.15 * seatScale;
+        const riserHeight = 0.18;             // le dernier rang reste ~2 m sous la caméra
+        const firstRowDistance = 9;           // du plan de l'écran au premier rang
+        const maxRows = 30;
+        const sideAisle = 1.4;
+        const centerAisle = 1.6;
+        const centerX = (leftX + rightX) / 2;
+        const rowZ = (row) => screenCenter.z + screenNormal.z * (firstRowDistance + row * rowSpacing);
+
+        // Chaque rang est mesuré là où il se trouve : la salle se resserre dans
+        // l'antichambre, et les rangs s'arrêtent là où le sol de la salle s'arrête.
+        const rows = [];
+        for (let row = 0; row < maxRows; row++) {
+          const z = rowZ(row);
+          const probe = new THREE.Vector3(centerX, floorY + 1, z);
+          const floorHit = castFrom(probe, new THREE.Vector3(0, -1, 0));
+          if (!floorHit || Math.abs(floorHit.point.y - floorY) > 0.3) break;
+          // Mur le plus proche sur toute la profondeur du rang (poutres, cadres de porte)
+          let left = leftX;
+          let right = rightX;
+          for (const dz of [-0.6, 0, 0.6]) {
+            const p = probe.clone().setZ(z + dz);
+            const l = castFrom(p, new THREE.Vector3(-1, 0, 0));
+            const r = castFrom(p, new THREE.Vector3(1, 0, 0));
+            if (l) left = Math.max(left, l.point.x);
+            if (r) right = Math.min(right, r.point.x);
+          }
+          rows.push({ z, y: floorY + row * riserHeight, left, right });
+        }
+        if (!rows.length) return;
+
+        // Le rendu sort en sRGB mais cette version de three lit les couleurs hex comme
+        // linéaires : sans conversion, le velours rouge sombre s'affiche rose clair.
+        // envMapIntensity réduit pour que l'environnement studio ne les délave pas.
+        const srgb = (hex) => new THREE.Color(hex).convertSRGBToLinear();
+        const fabric = new THREE.MeshStandardMaterial({ color: srgb(0x7a0c12), roughness: 0.95, metalness: 0, envMapIntensity: 0.35 });
+        const frame = new THREE.MeshStandardMaterial({ color: srgb(0x161616), roughness: 0.55, metalness: 0.2, envMapIntensity: 0.5 });
+        const riserMaterial = new THREE.MeshStandardMaterial({ color: srgb(0x1a1a1f), roughness: 0.9, metalness: 0, envMapIntensity: 0.25 });
+        const stepLightMaterial = new THREE.MeshBasicMaterial({ color: 0x8a5a2a });
+
+        // Géométries d'un fauteuil, à l'échelle 1, orienté vers -z (vers l'écran)
+        const cushionGeometry = new THREE.BoxGeometry(0.52, 0.12, 0.5).translate(0, 0.44, -0.04);
+        const backGeometry = new THREE.BoxGeometry(0.52, 0.62, 0.1)
+          .translate(0, 0.31, 0)
+          .rotateX(-0.14)
+          .translate(0, 0.46, 0.22);
+        const sideGeometry = new THREE.BoxGeometry(0.06, 0.68, 0.56).translate(-0.31, 0.34, 0);
+
+        // Nombre de fauteuils par bloc : le même pour tous les rangs (celui du rang le
+        // plus étroit), pour garder des allées bien droites.
+        const narrowest = Math.min(...rows.map((r) => Math.min(centerX - r.left, r.right - centerX)));
+        const seatsPerBlock = Math.floor((narrowest - sideAisle - centerAisle / 2) / seatPitch);
+        if (seatsPerBlock < 1) return;
+        const blockWidth = seatsPerBlock * seatPitch;
+        const blockStarts = [centerX - centerAisle / 2 - blockWidth, centerX + centerAisle / 2];
+
+        const facing = -Math.sign(screenNormal.z) || -1;
+
+        const seatCount = rows.length * blockStarts.length * seatsPerBlock;
+        const sideCount = rows.length * blockStarts.length * (seatsPerBlock + 1);
+        const cushions = new THREE.InstancedMesh(cushionGeometry, fabric, seatCount);
+        const backs = new THREE.InstancedMesh(backGeometry, fabric, seatCount);
+        const sides = new THREE.InstancedMesh(sideGeometry, frame, sideCount);
+
+        const matrix = new THREE.Matrix4();
+        const position = new THREE.Vector3();
+        const rotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), facing < 0 ? 0 : Math.PI);
+        const scale = new THREE.Vector3(seatScale, seatScale, seatScale);
+        let seatIndex = 0;
+        let sideIndex = 0;
+
+        rows.forEach(({ z, y, left, right }, row) => {
+          blockStarts.forEach((startX) => {
+            // Un panneau latéral à gauche de chaque fauteuil, plus un en bout de rang
+            for (let i = 0; i <= seatsPerBlock; i++) {
+              const x = startX + i * seatPitch + seatPitch / 2;
+              matrix.compose(position.set(x, y, z), rotation, scale);
+              sides.setMatrixAt(sideIndex++, matrix);
+              if (i < seatsPerBlock) {
+                cushions.setMatrixAt(seatIndex, matrix);
+                backs.setMatrixAt(seatIndex, matrix);
+                seatIndex++;
+              }
+            }
+          });
+
+          // Marche sous le rang (le premier rang est posé au sol), avec un filet de
+          // lumière sur son nez comme les éclairages de marches des salles.
+          // Le dernier rang est prolongé jusqu'au fond pour ne pas laisser de vide
+          // sous la caméra.
+          if (row > 0) {
+            const depth = row === rows.length - 1 ? rowSpacing * 2 : rowSpacing;
+            const width = right - left;
+            const midX = (left + right) / 2;
+            const riser = new THREE.Mesh(new THREE.BoxGeometry(width, y - floorY, depth), riserMaterial);
+            riser.position.set(midX, (y + floorY) / 2, z + screenNormal.z * (depth / 2 - 0.45));
+            scene.add(riser);
+
+            const stepLight = new THREE.Mesh(new THREE.BoxGeometry(width, 0.025, 0.02), stepLightMaterial);
+            stepLight.position.set(midX, y - 0.04, z - screenNormal.z * 0.46);
+            scene.add(stepLight);
+          }
+        });
+
+        [cushions, backs, sides].forEach((mesh) => {
+          mesh.instanceMatrix.needsUpdate = true;
+          scene.add(mesh);
+        });
       }
 
 
@@ -1297,14 +1541,7 @@
 
 
 
-    gsap.to(thirteenthSpotLight, {
-      duration: 10,
-      angle: 0.4,
-      delay: 8,
-      intensity: 0.42,
-
-
-    });
+    introLight(thirteenthSpotLight, { angle: 0.4, intensity: 0.42 });
 
 
     thirteenthSpotLight.castShadow = true;
@@ -1958,14 +2195,7 @@
 
     fourthSpotLight.castShadow = true;
 
-    gsap.to(fourthSpotLight, {
-      duration: 10,
-      angle: 2,
-      delay: 8,
-      intensity: 0.42,
-
-
-    });
+    introLight(fourthSpotLight, { angle: 2, intensity: 0.42 });
 
 
     // Helper pour la lumière
@@ -2038,14 +2268,7 @@
     scene.add(secondSpotLight.target);
 
 
-    gsap.to(secondSpotLight, {
-      duration: 10,
-      angle: 1.3,
-      delay: 8,
-
-
-
-    });
+    introLight(secondSpotLight, { angle: 1.3 });
 
 
     // Création de la troisieme SpotLight
