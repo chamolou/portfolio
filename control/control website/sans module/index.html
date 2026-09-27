@@ -905,17 +905,24 @@
             const rond = document.querySelector(".rond");
             gsap.to(rond, { duration: 4, top: "59%" });
 
-            // Déplacer la caméra en z: -105 et y: 14.5
-            gsap.to(camera.position, { duration: 5, z: -105, y: 14.5 });
+            // Un seul mouvement continu jusqu'à la salle de cinéma : la caméra avance
+            // sans s'arrêter en route, puis glisse vers la droite en douceur pendant
+            // qu'elle ralentit. Le glissement ne démarre qu'au passage de la porte
+            // (murs à x ≈ ±3 entre z -103,5 et -105), et part lentement pour ne pas
+            // toucher ses montants. Les mouvements de la pièce précédente (en cours
+            // ou encore en attente de leur délai) sont coupés pour ne pas s'y mêler.
+            gsap.killTweensOf(camera.position);
+            gsap.killTweensOf(camera.rotation, 'x,y');
+            gsap.to(camera.position, { duration: 6, z: -107, y: 14.5, ease: 'power2.inOut' });
+            gsap.to(camera.position, { delay: 5, duration: 2.8, x: 10, ease: 'sine.inOut' });
 
-            // Animer la rotation de la caméra à 360 degrés autour de l'axe Z
-            gsap.to(camera.rotation, { duration: 5, z: "+=6.2832" }); // 6.2832 radians = 360°
+            // Tonneau à 360° autour de l'axe Z pendant la traversée du couloir
+            gsap.to(camera.rotation, { duration: 5, z: "+=6.2832", ease: 'power2.inOut' }); // 6.2832 radians = 360°
 
-            // Optionnel : tu peux aussi animer la rotation légère de la caméra sur l'axe X si tu le souhaites
-            gsap.to(camera.rotation, { duration: 2, x: 0 }); // Rotation légère vers le haut (90°)
-
-            gsap.to(camera.position, { delay: 4.5, duration: 2, z: -107, x: 10 });
-            gsap.to(camera.rotation, { delay: 4, duration: 2, y: 0.1, x: -0.2 });
+            // Caméra à l'horizontale pendant le trajet, puis légèrement tournée vers
+            // l'écran et vers les fauteuils, au même rythme que le glissement.
+            gsap.to(camera.rotation, { duration: 2, x: 0, ease: 'power2.inOut' });
+            gsap.to(camera.rotation, { delay: 4.8, duration: 3, y: 0.1, x: -0.2, ease: 'sine.inOut' });
 
             // Cacher la div .playlist en 3 secondes
             gsap.to(".playlist", {
