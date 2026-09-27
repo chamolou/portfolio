@@ -88,10 +88,11 @@ section {
   border-top: solid 1px black;
 }
 
+/* descend jusqu'au trait stb1 (haut de la rangée 4), quelle que soit la hauteur d'écran */
 .stb2 {
-  height: 79%;
+  height: calc(100% + 21px);
   grid-column: 8;
-  grid-row: 1/5;
+  grid-row: 1/4;
   border-left: solid 1px black;
 }
 
@@ -179,48 +180,48 @@ sup {
 .jsp1{
  
   grid-row: 5;
-  grid-column: 1/15;
+  grid-column: 1/16; /* jusqu'au trait vertical de droite (jsp8) */
   border-bottom: solid 1px black;
   transform: translateY(-10px);
-  width: 101%;
+  width: 100%;
 }
 
 
 .jsp2{
  
   grid-row: 11;
-  grid-column: 1/15;
+  grid-column: 1/16; /* jusqu'au trait vertical de droite (jsp8) */
   border-bottom: solid 1px black;
-  width: 101%;
+  width: 100%;
 }
 
 
 .jsp3{
  
-  grid-row: 5/11;
+  grid-row: 6/12;
+  margin-top: -31px; /* remonte sur la gouttière (20px) jusqu'au trait jsp1 (-11px) */
   grid-column: 4;
   border-left: solid 1px black;
-  transform: translate(55px, 53px);
-  height: 94%;
+  transform: translateX(55px);
 }
 
 
 .jsp4{
  
-  grid-row: 5/11;
+  grid-row: 6/12;
+  margin-top: -31px; /* remonte sur la gouttière (20px) jusqu'au trait jsp1 (-11px) */
   grid-column: 10;
   border-left: solid 1px black;
-  transform: translate(85px, 53px);
-  height: 94%;
+  transform: translateX(85px);
 }
 
 .jsp5{
  
-  grid-row: 5/11;
+  grid-row: 6/12;
+  margin-top: -31px; /* remonte sur la gouttière (20px) jusqu'au trait jsp1 (-11px) */
   grid-column: 9;
   border-left: solid 1px black;
-  transform: translate(35px, 53px);
-  height: 94%;
+  transform: translateX(35px);
 }
 
 .jsp6{
@@ -236,11 +237,11 @@ sup {
 
 .jsp8{
  
-  grid-row: 5/11;
+  grid-row: 6/12;
+  margin-top: -31px; /* remonte sur la gouttière (20px) jusqu'au trait jsp1 (-11px) */
   grid-column: 15;
   border-right: solid 1px black;
-  transform: translate(0px, 53px);
-  height: 94%;
+  transform: translateX(0px);
 }
 
 

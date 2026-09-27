@@ -38,7 +38,8 @@
         if (!isMobileOrTablet()) return;
 
         const link = event.target.closest('a.lp3');
-        if (!link) return;
+        // Les maquettes adaptées au mobile (data-responsive) s'ouvrent normalement
+        if (!link || link.hasAttribute('data-responsive')) return;
 
         event.preventDefault();
         event.stopPropagation();

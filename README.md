@@ -9,7 +9,7 @@ Portfolio de design et de création web de Yaw Okyere Darko. Site statique en HT
 - **Pages projet** — chaque projet a sa page avec animations au scroll (GSAP + ScrollTrigger) et une galerie d'images en lightbox.
 - **Transitions** — fondu entre les pages.
 - **Défilement fluide** — la molette est lissée sur toutes les pages (Lenis) et reste synchronisée avec les animations au scroll. Le scroll tactile reste natif, et l'option « réduire les animations » du système désactive le lissage.
-- **Responsive** — jusqu'à 1024 px de large, l'accueil affiche directement la grille (pas de carrousel ni d'EXPLORE) et le défilement épinglé des pages projet est désactivé.
+- **Responsive** — jusqu'à 1024 px de large, l'accueil affiche directement la grille (pas de carrousel ni d'EXPLORE) et le défilement épinglé des pages projet est désactivé. La maquette Guggenheim est elle aussi responsive (téléphone, tablette, téléphone à l'horizontale) : son bouton « visit site » l'ouvre sur mobile, alors que les autres maquettes affichent un message invitant à les ouvrir sur ordinateur.
 
 ## Projets présentés
 

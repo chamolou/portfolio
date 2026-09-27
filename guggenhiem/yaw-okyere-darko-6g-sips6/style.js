@@ -1,23 +1,23 @@
 gsap.registerPlugin(ScrollTrigger);
 
-// Vérifier si on arrive avec une ancre #gallery dans l'URL
+// Arrivée avec l'ancre #gallery (bouton GALLERY depuis un projet ou la page
+// About) : l'intro est sautée (voir aussi le script en tête de index.html) et la
+// page va directement à la galerie
+function scrollToGallery(smooth) {
+  const gallerySection = document.querySelector('.s5');
+  const offset = gallerySection.getBoundingClientRect().top + window.scrollY;
+  const activeSmoother = ScrollSmoother.get();
+  if (activeSmoother) {
+    activeSmoother.scrollTo(offset, smooth);
+  } else {
+    window.scrollTo({ top: offset, behavior: smooth ? 'smooth' : 'auto' });
+  }
+}
+
 window.addEventListener('load', function() {
   if (window.location.hash === '#gallery') {
     // Petit délai pour laisser le temps au ScrollSmoother de s'initialiser
-    setTimeout(() => {
-      const gallerySection = document.querySelector('.s5');
-      const offset = gallerySection.getBoundingClientRect().top + window.scrollY;
-      
-      // Si on a un ScrollSmoother actif
-      if (window.smoother) {
-        window.smoother.scrollTo(offset, true);
-      } else {
-        window.scrollTo({
-          top: offset,
-          behavior: 'smooth'
-        });
-      }
-    }, 100);
+    setTimeout(() => scrollToGallery(false), 100);
   }
 });
 
@@ -36,16 +36,9 @@ document.querySelector('.nv11').addEventListener('click', function() {
 });
 
 document.querySelector('.nv12').addEventListener('click', function() {
-  const section = document.querySelector('.s5');
-  const offset = section.getBoundingClientRect().top + window.scrollY;
-  if (window.smoother) {
-    window.smoother.scrollTo(offset, true);
-  } else {
-    window.scrollTo({
-      top: offset,
-      behavior: 'smooth'
-    });
-  }
+  if (but5Clicked) return; // depuis un projet : géré plus bas (rechargement sur #gallery)
+  if (window.exploreHome) window.exploreHome(false);
+  scrollToGallery(true);
 });
 
 document.querySelector('.nv13').addEventListener('click', function() {
@@ -130,44 +123,48 @@ window.addEventListener('scroll', function() {
   }
 });
 
-// Épinglage de secc3d1
-ScrollTrigger.create({
-  trigger: ".secc3d1",
-  start: "top -4%",
-  end: "+=40%",
-  pin: true,
-  pinSpacing: false,
-  markers: false
-});
+// Épinglages desktop uniquement : jusqu'à 1024px les pages projet passent
+// sur une seule colonne (responsive.css) et l'encadré ne doit plus rester fixe
+gsap.matchMedia().add("not all and (max-width: 1024px)", () => {
+  // Épinglage de secc3d1
+  ScrollTrigger.create({
+    trigger: ".secc3d1",
+    start: "top -4%",
+    end: "+=40%",
+    pin: true,
+    pinSpacing: false,
+    markers: false
+  });
 
-// Épinglage de secc3d12
-ScrollTrigger.create({
-  trigger: ".secc3d12",
-  start: "top -4%",
-  end: "+=40%",
-  pin: true,
-  pinSpacing: false,
-  markers: false
-});
+  // Épinglage de secc3d12
+  ScrollTrigger.create({
+    trigger: ".secc3d12",
+    start: "top -4%",
+    end: "+=40%",
+    pin: true,
+    pinSpacing: false,
+    markers: false
+  });
 
-// Épinglage de secc3d13
-ScrollTrigger.create({
-  trigger: ".secc3d13",
-  start: "top -4%",
-  end: "+=40%",
-  pin: true,
-  pinSpacing: false,
-  markers: false
-});
+  // Épinglage de secc3d13
+  ScrollTrigger.create({
+    trigger: ".secc3d13",
+    start: "top -4%",
+    end: "+=40%",
+    pin: true,
+    pinSpacing: false,
+    markers: false
+  });
 
-// Épinglage de secc3d14
-ScrollTrigger.create({
-  trigger: ".secc3d14",
-  start: "top -4%",
-  end: "+=40%",
-  pin: true,
-  pinSpacing: false,
-  markers: false
+  // Épinglage de secc3d14
+  ScrollTrigger.create({
+    trigger: ".secc3d14",
+    start: "top -4%",
+    end: "+=40%",
+    pin: true,
+    pinSpacing: false,
+    markers: false
+  });
 });
 
 function demarrer() {
@@ -188,8 +185,8 @@ function demarrer() {
     transformOrigin: 'top'
   });
 
+  // hauteur fixée dans le CSS : le trait s'arrête pile sur le trait horizontal du bas
   gsap.set('.sb11', {
-    height: '104%',
     scaleY: 0,
     transformOrigin: 'top'
   });
@@ -502,8 +499,40 @@ function changeImage() {
   sec1img.src = images[currentImageIndex];
 }
 
-// Événements de la souris
+// Tablette et téléphone (ou écran sans survol) : les images défilent toutes
+// seules ; sur desktop elles défilent au survol
+const autoImageQuery = window.matchMedia('(max-width: 1024px), (hover: none)');
+const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+const AUTO_IMAGE_MS = 300;
+let autoImageInterval = null;
+let sec1imgVisible = false;
+
+// Précharge les images pour qu'elles s'affichent sans temps de chargement
+images.forEach((src) => { new Image().src = src; });
+
+function updateAutoImage() {
+  const shouldRun = autoImageQuery.matches && !reducedMotionQuery.matches
+    && sec1imgVisible && !document.hidden;
+  if (shouldRun && !autoImageInterval) {
+    autoImageInterval = setInterval(changeImage, AUTO_IMAGE_MS);
+  } else if (!shouldRun && autoImageInterval) {
+    clearInterval(autoImageInterval);
+    autoImageInterval = null;
+  }
+}
+
+// ne défile que quand l'image est à l'écran (économise la batterie)
+new IntersectionObserver((entries) => {
+  sec1imgVisible = entries[0].isIntersecting;
+  updateAutoImage();
+}).observe(sec1img);
+document.addEventListener('visibilitychange', updateAutoImage);
+autoImageQuery.addEventListener('change', updateAutoImage);
+reducedMotionQuery.addEventListener('change', updateAutoImage);
+
+// Événements de la souris (desktop)
 sec1img.addEventListener('mouseenter', () => {
+  if (autoImageQuery.matches) return;
   // Démarrer le changement d'image toutes les 0.1 secondes
   imageInterval = setInterval(changeImage, 70);
 });
@@ -522,7 +551,10 @@ let but5Clicked = false;
 // Ajouter l'event listener sur nv11
 document.querySelector('.nv11').addEventListener('click', () => {
   if (but5Clicked) {
-    window.location.reload(); // Recharge la page seulement si but5 a été cliqué
+    // Recharge la page seulement si but5 a été cliqué ; retire #gallery de l'URL
+    // pour revenir à l'accueil et non à la galerie
+    history.replaceState(null, '', window.location.pathname);
+    window.location.reload();
   }
 });
 
@@ -621,6 +653,13 @@ ScrollTrigger.create({
     etoil.style.transform = `translate(-50%, -50%) scale(${1 + (progress * 150)}) rotate(${progress * 720}deg)`;
   }
 });
+
+// Jusqu'à 1024px le texte se réajuste à la largeur de l'écran : SplitText coupe
+// toujours une ligne à chaque <br>, calé sur la largeur desktop, ce qui laisserait
+// des lignes très courtes
+if (window.matchMedia("(max-width: 1024px)").matches) {
+  document.querySelectorAll(".split br").forEach(br => br.replaceWith(" "));
+}
 
 //// split elements with the class "split" into words and characters
 let split = SplitText.create(".split", { 
@@ -997,12 +1036,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Gérer le clic sur le bouton explore
-    exploreButton.addEventListener('click', function() {
+    // Ouvre l'accueil : clic sur EXPLORE, ou GALLERY qui saute l'intro.
+    // instant : l'intro disparaît sans animation et le scroll est activé tout de suite
+    function exploreHome(instant) {
         if (!isExplored) {
             isExplored = true;
             // Cacher la section intro
+            if (instant) introSection.style.transition = 'none';
             introSection.classList.add('hidden');
+            if (instant) ScrollTrigger.enable();
             
             // Animer l'étoile
             gsap.to('.etoile-part', {
@@ -1083,9 +1125,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
 
-            }, 700);
+            }, instant ? 0 : 700);
         }
-    });
+    }
+
+    window.exploreHome = exploreHome;
+    exploreButton.addEventListener('click', () => exploreHome(false));
+
+    if (window.location.hash === '#gallery') exploreHome(true);
 });
 
 // Initialize GSAP ScrollTrigger and disable it initially
@@ -1101,8 +1148,15 @@ const smoother = ScrollSmoother.create({
 });
 
 // Initial setup for scroll elements
-gsap.set(['.nvb11', '.sb11'], {
-    height: '104%',
+// nvb11 s'arrête sur le premier trait horizontal (nb65) ; la hauteur de sb11
+// est fixée dans le CSS pour qu'il s'arrête sur le trait du bas (sb12)
+gsap.set('.nvb11', {
+    height: '100%',
+    scaleY: 0,
+    transformOrigin: 'top'
+});
+
+gsap.set('.sb11', {
     scaleY: 0,
     transformOrigin: 'top'
 });

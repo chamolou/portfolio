@@ -426,7 +426,10 @@ section {
   grid-column: 4/5;
   grid-row: 5/10;
 
-  height: 104%;
+  /* descend jusqu'à sb12 (haut de la rangée 9 + 95px). Sa zone fait 5 rangées
+     + 4 gouttières de 20px : 4 rangées + 4 gouttières + 95px = 80% + 111px.
+     En pourcentage, la hauteur ne modifie pas la taille des rangées */
+  height: calc(80% + 111px);
   border-left:solid black 1px ;
 }
 

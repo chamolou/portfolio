@@ -1,0 +1,1087 @@
+/* Responsive — tablette et mobile (jusqu'à 1024px de large).
+   Tout est dans la media query : au-dessus de 1024px aucune règle ne s'applique
+   et le site desktop reste identique. */
+
+@media (max-width: 1024px) {
+  :root {
+    --m-pad: clamp(14px, 4vw, 32px); /* marge latérale */
+    --m-gap: 10px;                   /* gouttière des grilles */
+    --m-head: 44px;                  /* hauteur de la barre de navigation */
+  }
+
+  /* ===== Barre de navigation ===== */
+
+  .d21 {
+    height: var(--m-head);
+    min-height: 0;
+    padding: 0 var(--m-pad);
+    align-items: stretch;
+    gap: 8px;
+    font-size: clamp(9px, 2.8vw, 13px);
+    white-space: nowrap;
+  }
+
+  /* chaque lien occupe toute la hauteur de la barre : zone de tap de 44px */
+  .d21 > div {
+    display: flex;
+    align-items: center;
+  }
+
+  /* ===== Intro ===== */
+
+  .intro-section {
+    height: 100vh;
+    height: 100svh;
+  }
+
+  .intro-content {
+    padding: calc(var(--m-head) + 16px) var(--m-pad) 24px;
+    box-sizing: border-box;
+  }
+
+  .intro-title {
+    font-size: clamp(1.6rem, 8vw, 3rem);
+    letter-spacing: 0.06em;
+    margin-bottom: 0.5rem;
+    text-wrap: balance;
+  }
+
+  .intro-line {
+    margin: 1.25rem 0;
+  }
+
+  .intro-subtitle {
+    font-size: clamp(1rem, 4.4vw, 1.5rem);
+    margin-bottom: 1.25rem;
+  }
+
+  .intro-description {
+    margin-bottom: 1rem;
+  }
+
+  .intro-description p,
+  .intro-quote {
+    font-size: clamp(0.9rem, 3.8vw, 1.1rem);
+  }
+
+  .intro-description p {
+    margin-bottom: 0.5rem;
+  }
+
+  .intro-description h2 {
+    font-size: clamp(1.35rem, 6.2vw, 1.8rem);
+    margin: 0.5rem 0;
+  }
+
+  .intro-quote {
+    margin: 1.25rem auto;
+  }
+
+  .explore-button {
+    margin-top: 1rem;
+    padding: 1rem 2.5rem;
+  }
+
+  /* ===== Accueil (nv1) : même composition sur une grille de 6 colonnes =====
+     La photo est en paysage (16:10) : sa rangée (la 6e) a une hauteur calculée
+     depuis sa largeur, 5 colonnes, sans dépasser 35% de la hauteur d'écran
+     (tablette à l'horizontale). style.js anime sa hauteur de 0 à 100% de la rangée */
+
+  .nv1 {
+    --hero-img-w: min(calc((5 * (100vw - 2 * var(--m-pad)) - var(--m-gap)) / 6), 56vh);
+    --hero-img-h: calc(var(--hero-img-w) / 1.6);
+    height: 100vh;
+    height: 100svh;
+    min-height: 560px;
+    box-sizing: border-box;
+    padding: calc(var(--m-head) + 10px) var(--m-pad) 14px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr)) var(--hero-img-h) repeat(3, minmax(0, 1fr));
+    column-gap: var(--m-gap);
+    row-gap: 8px;
+  }
+
+  .logo {
+    grid-column: 1 / 4;
+    grid-row: 1 / 2;
+    height: 100%;
+    width: auto;
+    max-width: calc(100% - 16px); /* ne touche pas le trait vertical */
+    object-fit: contain;
+    object-position: left center;
+    justify-self: start;
+    padding-left: 0;
+    transform: none;
+  }
+
+  /* comme sur desktop : MAIN à gauche du trait vertical, WORK et CONTACT à
+     droite. Sur téléphone, CONTACT passe sous WORK faute de place.
+     Sans le décalage desktop de -45px, qui les ferait remonter sur le logo */
+  .nvm,
+  .nvw,
+  .nvc {
+    transform: none;
+  }
+
+  .nvm {
+    grid-column: 1 / 4;
+    grid-row: 2 / 4;
+    align-items: flex-start;
+  }
+
+  .nvw {
+    grid-column: 4 / 7;
+    grid-row: 2 / 3;
+    align-items: flex-start;
+    padding-left: 12px;
+  }
+
+  .nvc {
+    grid-column: 4 / 7;
+    grid-row: 3 / 4;
+    padding-right: 0;
+  }
+
+  .nvm1,
+  .nvw1,
+  .nvc1 {
+    font-size: clamp(17px, 5.2vw, 30px);
+  }
+
+  .nvm2,
+  .nvw2,
+  .nvc2 {
+    font-size: clamp(8px, 2.4vw, 14px);
+  }
+
+  /* cercle centré sur la photo : deux rangées au-dessus, deux en dessous */
+  .cercle {
+    grid-column: 1 / 7;
+    grid-row: 4 / 9;
+  }
+
+  /* photo centrée, comme le cercle et le trait vertical */
+  .sec1img {
+    grid-column: 1 / 7;
+    grid-row: 6 / 7;
+    width: var(--hero-img-w);
+    justify-self: center;
+  }
+
+  /* trait vertical relié à la barre du haut et au bas de l'écran, comme sur
+     desktop : il déborde sur les marges haute (10px) et basse (14px) de la grille */
+  .nvb1 {
+    grid-column: 3 / 4;
+    grid-row: 1 / 10;
+    margin: -10px 0 -14px;
+  }
+
+  /* le trait horizontal passe derrière le milieu de la photo */
+  .nvb2 {
+    grid-column: 1 / 7;
+    grid-row: 6 / 7;
+    height: 0;
+    align-self: center;
+    margin: 0 calc(var(--m-pad) * -1);
+  }
+
+  .date {
+    grid-column: 1 / 7;
+    grid-row: 5 / 6;
+    align-items: center;
+    font-size: clamp(12px, 3.6vw, 18px);
+  }
+
+  /* étoile juste sous le coin de la photo ; le texte en dessous a deux rangées
+     pour ne jamais remonter sur l'étoile quand l'écran est bas */
+  .etoile {
+    grid-column: 6 / 7;
+    grid-row: 7 / 8;
+    width: 70%;
+    height: 70%;
+    justify-self: center;
+    align-self: start;
+  }
+
+  .nvt1 {
+    grid-column: 4 / 7;
+    grid-row: 7 / 9;
+    align-self: end;
+    text-align: right;
+    font-size: clamp(9px, 2.5vw, 14px);
+  }
+
+  .nvbb,
+  .nvbb2 {
+    grid-row: 9 / 10;
+    display: flex;
+    align-items: flex-end;
+    padding-left: 0;
+    font-size: clamp(13px, 3.8vw, 18px);
+  }
+
+  .nvbb {
+    grid-column: 1 / 4;
+  }
+
+  .nvbb2 {
+    grid-column: 4 / 7;
+    justify-content: flex-end;
+  }
+
+  /* ===== Section 2 — Exhibition ===== */
+
+  #section2 {
+    height: 100vh;
+    height: 100svh;
+    min-height: 560px;
+    box-sizing: border-box;
+    padding: var(--m-head) var(--m-pad) 16px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: repeat(10, minmax(0, 1fr));
+    column-gap: var(--m-gap);
+    row-gap: 8px;
+  }
+
+  /* le trait prolonge celui de l'accueil : il remonte sur la marge du haut de la
+     section et s'arrête sur le premier trait horizontal qu'il croise (nb65).
+     !important : style.js lui impose une hauteur en style inline */
+  .nvb11 {
+    grid-column: 3 / 4;
+    grid-row: 1 / 5;
+    align-self: start;
+    margin-top: calc(var(--m-head) * -1);
+    height: calc(100% + var(--m-head)) !important;
+  }
+
+  .s21 {
+    grid-column: 4 / 7;
+    grid-row: 3 / 5;
+    font-size: clamp(22px, 6.4vw, 56px);
+  }
+
+  /* lignes pleine largeur : elles débordent sur les marges latérales */
+  .nb65,
+  .nb66,
+  .sb12 {
+    grid-column: 1 / 7;
+    margin-left: calc(var(--m-pad) * -1);
+    min-width: calc(100% + 2 * var(--m-pad));
+  }
+
+  .nb65,
+  .nb66 {
+    grid-row: 4 / 5;
+  }
+
+  .nb66 {
+    transform: translateY(10px);
+  }
+
+  /* part du second trait horizontal (nb66 : 10px sous la rangée 4, soit 2px sous
+     le début de la rangée 5 moins son épaisseur de 1px) et s'arrête pile sur le
+     trait du bas */
+  .sb11 {
+    grid-column: 3 / 4;
+    grid-row: 5 / 11;
+    align-self: start;
+    margin-top: 1px;
+    height: calc(100% - 1px);
+  }
+
+  /* Bas de la section : le titre, le sommaire et SCROLL TO EXPLORE posent leur
+     dernière ligne sur la même ligne de base, 22px au-dessus du trait du bas.
+     Chaque marge retire l'espace sous la ligne de base de sa police Raleway :
+     0.234em avec l'interligne normal, 0.547em avec l'interligne de 1.8 du sommaire */
+  #section2 {
+    --s2-base: 22px;
+    --s2t4-size: clamp(8px, 2.3vw, 12px);
+  }
+
+  .s2t1,
+  .s2t2,
+  .s2t3,
+  .s2t4 {
+    grid-row: 5 / 11;
+    align-self: end;
+    transform: none;
+  }
+
+  .s2t1 {
+    grid-column: 3 / 7;
+    padding-left: 12px;
+    margin-bottom: calc(var(--s2-base) - 0.234em);
+    font-size: clamp(20px, 6.2vw, 44px);
+  }
+
+  .s2t2 {
+    grid-column: 3 / 7;
+    margin-bottom: calc(var(--s2-base) - 0.234em);
+    font-size: clamp(10px, 2.8vw, 14px);
+  }
+
+  .s2t4 {
+    grid-column: 1 / 3;
+    margin-bottom: calc(var(--s2-base) - 0.547em);
+    font-size: var(--s2t4-size);
+    line-height: 1.8;
+  }
+
+  /* SUMMARY juste au-dessus du sommaire (5 lignes de 1.8 × sa taille), 6px d'écart */
+  .s2t3 {
+    grid-column: 1 / 3;
+    margin-bottom: calc(var(--s2-base) + 6px + (9 - 0.547) * var(--s2t4-size));
+    font-size: clamp(10px, 2.8vw, 14px);
+  }
+
+  .sb12 {
+    grid-row: 10 / 11;
+    align-self: end;
+    height: 1px;
+    transform: none;
+  }
+
+  /* ===== Texte animé ligne par ligne (s3 / s4) ===== */
+
+  .s3,
+  .s4 {
+    display: block;
+    height: auto;
+    padding-left: var(--m-pad);
+    padding-right: var(--m-pad);
+  }
+
+  .s3 {
+    padding-top: 30vh;
+  }
+
+  .s4 {
+    padding-bottom: 25vh;
+  }
+
+  /* les <br> calés sur la largeur desktop sont retirés avant le découpage (style.js) */
+  .s3t1,
+  .s4t1 {
+    --split-size: clamp(22px, min(7.2vw, 11vh), 64px);
+    font-size: var(--split-size);
+  }
+
+  .s3t1 .split-line,
+  .s4t1 .split-line {
+    height: var(--split-size);
+  }
+
+  /* ===== Galerie (fond noir) ===== */
+
+  .green-background {
+    height: 100vh;
+    height: 100svh;
+    box-sizing: border-box;
+    padding: calc(var(--m-head) + 14px) var(--m-pad) 20px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
+    column-gap: var(--m-gap);
+    row-gap: 12px;
+  }
+
+  .uno {
+    grid-column: 1 / 7;
+    grid-row: 1 / 2;
+    align-items: flex-start;
+    font-size: clamp(32px, 10.5vw, 92px);
+    line-height: 1;
+    transform: none;
+  }
+
+  .sup {
+    margin-left: auto;
+    padding-left: 8px;
+    font-size: 0.34em;
+    transform: none;
+  }
+
+  .but4 {
+    grid-column: 1 / 4;
+    grid-row: 2 / 3;
+    align-self: center;
+    font-size: 13px;
+    transform: none;
+  }
+
+  .change-image-btn {
+    grid-column: 4 / 7;
+    grid-row: 2 / 3;
+    justify-self: end;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    transform: none;
+  }
+
+  .img1 {
+    grid-column: 1 / 7;
+    grid-row: 3 / 4;
+    min-height: 0;
+    transform: none;
+  }
+
+  .bu20 {
+    grid-column: 1 / 2;
+    grid-row: 4 / 7;
+    justify-self: start;
+    width: 0;
+    height: auto;
+    transform: none;
+  }
+
+  .but1,
+  .but6,
+  .but2 {
+    grid-column: 1 / 4;
+    padding-left: 12px;
+    transform: none;
+  }
+
+  .but1 {
+    grid-row: 4 / 5;
+    font-size: 13px;
+  }
+
+  .but6 {
+    grid-row: 5 / 6;
+    font-size: 12px;
+  }
+
+  .but2 {
+    grid-row: 6 / 7;
+    font-size: 12px;
+  }
+
+  .but3 {
+    grid-column: 4 / 7;
+    grid-row: 4 / 7;
+    align-self: end;
+    font-size: 12px;
+    transform: none;
+  }
+
+  .but3 br {
+    display: none;
+  }
+
+  /* ===== Pages projet (Gordon House, Fallingwater, Guggenheim) =====
+     Les colonnes texte / image s'empilent sur une seule colonne */
+
+  .secc2,
+  .secc22,
+  .secc23,
+  .secc24,
+  .sections-container .secc2,
+  .sections-container .secc3,
+  .sections-container .secc4 {
+    min-height: 0;
+  }
+
+  .secc2,
+  .secc22,
+  .secc23,
+  .secc24 {
+    height: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    row-gap: 18px;
+    padding-top: var(--m-head);
+  }
+
+  .ip21 {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    height: 62vh;
+    height: 62svh;
+  }
+
+  .secc2t3,
+  .secc2t32,
+  .secc2t33 {
+    --title-size: clamp(34px, 10vw, 80px);
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+    padding: 0 var(--m-pad) 28px;
+    font-size: var(--title-size);
+    transform: none;
+  }
+
+  /* même rapport hauteur de ligne / taille de texte que sur desktop (4vw / 5vw) */
+  .secc2t3 .split-line,
+  .secc2t32 .split-line,
+  .secc2t33 .split-line {
+    height: calc(var(--title-size) * 0.8);
+  }
+
+  .secc3,
+  .secc32,
+  .secc33,
+  .secc34 {
+    height: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    row-gap: 24px;
+    padding: 36px var(--m-pad) 44px;
+  }
+
+  .secc2t4,
+  .imggord1,
+  .secc3d1,
+  .secc3d12,
+  .secc3d13,
+  .secc3d14,
+  .secc3d2 {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .secc2t4 {
+    font-size: clamp(17px, 5.2vw, 30px);
+  }
+
+  .secc2t4 br,
+  .d1t1 br,
+  .d1t2 br,
+  .secc4t2 br,
+  .secc4t4 br {
+    display: none;
+  }
+
+  .secc3mid {
+    display: none;
+  }
+
+  .imggord1 {
+    height: auto;
+    aspect-ratio: 4 / 3;
+    max-height: 70vh;
+    max-height: 70svh;
+  }
+
+  .secc3d1,
+  .secc3d12,
+  .secc3d13,
+  .secc3d14 {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* div vide qui ne sert qu'à la grille desktop */
+  .secc3d1 > div,
+  .secc3d12 > div,
+  .secc3d13 > div,
+  .secc3d14 > div {
+    display: none;
+  }
+
+  .d1t1,
+  .d1t2 {
+    max-width: 680px;
+    font-size: clamp(15px, 4.1vw, 20px);
+  }
+
+  .d1t3 {
+    margin-top: 12px;
+    font-size: clamp(24px, 7.4vw, 35px);
+  }
+
+  .secc3d2 {
+    display: block;
+    padding-top: 22px;
+  }
+
+  .d2t1 {
+    font-size: clamp(22px, 6.6vw, 35px);
+  }
+
+  .secc4,
+  .secc42,
+  .secc43,
+  .secc44 {
+    height: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    row-gap: 18px;
+    padding: 0 var(--m-pad) 56px;
+  }
+
+  .sec4s3,
+  .secc4t1,
+  .secc4b1,
+  .imggord2,
+  .secc4t2,
+  .secc4t4,
+  .secc4t3 {
+    grid-column: 1 / -1;
+  }
+
+  .sec4s3 {
+    grid-row: 1;
+  }
+
+  /* titre "Interior" et son trait dans la même cellule */
+  .secc4t1,
+  .secc4b1 {
+    grid-row: 2;
+  }
+
+  .secc4t1 {
+    padding-top: 24px;
+    font-size: clamp(40px, 13vw, 70px);
+  }
+
+  .imggord2 {
+    grid-row: 3;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    max-height: 70vh;
+    max-height: 70svh;
+  }
+
+  .secc4t2 {
+    grid-row: 4;
+    max-width: 680px;
+    font-size: clamp(15px, 4.1vw, 20px);
+  }
+
+  .secc4t4,
+  .secc4t3 {
+    padding-top: 12px;
+    border-top: 1px solid black;
+    font-size: 15px;
+    transform: none;
+  }
+
+  .secc4t4 {
+    grid-row: 5;
+  }
+
+  .secc4t3 {
+    grid-row: 6;
+  }
+
+  .secc4b3,
+  .secc4b4 {
+    display: none;
+  }
+}
+
+/* Tablette : WORK et CONTACT tiennent côte à côte à droite du trait vertical.
+   WORK et son petit texte sont centrés l'un sur l'autre (comme sur desktop), au
+   milieu de l'espace entre le trait et CONTACT */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .nvw,
+  .nvc {
+    grid-row: 2 / 4;
+  }
+
+  /* la zone de WORK va du trait (demi-gouttière comprise) jusqu'à CONTACT, dont
+     la place réservée à droite vaut 4.86 fois la taille de son titre (mesuré) :
+     WORK est ainsi à égale distance du trait et de CONTACT */
+  .nvw {
+    grid-column: 4 / 7;
+    align-items: center;
+    padding-left: 0;
+    margin-left: calc(var(--m-gap) / -2);
+    margin-right: calc(4.86 * clamp(17px, 5.2vw, 30px));
+    text-align: center;
+  }
+
+  /* CONTACT est plus large que sa colonne : calé sur le bord droit, il déborde
+     vers la gauche et non hors de l'écran */
+  .nvc {
+    grid-column: 6 / 7;
+    align-items: flex-end;
+    white-space: nowrap;
+  }
+}
+
+/* Écran tactile : le survol reste collé après un tap, la flèche de la galerie
+   ne doit pas rester tournée */
+@media (max-width: 1024px) and (hover: none) {
+  .change-image-btn:hover .button-icon {
+    transform: none;
+  }
+}
+
+/* Téléphone à l'horizontale : écran bas et large. L'accueil et la galerie
+   reprennent la disposition desktop (image à droite) pour tenir en hauteur,
+   et l'intro se resserre pour que EXPLORE reste visible */
+@media (max-width: 1024px) and (orientation: landscape) and (max-height: 540px) {
+  /* ===== Intro ===== */
+
+  .intro-content {
+    padding-top: calc(var(--m-head) + 8px);
+    padding-bottom: 8px;
+  }
+
+  .intro-title {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  .intro-line {
+    margin: 0.6rem 0;
+  }
+
+  .intro-subtitle {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .intro-description {
+    margin-bottom: 0;
+  }
+
+  .intro-description p,
+  .intro-quote {
+    font-size: 0.85rem;
+  }
+
+  .intro-description p {
+    margin-bottom: 0.2rem;
+  }
+
+  .intro-description h2 {
+    font-size: 1.2rem;
+    margin: 0.2rem 0;
+  }
+
+  .intro-quote {
+    line-height: 1.4;
+    margin: 0.5rem auto;
+  }
+
+  .explore-button {
+    margin-top: 0.4rem;
+    padding: 0.7rem 2rem;
+  }
+
+  /* ===== Accueil (nv1) : grille desktop de 14 colonnes ===== */
+
+  .nv1 {
+    min-height: 0;
+    padding-bottom: 10px;
+    grid-template-columns: repeat(14, minmax(0, 1fr));
+    grid-template-rows: repeat(10, minmax(0, 1fr));
+    column-gap: var(--m-gap); /* même gouttière que la section 2 : les traits verticaux s'alignent */
+    row-gap: 6px;
+  }
+
+  .logo {
+    grid-column: 1 / 4;
+    grid-row: 1 / 3;
+  }
+
+  .nvm,
+  .nvw,
+  .nvc {
+    grid-row: 1 / 3;
+  }
+
+  .nvm {
+    grid-column: 4 / 6;
+    align-items: center;
+  }
+
+  .nvw {
+    grid-column: 9 / 11;
+    align-items: center;
+    padding-left: 0;
+  }
+
+  .nvc {
+    grid-column: 13 / 15;
+  }
+
+  .nvm1,
+  .nvw1,
+  .nvc1 {
+    font-size: 18px;
+  }
+
+  .nvm2,
+  .nvw2,
+  .nvc2 {
+    font-size: 9px;
+  }
+
+  /* cercle centré sur la photo */
+  .cercle {
+    grid-column: 1 / 15;
+    grid-row: 2 / 11;
+  }
+
+  /* photo en paysage, centrée : 6 colonnes sur 6 rangées ; les dates "06" et "20"
+     s'écartent un peu plus que sur desktop pour rester de part et d'autre */
+  .sec1img {
+    grid-column: 5 / 11;
+    grid-row: 3 / 9;
+    width: 100%;
+  }
+
+  .six {
+    left: -12vw;
+  }
+
+  .vingt {
+    left: 12vw;
+  }
+
+  .nvb1 {
+    grid-column: 7 / 8;
+    grid-row: 1 / 11;
+    margin-bottom: -10px;
+  }
+
+  .nvb2 {
+    grid-column: 1 / 15;
+    grid-row: 6 / 7;
+    height: auto;
+    align-self: stretch;
+  }
+
+  .date {
+    grid-column: 2 / 14;
+    grid-row: 5 / 6;
+    font-size: 12px;
+  }
+
+  .etoile {
+    grid-column: 11 / 12;
+    grid-row: 7 / 8;
+    width: 60%;
+    height: 60%;
+  }
+
+  .nvt1 {
+    grid-column: 12 / 15;
+    grid-row: 8 / 10;
+    text-align: left;
+    font-size: 9px;
+  }
+
+  .nvbb,
+  .nvbb2 {
+    grid-row: 10 / 11;
+    font-size: 12px;
+  }
+
+  .nvbb {
+    grid-column: 1 / 6;
+  }
+
+  .nvbb2 {
+    grid-column: 11 / 15;
+  }
+
+  /* ===== Galerie (fond noir) : textes à gauche, image à droite ===== */
+
+  .green-background {
+    padding-top: calc(var(--m-head) + 8px);
+    padding-bottom: 12px;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    row-gap: 8px;
+  }
+
+  .uno {
+    grid-column: 1 / 13;
+    font-size: clamp(24px, 11vh, 56px);
+  }
+
+  .but4 {
+    grid-column: 7 / 10;
+  }
+
+  .change-image-btn {
+    grid-column: 10 / 13;
+  }
+
+  .img1 {
+    grid-column: 7 / 13;
+    grid-row: 3 / 6;
+  }
+
+  .bu20 {
+    grid-row: 3 / 6;
+  }
+
+  .but1 {
+    grid-column: 1 / 6;
+    grid-row: 3 / 4;
+  }
+
+  .but6 {
+    grid-column: 1 / 4;
+    grid-row: 4 / 5;
+  }
+
+  .but2 {
+    grid-column: 1 / 4;
+    grid-row: 5 / 6;
+  }
+
+  .but3 {
+    grid-column: 4 / 7;
+    grid-row: 3 / 6;
+  }
+}
+
+/* ===== Téléphone (portrait et paysage) : l'accueil se concentre sur la photo =====
+   Le logo FRANK LLOYD WRIGHT GUGGENHEIM est retiré (MAIN / WORK / CONTACT
+   prennent sa place en haut), et le trait vertical passe au centre exact de
+   l'écran, dans l'axe de la photo et du cercle : il est décalé d'une
+   demi-gouttière, comme celui de la section 2 qui le prolonge */
+@media (max-width: 767px), (max-width: 1024px) and (orientation: landscape) and (max-height: 500px) {
+  .logo {
+    display: none;
+  }
+
+  .nvb1,
+  .nvb11 {
+    margin-right: calc(var(--m-gap) / -2);
+  }
+}
+
+/* Téléphone : le titre de la section 2 et SCROLL TO EXPLORE partagent la même
+   colonne et la même ligne de base. SCROLL TO EXPLORE passe sur deux lignes calées
+   à droite (sa largeur est limitée à 6em) et le titre est un peu plus petit, pour
+   que GUGGENHEIM ne le touche pas */
+@media (max-width: 767px) {
+  .s2t1 {
+    font-size: clamp(15px, 5vw, 44px);
+  }
+
+  /* interligne serré : "SCROLL TO" reste sous la ligne LLOYD WRIGHT du titre ;
+     avec un interligne de 1.1, la ligne de base est à 0.197em du bas */
+  .s2t2 {
+    display: block;
+    padding-left: calc(100% - 6em);
+    margin-bottom: calc(var(--s2-base) - 0.197em);
+    line-height: 1.1;
+    text-align: right;
+  }
+}
+
+/* Téléphone en portrait : la photo est au milieu, avec autant de rangées
+   au-dessus qu'en dessous ; le cercle, les dates et l'étoile l'entourent */
+@media (max-width: 767px) and (orientation: portrait) {
+  /* marge du bas = marge sous le menu (10px) : la grille est centrée dans la
+     partie visible de l'écran */
+  .nv1 {
+    padding-bottom: 10px;
+    grid-template-rows:
+      repeat(4, minmax(0, 1fr))
+      var(--hero-img-h)
+      repeat(4, minmax(0, 1fr));
+  }
+
+  .nvb1 {
+    margin-bottom: -10px;
+  }
+
+  /* MAIN, WORK et CONTACT sur la même ligne, chacun centré dans un tiers de
+     l'écran ; chaque titre est centré sur son petit texte, comme sur desktop */
+  .nvm,
+  .nvw,
+  .nvc {
+    grid-row: 1 / 2;
+    align-items: center;
+    padding: 0;
+    text-align: center;
+  }
+
+  /* deux colonnes + une gouttière font un tiers moins 2/3 de gouttière :
+     MAIN et CONTACT récupèrent ce morceau côté WORK pour être au centre exact
+     de leur tiers d'écran */
+  .nvm {
+    grid-column: 1 / 3;
+    margin-right: calc(var(--m-gap) * -2 / 3);
+  }
+
+  .nvw {
+    grid-column: 3 / 5;
+  }
+
+  .nvc {
+    grid-column: 5 / 7;
+    margin-left: calc(var(--m-gap) * -2 / 3);
+  }
+
+  /* WORK est au centre de l'écran, sur le trait vertical : le trait passe
+     derrière le mot et son petit texte (fond blanc, inversé en thème sombre) */
+  .nvw {
+    position: relative;
+    z-index: 1;
+  }
+
+  .nvw1,
+  .nvw2 {
+    padding: 0 6px;
+    background-color: white;
+  }
+
+  .cercle {
+    grid-row: 3 / 8;
+  }
+
+  .date {
+    grid-row: 4 / 5;
+  }
+
+  .sec1img,
+  .nvb2 {
+    grid-row: 5 / 6;
+  }
+
+  .etoile {
+    grid-row: 6 / 7;
+  }
+
+  .nvt1 {
+    grid-row: 8 / 9;
+  }
+
+  .nvbb,
+  .nvbb2 {
+    grid-row: 9 / 10;
+  }
+}
+
+/* Téléphone à l'horizontale : la photo occupe les rangées 3 à 8 sur 10 ; le cercle
+   et le trait horizontal se centrent sur elle (deux rangées au-dessus, deux en dessous) */
+@media (max-width: 1024px) and (orientation: landscape) and (max-height: 500px) {
+  /* MAIN prend la place du logo, calé à gauche */
+  .nvm {
+    grid-column: 1 / 4;
+    align-items: flex-start;
+  }
+
+  /* WORK et son petit texte centrés entre le trait vertical et CONTACT */
+  .nvw {
+    grid-column: 8 / 13;
+    text-align: center;
+  }
+
+  .nvc {
+    align-items: flex-end;
+    white-space: nowrap;
+  }
+
+  .cercle {
+    grid-row: 1 / 11;
+  }
+
+  .nvb2 {
+    grid-row: 5 / 7;
+    height: 0;
+    align-self: center;
+  }
+}
