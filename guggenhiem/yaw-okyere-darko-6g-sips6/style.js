@@ -575,6 +575,7 @@ etoilContainer.style.width = '100%';
 etoilContainer.style.height = '100%';
 etoilContainer.style.pointerEvents = 'none';
 etoilContainer.style.zIndex = '1000';
+etoilContainer.style.visibility = 'hidden'; // visible seulement pendant l'animation de l'étoile
 document.body.appendChild(etoilContainer);
 
 // Déplacer l'étoile dans le conteneur fixe
@@ -661,8 +662,12 @@ ScrollTrigger.create({
   end: '80% top',
   scrub: 2.5,
   scroller: '#smoothWrapper',
+  onToggle: (self) => {
+    if (self.isActive) etoilContainer.style.visibility = 'visible';
+  },
   onEnter: () => {
     if (galleryShown) return;
+    gsap.killTweensOf(etoil, 'opacity'); // annule un fondu de sortie en cours (et son masquage)
     gsap.to(etoil, {
       opacity: 1,
       duration: 1.5,
@@ -671,13 +676,15 @@ ScrollTrigger.create({
   },
   onLeave: () => {
     setGalleryShown(true);
+    etoilContainer.style.visibility = 'hidden';
   },
   onLeaveBack: () => {
     setGalleryShown(false);
     gsap.to(etoil, {
       opacity: 0,
       duration: 1.5,
-      ease: 'power2.inOut'
+      ease: 'power2.inOut',
+      onComplete: () => { etoilContainer.style.visibility = 'hidden'; }
     });
   },
   onUpdate: self => {
@@ -1096,9 +1103,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function exploreHome(instant) {
         if (!isExplored) {
             isExplored = true;
-            // Cacher la section intro
+            // Cacher la section intro, puis la retirer une fois sortie de l'écran :
+            // sur iPhone, Safari colore sa barre du bas avec le fond des éléments
+            // fixés en bas de l'écran, et l'intro blanche, même glissée vers le
+            // haut, y laissait une bande blanche
             if (instant) introSection.style.transition = 'none';
             introSection.classList.add('hidden');
+            setTimeout(() => { introSection.style.display = 'none'; }, instant ? 0 : 1000);
             if (instant) ScrollTrigger.enable();
             
             // Animer l'étoile
