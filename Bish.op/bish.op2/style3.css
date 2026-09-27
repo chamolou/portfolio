@@ -47,9 +47,11 @@ section {
 
 h1 {
     grid-column: 1/6;
+    font-weight: 400;
     grid-row: 2/4;
-    font-size: 13.8vw;
-    font-family: 'Helvetica Neue', sans-serif;
+    /* Plafonné par la hauteur : sur un écran très large (21:9), le titre grandissait avec la largeur alors que les rangées de la grille suivent la hauteur, et il débordait sur les textes en dessous. 24.5vh = 13.8vw sur un écran 16:9. */
+    font-size: min(13.8vw, 24.5vh);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     align-self: start;
     justify-self: start;
     text-align: right;
