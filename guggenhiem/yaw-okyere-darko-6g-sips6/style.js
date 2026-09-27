@@ -593,6 +593,67 @@ gsap.set(etoil, {
   force3D: true
 });
 
+// L'étoile (image/Group 13.svg, 57×59) est faite de 4 barres qui passent par son
+// centre. Dès que ses barres couvrent tout le bord de l'écran, elles couvrent tout
+// l'écran (chaque barre contient le centre) : la galerie s'affiche à ce moment-là,
+// sans transition visible puisque son fond est noir lui aussi
+const STAR_BARS = [ // rectangles du SVG : x, y, largeur, hauteur, rotation (degrés)
+  [25.2971, 58.2184, 57.0001, 8.44445, -92.0431],
+  [45.6671, 52.7241, 57.0001, 8.44445, -135],
+  [57, 33, 57, 7, 180],
+  [51.6382, 12.4191, 57.0001, 8.44445, 135]
+].map(([x, y, w, h, deg]) => ({ x, y, w, h, cos: Math.cos(deg * Math.PI / 180), sin: Math.sin(deg * Math.PI / 180) }));
+const STAR_MARGIN_PX = 1.5; // marge pour les bords adoucis (anticrénelés) des barres
+let galleryShown = false;
+let galleryProgress = null; // avancement du scroll où l'étoile a couvert l'écran
+
+function starCovers(ux, uy, margin) {
+  return STAR_BARS.some((r) => {
+    const dx = ux - r.x, dy = uy - r.y;
+    const qx = dx * r.cos + dy * r.sin, qy = -dx * r.sin + dy * r.cos;
+    return qx >= margin && qx <= r.w - margin && qy >= margin && qy <= r.h - margin;
+  });
+}
+
+function starCoversScreen(scale, degrees) {
+  const rect = etoilContainer.getBoundingClientRect();
+  const W = rect.width, H = rect.height;
+  const cx = W * 0.5, cy = H * 0.6;                 // top 60%, left 50%
+  const unit = scale * etoil.offsetWidth / 57;        // pixels par unité du SVG
+  const margin = STAR_MARGIN_PX / unit;
+  const a = degrees * Math.PI / 180, cos = Math.cos(a), sin = Math.sin(a);
+  const covered = (px, py) => {
+    const dx = px - cx, dy = py - cy;
+    return starCovers((dx * cos + dy * sin) / unit + 28.5, (-dx * sin + dy * cos) / unit + 29.5, margin);
+  };
+  const STEP = 8;
+  for (let x = 0; x <= W; x += STEP) if (!covered(x, 0) || !covered(x, H)) return false;
+  for (let y = 0; y <= H; y += STEP) if (!covered(0, y) || !covered(W, y)) return false;
+  return covered(W, 0) && covered(W, H);
+}
+
+window.addEventListener('resize', () => { galleryProgress = null; });
+
+function setGalleryShown(show) {
+  if (show === galleryShown) return;
+  galleryShown = show;
+  gsap.killTweensOf(etoil, 'opacity');
+  if (greenDiv && !but5Clicked) gsap.killTweensOf(greenDiv);
+  if (show) {
+    gsap.set(etoil, { opacity: 0 });
+    if (greenDiv && !but5Clicked) {
+      greenDiv.style.display = 'grid';
+      greenDiv.style.opacity = '1';
+    }
+  } else {
+    gsap.set(etoil, { opacity: 1 });
+    if (greenDiv && !but5Clicked) {
+      greenDiv.style.opacity = '0';
+      greenDiv.style.display = 'none';
+    }
+  }
+}
+
 // Animation de rotation et scale pendant le scroll
 ScrollTrigger.create({
   trigger: '.s55',
@@ -601,56 +662,33 @@ ScrollTrigger.create({
   scrub: 2.5,
   scroller: '#smoothWrapper',
   onEnter: () => {
+    if (galleryShown) return;
     gsap.to(etoil, {
       opacity: 1,
       duration: 1.5,
       ease: 'power2.inOut'
     });
-    if (greenDiv && !but5Clicked) {
-      greenDiv.style.opacity = '0';
-      greenDiv.style.display = 'none';
-    }
   },
   onLeave: () => {
-    gsap.to(etoil, {
-      opacity: 0,
-      duration: 1.5,
-      ease: 'power2.inOut'
-    });
-    if (greenDiv && !but5Clicked) {
-      greenDiv.style.display = 'grid';
-      gsap.to(greenDiv, {
-        opacity: 1,
-        duration: 1.5,
-        ease: 'power2.inOut'
-      });
-    }
-  },
-  onEnterBack: () => {
-    gsap.to(etoil, {
-      opacity: 1,
-      duration: 1.5,
-      ease: 'power2.inOut'
-    });
-    if (greenDiv && !but5Clicked) {
-      greenDiv.style.opacity = '0';
-      greenDiv.style.display = 'none';
-    }
+    setGalleryShown(true);
   },
   onLeaveBack: () => {
+    setGalleryShown(false);
     gsap.to(etoil, {
       opacity: 0,
       duration: 1.5,
       ease: 'power2.inOut'
     });
-    if (greenDiv && !but5Clicked) {
-      greenDiv.style.opacity = '0';
-      greenDiv.style.display = 'none';
-    }
   },
   onUpdate: self => {
     const progress = self.progress;
-    etoil.style.transform = `translate(-50%, -50%) scale(${1 + (progress * 150)}) rotate(${progress * 720}deg)`;
+    const scale = 1 + (progress * 150);
+    const degrees = progress * 720;
+    etoil.style.transform = `translate(-50%, -50%) scale(${scale}) rotate(${degrees}deg)`;
+    // la galerie reste affichée au-delà du premier instant où l'écran est couvert,
+    // même si la rotation rouvre un instant un interstice entre deux barres
+    if (galleryProgress === null && starCoversScreen(scale, degrees)) galleryProgress = progress;
+    if (self.isActive) setGalleryShown(galleryProgress !== null && progress >= galleryProgress);
   }
 });
 
@@ -693,9 +731,17 @@ gsap.to('.split-word', {
 // Variable pour suivre l'état du thème
 let isDarkTheme = false;
 
-// Fonction pour passer en mode sombre (appelée une seule fois par nvbb2)
+// Souligne le mode actif ("in white" ou "in black")
+function updateThemeIndicator() {
+    document.querySelector('.nvbb').classList.toggle('is-active', !isDarkTheme);
+    document.querySelector('.nvbb2').classList.toggle('is-active', isDarkTheme);
+}
+
+// Fonction pour passer en mode sombre (appelée par nvbb2) ; sans effet si le
+// mode sombre est déjà actif, pour que "in black" ne repasse pas en blanc
 function toggleTheme() {
-    isDarkTheme = !isDarkTheme;
+    if (isDarkTheme) return;
+    isDarkTheme = true;
     localStorage.setItem('yawTheme', isDarkTheme ? 'dark' : 'light');
 
     // Animer la transition de couleur pour nvbb et nvbb2
@@ -719,15 +765,22 @@ function revertTheme() {
 
 // Fonction qui applique le thème
 function applyTheme() {
-    // Sélectionner tous les éléments avec du texte ou des bordures
-    const elements = document.querySelectorAll('*');
-    
-    elements.forEach(element => {
-        // Obtenir les styles calculés de l'élément
+    updateThemeIndicator();
+
+    // Sélectionner tous les éléments avec du texte ou des bordures. Les couleurs
+    // sont toutes relevées avant d'en inverser une seule : sinon un texte qui
+    // hérite du blanc tout juste donné à son parent serait réinversé en noir
+    const snapshot = Array.from(document.querySelectorAll('*'), element => {
         const computedStyle = window.getComputedStyle(element);
-        const color = computedStyle.color;
-        const backgroundColor = computedStyle.backgroundColor;
-        const borderColor = computedStyle.borderColor;
+        return {
+            element,
+            color: computedStyle.color,
+            backgroundColor: computedStyle.backgroundColor,
+            borderColor: computedStyle.borderColor
+        };
+    });
+
+    snapshot.forEach(({ element, color, backgroundColor, borderColor }) => {
         
         // Inverser la couleur du texte si elle est noire ou blanche
         if (color === 'rgb(0, 0, 0)') {
@@ -967,6 +1020,8 @@ if (localStorage.getItem('yawTheme') === 'dark') {
         gsap.set(['.nvbb', '.nvbb2'], { color: '#FFFFFF' });
         applyTheme();
     });
+} else {
+    updateThemeIndicator();
 }
 
 // Intro section scroll animation
@@ -1108,7 +1163,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     opacity: 1,
                     y: 0,
                     scale: 1,
-                    color: '#000000',
+                    color: isDarkTheme ? '#FFFFFF' : '#000000',
                     duration: 1,
                     ease: 'elastic.out(1, 0.5)',
                     delay: 1.0
@@ -1118,7 +1173,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     opacity: 1,
                     y: 0,
                     scale: 1,
-                    color: '#000000',
+                    color: isDarkTheme ? '#FFFFFF' : '#000000',
                     duration: 1,
                     ease: 'elastic.out(1, 0.5)',
                     delay: 1.2

@@ -1472,3 +1472,62 @@ body::-webkit-scrollbar {
 .nvbb2 {
     cursor: pointer;
 }
+
+/* Indicateur du thème choisi ("in white" / "in black") : le mode actif est
+   souligné d'un trait fin et le mode inactif est atténué. En changeant de mode,
+   le trait se retire vers la droite sous l'ancien choix puis se dessine de
+   gauche à droite sous le nouveau. Le trait prend la couleur du texte, il suit
+   donc l'inversion du thème */
+.theme-label {
+  position: relative;
+  display: inline-block;
+  opacity: 0.35;
+  transition: opacity 0.5s ease;
+}
+
+.theme-label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.nvbb:hover .theme-label,
+.nvbb2:hover .theme-label {
+  opacity: 0.7;
+}
+
+.is-active .theme-label,
+.is-active:hover .theme-label {
+  opacity: 1;
+}
+
+.is-active .theme-label::after {
+  transform: scaleX(1);
+  transform-origin: left;
+  transition-delay: 0.2s;
+}
+
+/* desktop : "in black" tient sur une seule ligne, calé à droite comme CONTACT
+   (sa colonne d'origine, la 14e, est trop étroite pour les deux mots) */
+@media (min-width: 1025px) {
+  .nvbb2 {
+    grid-column: 11/15;
+    justify-self: end;
+    padding-right: 20px;
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-label,
+  .theme-label::after {
+    transition: none;
+  }
+}

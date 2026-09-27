@@ -4,8 +4,16 @@
     function applyStoredTheme() {
         if (localStorage.getItem('yawTheme') !== 'dark') return;
 
-        document.querySelectorAll('*').forEach(function (element) {
+        // Toutes les couleurs sont relevées avant d'en inverser une seule : sinon un
+        // texte qui hérite du blanc tout juste donné à son parent serait réinversé
+        // en noir (texte noir sur fond noir)
+        var snapshot = Array.prototype.map.call(document.querySelectorAll('*'), function (element) {
             var cs = window.getComputedStyle(element);
+            return { element: element, color: cs.color, backgroundColor: cs.backgroundColor, borderColor: cs.borderColor };
+        });
+
+        snapshot.forEach(function (item) {
+            var element = item.element, cs = item;
 
             if (cs.color === 'rgb(0, 0, 0)') {
                 element.style.color = 'white';
@@ -24,6 +32,11 @@
             } else if (cs.borderColor === 'rgb(255, 255, 255)') {
                 element.style.borderColor = 'black';
             }
+        });
+
+        // Les logos SVG sont noirs : inversés en blanc, comme le logo de l'accueil
+        document.querySelectorAll('img[src$=".svg"]').forEach(function (img) {
+            img.style.filter = 'invert(1)';
         });
     }
 
