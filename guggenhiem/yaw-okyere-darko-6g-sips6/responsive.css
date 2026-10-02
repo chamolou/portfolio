@@ -394,6 +394,15 @@
     row-gap: 12px;
   }
 
+  /* Safari iOS : la barre flottante du bas occupe moins que l'écart lvh - svh,
+     la moitié suffit pour poser les textes juste au-dessus d'elle, en bas de
+     l'écran sous l'image */
+  @supports (-webkit-touch-callout: none) {
+    .green-background {
+      padding-bottom: calc(20px + (100lvh - 100svh) / 2);
+    }
+  }
+
   .uno {
     grid-column: 1 / 7;
     grid-row: 1 / 2;
@@ -428,9 +437,16 @@
     transform: none;
   }
 
+  /* l'image garde ses proportions au lieu de remplir toute la rangée : le
+     vide reste entre l'image et les textes, posés en bas de l'écran. Sur les
+     petits écrans elle est plafonnée à la hauteur disponible */
   .img1 {
     grid-column: 1 / 7;
     grid-row: 3 / 4;
+    align-self: start;
+    height: auto;
+    aspect-ratio: 7 / 6;
+    max-height: 100%;
     min-height: 0;
     transform: none;
   }
@@ -918,6 +934,9 @@
   .img1 {
     grid-column: 7 / 13;
     grid-row: 3 / 6;
+    align-self: stretch;
+    height: 100%;
+    aspect-ratio: auto;
   }
 
   .bu20 {
