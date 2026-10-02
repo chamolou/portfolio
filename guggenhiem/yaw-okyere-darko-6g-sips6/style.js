@@ -1247,7 +1247,15 @@ let currentBackgroundImageIndex = 0;
 document.querySelector('.change-image-btn').addEventListener('click', function() {
     const img1 = document.querySelector('.green-background .img1');
     const counter = document.querySelector('.but4');
-    
+
+    // Flèche qui traverse le bouton (téléphone / tablette, voir responsive.css) :
+    // la classe est retirée puis remise pour relancer l'animation à chaque tap
+    if (window.matchMedia('(max-width: 1024px)').matches) {
+        this.classList.remove('is-turning');
+        void this.offsetWidth;
+        this.classList.add('is-turning');
+    }
+
     currentBackgroundImageIndex = (currentBackgroundImageIndex + 1) % backgroundImages.length;
     const newImage = backgroundImages[currentBackgroundImageIndex];
     
@@ -1272,6 +1280,11 @@ document.querySelector('.change-image-btn').addEventListener('click', function()
             });
         }
     });
+});
+
+// Fin de la traversée : la flèche reprend son petit mouvement d'invitation
+document.querySelector('.change-image-btn').addEventListener('animationend', function(event) {
+    if (event.animationName === 'arrow-through') this.classList.remove('is-turning');
 });
 
 // Initialiser la première classe d'image
