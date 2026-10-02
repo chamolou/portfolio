@@ -610,10 +610,10 @@ section {
   font-family: 'Raleway', sans-serif;
   font-weight: 600;
   grid-row: 3 / 5;
-  grid-column: 1 / 14;
+  grid-column: 1 / 15;
   display: flex;
   align-items: center;
-  transform: translate(20px, -50px);
+  transform: translateY(-50px);
   color: white;
 }
 
@@ -623,7 +623,7 @@ section {
   object-fit: cover;
   grid-column: 9 / 15;
   grid-row: 6 / 11;
-  transform: translate(-10px, -30px);
+  transform: translateY(-30px);
   filter: grayscale(100%);
   transition: transform 3s linear, filter 0.3s ease, opacity 0.5s ease;
   opacity: 1;
@@ -634,9 +634,10 @@ section {
 }
 
 .bu20 {
-  transform: translateX(-80px);
   grid-column: 1/2;
   grid-row: 6/11;
+  justify-self: start;
+  width: 0;
   height: 95%;
   border-right: solid white 3px;
 }
@@ -660,13 +661,14 @@ section {
 }
 
 .sup {
-  transform: translate(20px, -40px);
+  margin-left: auto;
+  transform: translateY(-40px);
   color: white;
 }
 
 .but3 {
   font-family: 'Raleway', sans-serif;
-  transform: translate(-10px, -30px);
+  transform: translateY(-30px);
   grid-column: 6/9;
   grid-row: 10;
   text-align: right;
@@ -677,7 +679,7 @@ section {
   font-family: 'Raleway', sans-serif;
   grid-column: 9/10;
   grid-row: 5/6;
-  transform: translate(-10px, 25px);
+  transform: translateY(25px);
   color: white;
 }
 
@@ -1202,13 +1204,18 @@ body::-webkit-scrollbar {
 }
 
 .green-background {
+  /* même marge à gauche et à droite : le trait et les textes à gauche, l'image
+     et la flèche à droite s'alignent sur ce padding */
+  --g-pad: clamp(24px, 2.8vw, 48px);
   display: none;
   grid-template-columns: repeat(14, 1fr);
   grid-template-rows: repeat(10, 1fr);
   gap: 20px;
   position: fixed;
+  box-sizing: border-box;
   width: 100vw;
   height: 100vh;
+  padding: 0 var(--g-pad);
   background-color: black;
   z-index: 100;
   top: 0;
@@ -1429,7 +1436,11 @@ body::-webkit-scrollbar {
     display: grid;
     grid-column: 14/15;
     grid-row: 5/6;
-    padding: 0.5rem;
+    justify-self: end;
+    /* 8px de jeu à droite, repris par la marge négative : la flèche reste
+       alignée sur la marge mais sa pointe n'est pas coupée quand elle pousse */
+    padding: 0.5rem 8px 0.5rem 0;
+    margin-right: -8px;
     font-family: 'Raleway', sans-serif;
     font-size: 1rem;
     color: white;
@@ -1440,9 +1451,9 @@ body::-webkit-scrollbar {
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     z-index: 101;
-    transform: translate(34px, 6px);;
+    transform: translateY(6px);
 }
 
 .change-image-btn .button-text {
@@ -1452,13 +1463,38 @@ body::-webkit-scrollbar {
 .change-image-btn .button-icon {
     position: relative;
     z-index: 1;
-    transition: transform 0.3s ease;
     color: white;
     font-size: 1.5rem;
+    /* pas la transition de .button-icon (bouton EXPLORE) : elle retarderait
+       l'entrée en cascade de la galerie */
+    transition: none;
+    animation: arrow-nudge 2.4s ease-in-out infinite;
 }
 
-.change-image-btn:hover .button-icon {
-    transform: rotate(45deg);
+/* La flèche pousse vers la droite pour inviter au clic ; au clic elle sort à
+   droite puis revient par la gauche pendant le fondu de l'image (classe
+   is-turning, style.js) */
+.change-image-btn.is-turning .button-icon {
+    animation: arrow-through 1s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+@keyframes arrow-nudge {
+    0%, 40%, 100% { transform: translateX(0); }
+    20% { transform: translateX(6px); }
+}
+
+@keyframes arrow-through {
+    0% { transform: translateX(0); opacity: 1; }
+    45% { transform: translateX(32px); opacity: 0; }
+    55% { transform: translateX(-32px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .change-image-btn .button-icon,
+    .change-image-btn.is-turning .button-icon {
+        animation: none;
+    }
 }
 
 /* Styles pour les éléments cliquables */

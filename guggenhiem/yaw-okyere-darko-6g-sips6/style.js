@@ -604,6 +604,7 @@ const STAR_BARS = [ // rectangles du SVG : x, y, largeur, hauteur, rotation (deg
   [57, 33, 57, 7, 180],
   [51.6382, 12.4191, 57.0001, 8.44445, 135]
 ].map(([x, y, w, h, deg]) => ({ x, y, w, h, cos: Math.cos(deg * Math.PI / 180), sin: Math.sin(deg * Math.PI / 180) }));
+const STAR_MAX_SCALE = 150;
 const STAR_MARGIN_PX = 1.5; // marge pour les bords adoucis (anticrénelés) des barres
 let galleryShown = false;
 let galleryProgress = null; // avancement du scroll où l'étoile a couvert l'écran
@@ -635,6 +636,47 @@ function starCoversScreen(scale, degrees) {
 
 window.addEventListener('resize', () => { galleryProgress = null; });
 
+// Entrée de la galerie une fois l'écran noir : le titre, puis le compteur et
+// la flèche, l'image, le trait et les textes se dévoilent en cascade (environ
+// 1s en tout). Seuls clip-path et opacity sont animés, les transform restent
+// ceux du CSS ; l'image n'est animée qu'en clip-path, son opacité reste au fondu
+// du bouton flèche.
+// Sur desktop les textes débordent de leur boîte (le titre en 137px surtout) :
+// leur masque s'étend d'une hauteur de boîte au-delà de chaque bord, sinon le
+// débordement resterait coupé jusqu'à la fin de la cascade
+const TEXT_HIDDEN = 'inset(-100% -100% 200% -100%)';
+const TEXT_SHOWN = 'inset(-100% -100% -100% -100%)';
+const GALLERY_REVEAL = [
+  ['.green-background .uno', TEXT_HIDDEN, TEXT_SHOWN, true],
+  ['.green-background .but4, .green-background .change-image-btn .button-icon', TEXT_HIDDEN, TEXT_SHOWN, true],
+  ['.green-background .img1', 'inset(100% 0% 0% 0%)', 'inset(0% 0% 0% 0%)', false],
+  ['.green-background .bu20', TEXT_HIDDEN, TEXT_SHOWN, false],
+  ['.green-background .but1, .green-background .but6, .green-background .but2, .green-background .but3', TEXT_HIDDEN, TEXT_SHOWN, true]
+];
+// galerie masquée moins longtemps que ça (léger retour en arrière du scroll) :
+// elle réapparaît telle quelle, sans rejouer la cascade
+const GALLERY_REPLAY_AFTER_MS = 800;
+let galleryReveal = null;
+let galleryHiddenAt = -Infinity;
+
+function clearGalleryReveal() {
+  if (galleryReveal) galleryReveal.kill();
+  galleryReveal = null;
+  GALLERY_REVEAL.forEach(([selector]) => gsap.set(selector, { clearProps: 'clip-path,opacity' }));
+}
+
+function playGalleryReveal() {
+  clearGalleryReveal();
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (performance.now() - galleryHiddenAt < GALLERY_REPLAY_AFTER_MS) return;
+  galleryReveal = gsap.timeline({ onComplete: clearGalleryReveal });
+  GALLERY_REVEAL.forEach(([selector, hidden, shown, fade], i) => {
+    const from = { clipPath: hidden }, to = { clipPath: shown, duration: 0.6, ease: 'power3.out', stagger: 0.05 };
+    if (fade) { from.opacity = 0; to.opacity = 1; }
+    galleryReveal.fromTo(selector, from, to, i * 0.07);
+  });
+}
+
 function setGalleryShown(show) {
   if (show === galleryShown) return;
   galleryShown = show;
@@ -645,10 +687,13 @@ function setGalleryShown(show) {
     if (greenDiv && !but5Clicked) {
       greenDiv.style.display = 'grid';
       greenDiv.style.opacity = '1';
+      playGalleryReveal();
     }
   } else {
     gsap.set(etoil, { opacity: 1 });
     if (greenDiv && !but5Clicked) {
+      clearGalleryReveal();
+      galleryHiddenAt = performance.now();
       greenDiv.style.opacity = '0';
       greenDiv.style.display = 'none';
     }
@@ -660,7 +705,7 @@ ScrollTrigger.create({
   trigger: '.s55',
   start: 'top 80%',
   end: '80% top',
-  scrub: 2.5,
+  scrub: 1,
   scroller: '#smoothWrapper',
   onToggle: (self) => {
     if (self.isActive) etoilContainer.style.visibility = 'visible';
@@ -670,8 +715,8 @@ ScrollTrigger.create({
     gsap.killTweensOf(etoil, 'opacity'); // annule un fondu de sortie en cours (et son masquage)
     gsap.to(etoil, {
       opacity: 1,
-      duration: 1.5,
-      ease: 'power2.inOut'
+      duration: 0.6,
+      ease: 'power2.out'
     });
   },
   onLeave: () => {
@@ -689,13 +734,19 @@ ScrollTrigger.create({
   },
   onUpdate: self => {
     const progress = self.progress;
-    const scale = 1 + (progress * 150);
-    const degrees = progress * 720;
+    // agrandissement exponentiel : à l'œil l'étoile grossit à vitesse constante,
+    // elle naît petite au lieu d'apparaître déjà immense ; la rotation ralentit
+    // à mesure qu'elle remplit l'écran
+    const scale = Math.pow(STAR_MAX_SCALE, progress);
+    const degrees = 540 * (1 - Math.pow(1 - progress, 2));
     etoil.style.transform = `translate(-50%, -50%) scale(${scale}) rotate(${degrees}deg)`;
     // la galerie reste affichée au-delà du premier instant où l'écran est couvert,
     // même si la rotation rouvre un instant un interstice entre deux barres
     if (galleryProgress === null && starCoversScreen(scale, degrees)) galleryProgress = progress;
-    if (self.isActive) setGalleryShown(galleryProgress !== null && progress >= galleryProgress);
+    // petite tolérance une fois affichée : un léger retour en arrière du scroll ne
+    // fait pas clignoter la galerie
+    const threshold = galleryShown ? galleryProgress - 0.03 : galleryProgress;
+    if (self.isActive) setGalleryShown(galleryProgress !== null && progress >= threshold);
   }
 });
 
@@ -1248,13 +1299,11 @@ document.querySelector('.change-image-btn').addEventListener('click', function()
     const img1 = document.querySelector('.green-background .img1');
     const counter = document.querySelector('.but4');
 
-    // Flèche qui traverse le bouton (téléphone / tablette, voir responsive.css) :
-    // la classe est retirée puis remise pour relancer l'animation à chaque tap
-    if (window.matchMedia('(max-width: 1024px)').matches) {
-        this.classList.remove('is-turning');
-        void this.offsetWidth;
-        this.classList.add('is-turning');
-    }
+    // Flèche qui traverse le bouton (voir style.css) : la classe est retirée
+    // puis remise pour relancer l'animation à chaque clic
+    this.classList.remove('is-turning');
+    void this.offsetWidth;
+    this.classList.add('is-turning');
 
     currentBackgroundImageIndex = (currentBackgroundImageIndex + 1) % backgroundImages.length;
     const newImage = backgroundImages[currentBackgroundImageIndex];

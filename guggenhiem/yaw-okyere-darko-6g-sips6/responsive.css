@@ -433,7 +433,7 @@
     justify-self: end;
     min-width: 44px;
     min-height: 44px;
-    padding: 0;
+    padding: 0 8px 0 0;
     transform: none;
   }
 
@@ -728,46 +728,13 @@
   }
 }
 
-/* Téléphone et tablette : pas d'effet de survol dans la galerie (il reste
-   collé après un tap). L'image est en couleur, la flèche s'anime seule : elle
-   pousse vers la droite pour inviter au tap, et au tap elle sort à droite puis
-   revient par la gauche pendant le fondu de l'image (classe is-turning, style.js) */
+/* Téléphone et tablette : pas d'effet de survol sur l'image de la galerie (il
+   reste collé après un tap), elle est en couleur. L'animation de la flèche est
+   dans style.css, commune à tous les écrans */
 @media (max-width: 1024px) {
   .img1,
   .img1:hover {
     filter: none;
-  }
-
-  .change-image-btn:hover .button-icon {
-    transform: none;
-  }
-
-  .change-image-btn .button-icon {
-    transition: none;
-    animation: arrow-nudge 2.4s ease-in-out infinite;
-  }
-
-  .change-image-btn.is-turning .button-icon {
-    animation: arrow-through 1s cubic-bezier(0.7, 0, 0.3, 1);
-  }
-
-  @keyframes arrow-nudge {
-    0%, 40%, 100% { transform: translateX(0); }
-    20% { transform: translateX(6px); }
-  }
-
-  @keyframes arrow-through {
-    0% { transform: translateX(0); opacity: 1; }
-    45% { transform: translateX(32px); opacity: 0; }
-    55% { transform: translateX(-32px); opacity: 0; }
-    100% { transform: translateX(0); opacity: 1; }
-  }
-}
-
-@media (max-width: 1024px) and (prefers-reduced-motion: reduce) {
-  .change-image-btn .button-icon,
-  .change-image-btn.is-turning .button-icon {
-    animation: none;
   }
 }
 
