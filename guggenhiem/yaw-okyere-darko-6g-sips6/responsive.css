@@ -1013,6 +1013,11 @@
   .nvb11 {
     margin-right: calc(var(--m-gap) / -2);
   }
+
+  /* galerie : "the architect" est retiré */
+  .but6 {
+    display: none;
+  }
 }
 
 /* Téléphone : le titre de la section 2 et SCROLL TO EXPLORE partagent la même
