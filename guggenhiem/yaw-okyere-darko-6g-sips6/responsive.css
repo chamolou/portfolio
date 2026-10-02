@@ -29,9 +29,15 @@
 
   /* ===== Intro ===== */
 
+  /* fond sur la plus grande hauteur d'écran (lvh) : quand les barres du
+     navigateur se rétractent, ou sous la barre flottante de Safari, la page
+     n'apparaît plus en bande blanche sous l'intro. Le padding ramène le contenu
+     au centre de la zone toujours visible (svh) */
   .intro-section {
     height: 100vh;
-    height: 100svh;
+    height: 100lvh;
+    box-sizing: border-box;
+    padding-bottom: calc(100lvh - 100svh);
   }
 
   .intro-content {
@@ -373,11 +379,15 @@
 
   /* ===== Galerie (fond noir) ===== */
 
+  /* comme l'intro : fond noir sur la plus grande hauteur d'écran (lvh) pour ne
+     pas laisser de bande blanche sous la barre flottante de Safari, contenu
+     gardé dans la zone toujours visible (svh) par le padding du bas */
   .green-background {
     height: 100vh;
-    height: 100svh;
+    height: 100lvh;
     box-sizing: border-box;
     padding: calc(var(--m-head) + 14px) var(--m-pad) 20px;
+    padding-bottom: calc(20px + 100lvh - 100svh);
     grid-template-columns: repeat(6, minmax(0, 1fr));
     grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
     column-gap: var(--m-gap);
@@ -886,6 +896,7 @@
   .green-background {
     padding-top: calc(var(--m-head) + 8px);
     padding-bottom: 12px;
+    padding-bottom: calc(12px + 100lvh - 100svh);
     grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-template-rows: auto auto minmax(0, 1fr) auto auto;
     row-gap: 8px;
