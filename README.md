@@ -9,7 +9,7 @@ Portfolio de design et de création web de Yaw Okyere Darko. Site statique en HT
 - **Pages projet** — chaque projet a sa page avec animations au scroll (GSAP + ScrollTrigger) et une galerie d'images en lightbox.
 - **Transitions** — fondu entre les pages.
 - **Défilement fluide** — la molette est lissée sur toutes les pages (Lenis) et reste synchronisée avec les animations au scroll. Le scroll tactile reste natif, et l'option « réduire les animations » du système désactive le lissage.
-- **Responsive** — jusqu'à 1024 px de large, l'accueil affiche directement la grille (pas de carrousel ni d'EXPLORE) et le défilement épinglé des pages projet est désactivé. La maquette Guggenheim est elle aussi responsive (téléphone, tablette, téléphone à l'horizontale) : son bouton « visit site » l'ouvre sur mobile, alors que les autres maquettes affichent un message invitant à les ouvrir sur ordinateur.
+- **Responsive** — jusqu'à 1024 px de large, l'accueil affiche directement la grille (pas de carrousel ni d'EXPLORE) et le défilement épinglé des pages projet est désactivé. Sur mobile, le bouton « visit site » ouvre la maquette Guggenheim (adaptée au mobile, voir plus bas) ; les autres maquettes affichent un message invitant à les ouvrir sur ordinateur.
 
 ## Projets présentés
 
@@ -23,6 +23,20 @@ Portfolio de design et de création web de Yaw Okyere Darko. Site statique en HT
 | Messi 15.1 × adidas | [messi/](messi/messi.html) | Analyse du jeu de Messi et de son influence sur la chaussure adidas Messi 15.1. |
 
 Le bouton « visite site » de chaque page ouvre soit une maquette hébergée dans le dépôt (sous-dossiers de chaque projet, certaines en three.js / WebGL avec GSAP ScrollSmoother), soit le site réel (AgroVida, Ian Campo).
+
+## Maquette Guggenheim × Frank Lloyd Wright
+
+Site d'exposition virtuelle consacré à Frank Lloyd Wright, dans [`guggenhiem/yaw-okyere-darko-6g-sips6/`](guggenhiem/yaw-okyere-darko-6g-sips6/index.html). Deux pages : l'accueil (`index.html`) et la page About / Contact (`index3.html`).
+
+- **Intro** — écran « Architecture is Life » ; le bouton **EXPLORE** révèle l'accueil (traits, cercle, photo, étoile qui tourne).
+- **Photo de l'accueil** — sur desktop, les photos défilent au survol ; sur tablette et téléphone, elles défilent seules (une par seconde), seulement quand l'image est à l'écran.
+- **Étoile → galerie** — au scroll, l'étoile grandit en tournant ; la galerie « The Spaces He Shapes » apparaît dès que l'étoile couvre tout l'écran (calculé à partir de ses quatre barres et de sa rotation).
+- **Projets** — Gordon House, Fallingwater et le Guggenheim, ouverts depuis la galerie (bouton flèche pour changer d'image, clic sur l'image pour ouvrir).
+- **Thème « in white » / « in black »** — le thème actif est souligné d'un trait qui se redessine au changement ; le choix est gardé en navigant entre les pages (`localStorage`).
+- **Navigation** — **GALLERY** mène directement à la galerie sans rejouer l'intro, depuis un projet ou depuis la page About.
+- **Responsive** — tout le responsive est dans `responsive.css` et `responsive3.css`, dans des media queries jusqu'à 1024 px : le desktop n'est pas modifié. Les traits se rejoignent d'une section à l'autre et s'arrêtent au premier trait qu'ils croisent. Sur téléphone, la photo de l'accueil est en paysage et centrée, MAIN / WORK / CONTACT sont sur une ligne, et le logo de la première section est retiré. Une disposition dédiée gère le téléphone à l'horizontale.
+
+La maquette utilise sa propre copie de GSAP 3.11.3 avec ScrollTrigger et ScrollSmoother (fichiers locaux), SplitText 3.13 (jsDelivr) et la police Raleway (Google Fonts).
 
 ## Stack
 
@@ -53,6 +67,7 @@ L'intro ne s'affiche qu'une fois par session de navigateur : pour la revoir, ouv
 ├── project/                          Galerie de visuels (lightbox)
 ├── guggenhiem/  agro-vida/  ian-campo/
 │   control/  Bish.op/  messi/        Une page par projet + maquettes associées
+│                                     (maquette Guggenheim : guggenhiem/yaw-okyere-darko-6g-sips6/)
 ├── shared/                           CSS/JS communs : transitions de page, intro,
 │                                     responsive, lightbox, défilement fluide (Lenis),
 │                                     défilement des pages projet
