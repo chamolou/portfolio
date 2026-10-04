@@ -1,0 +1,26 @@
+{
+  "name": "primary",
+  "version": "1.0.0",
+  "description": "Portfolio de design et de création web de Yaw Okyere Darko. Site statique en HTML, CSS et JavaScript, sans build ni dépendance à installer : on l'ouvre dans un navigateur.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chamolou/portfolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chamolou/portfolio/issues"
+  },
+  "homepage": "https://github.com/chamolou/portfolio#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
